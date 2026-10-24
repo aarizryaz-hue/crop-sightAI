@@ -6,6 +6,21 @@
 <title>Field Signal — Picture-based crop observation for farmworkers</title>
 <meta name="description" content="Field Signal helps farmworkers show what they see in the field: pick a crop, tap a symptom, add a photo, and share a bilingual visual report with a supervisor.">
 <style>
+  [hidden]{display:none!important}
+  #demo{scroll-margin-top:76px}
+  button,.btn,.seg button{min-height:48px;min-width:48px}
+  button:disabled{opacity:.55;cursor:not-allowed;transform:none}
+  .consent{display:flex;align-items:center;gap:12px;min-height:48px;margin-top:12px;cursor:pointer}
+  .consent input{width:24px;height:24px;flex-shrink:0}
+  .drop:focus-within{outline:3px solid var(--sun);outline-offset:2px}
+  .tile svg,.rep-sym svg{width:52px;height:52px;flex-shrink:0}
+  .report [lang]{overflow-wrap:anywhere}
+  .report .note{color:#5d6b5f}
+  .report{scroll-margin-top:80px}
+  .assess summary{cursor:pointer;min-height:48px;display:flex;align-items:center;font-weight:700}
+  .report-lang + .report-lang{border-top:1px solid #d9dfd0;margin-top:14px;padding-top:14px}
+  @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}*{transition:none!important}}
+
   :root{
     --leaf:#2f6b3a; --leaf-2:#4f8f4f; --sun:#f2b33d; --soil:#6b4a2f;
     --paper:#fbfaf5; --ink:#1d2a1f; --muted:#5d6b5f; --line:#e3e6dc; --card:#ffffff;
@@ -13,11 +28,11 @@
   }
   @media (prefers-color-scheme: dark){
     :root:not([data-theme="light"]){
-      --paper:#141a15; --ink:#eef3ea; --muted:#a6b3a6; --line:#2a3429; --card:#1c241d; --shadow:none;
+      --paper:#141a15; --ink:#eef3ea; --muted:#a6b3a6; --line:#2a3429; --card:#1c241d; --shadow:none; --leaf:#86bf91; --button-ink:#102d17;
     }
   }
   :root[data-theme="dark"]{
-    --paper:#141a15; --ink:#eef3ea; --muted:#a6b3a6; --line:#2a3429; --card:#1c241d; --shadow:none;
+    --paper:#141a15; --ink:#eef3ea; --muted:#a6b3a6; --line:#2a3429; --card:#1c241d; --shadow:none; --leaf:#86bf91; --button-ink:#102d17;
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
@@ -31,7 +46,8 @@
   p{margin:0 0 1em}
   .eyebrow{font-size:.8rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--leaf)}
   .btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:999px;padding:12px 22px;font-family:inherit;font-weight:600;font-size:1rem;line-height:1;cursor:pointer;text-decoration:none;background:var(--leaf);color:#fff;transition:transform .15s,background .15s}
-  .btn:hover{background:#255630;transform:translateY(-1px)}
+  .btn{color:var(--button-ink,#fff)}
+  .btn:hover{background:#255630;color:#fff;transform:translateY(-1px)}
   .btn.ghost{background:transparent;color:var(--leaf);box-shadow:inset 0 0 0 2px var(--leaf)}
   .btn:focus-visible,.tile:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
 
@@ -59,6 +75,7 @@
   /* Stats */
   .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:8px 0 0}
   @media (max-width:800px){.stats{grid-template-columns:repeat(2,1fr)}}
+  @media (max-width:380px){.stats{grid-template-columns:1fr}}
   .stat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
   .stat b{display:block;font-size:2rem;color:var(--leaf);letter-spacing:-.02em}
   .stat span{color:var(--muted);font-size:.9rem}
@@ -94,7 +111,7 @@
   .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
   .seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
   .seg button{border:0;background:transparent;padding:9px 16px;font-family:inherit;font-weight:600;font-size:.9rem;cursor:pointer;color:var(--muted)}
-  .seg button[aria-pressed="true"]{background:var(--leaf);color:#fff}
+  .seg button[aria-pressed="true"]{background:var(--leaf);color:var(--button-ink,#fff)}
   .note{font-size:.85rem;color:var(--muted);margin-top:8px}
   .warn{border-left:4px solid var(--sun);padding:10px 14px;background:color-mix(in srgb,var(--sun) 14%,transparent);border-radius:8px;font-size:.92rem;margin-top:12px}
 
@@ -102,7 +119,7 @@
   .report{background:#fff;color:#1d2a1f;border-radius:14px;border:1px solid #d9dfd0;padding:22px;box-shadow:var(--shadow)}
   .report h3{color:#2f6b3a;margin-bottom:4px}
   .report .meta{font-size:.9rem;color:#5d6b5f;margin-bottom:14px}
-  .rep-photo{width:100%;max-height:260px;object-fit:cover;border-radius:10px;margin-bottom:14px}
+  .rep-photo{width:100%;max-height:260px;object-fit:contain;border-radius:10px;margin-bottom:14px}
   .rep-sym{display:flex;gap:10px;align-items:center;padding:10px;border-radius:10px;background:#f2f6ea;margin-bottom:8px;font-weight:600}
   .rep-sym .ico{font-size:1.4rem}
   .rep-foot{font-size:.8rem;color:#5d6b5f;margin-top:14px;border-top:1px solid #e3e6dc;padding-top:10px}
@@ -120,8 +137,15 @@
   footer{padding:32px 0 48px;color:var(--muted);font-size:.9rem;border-top:1px solid var(--line)}
   .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
   @media print{
+    body{background:#fff!important}
     header.top,#demo .controls,.no-print,footer,.hero,section:not(#demo),.demo-left{display:none!important}
-    #demo{background:#fff;border:0}
+    @page{margin:12mm}
+    #demo{background:#fff;border:0;padding:0}
+    #demo > .wrap > :not(.demo-grid){display:none!important}
+    .demo-grid{display:block!important}
+    .rep-photo{max-height:180px}
+    .rep-sym,.report-lang p,.rep-foot{break-inside:avoid}
+    .wrap{max-width:none;padding:0}
     .report{box-shadow:none;border:0}
   }
 </style>
@@ -135,17 +159,96 @@
       Field Signal
     </a>
     <nav aria-label="Primary">
-      <a href="#problem">The problem</a>
-      <a href="#stats">Why it matters</a>
-      <a href="#how">How it works</a>
-      <a href="#demo" class="keep btn" style="padding:9px 16px;color:#fff">Try the demo</a>
+      <a href="#problem" data-i18n="navProblem">The problem</a>
+      <a href="#stats" data-i18n="navWhy">Why it matters</a>
+      <a href="#how" data-i18n="navHow">How it works</a>
+      <a href="#demo" class="keep btn" data-i18n="start">Start</a>
     </nav>
   </div>
 </header>
 
 <main id="top">
+<section id="demo" aria-labelledby="demo-h">
+  <div class="wrap">
+    <div class="eyebrow" data-i18n="eyebrow">Observation · human review</div>
+    <h2 id="demo-h" data-i18n="heading">Show what you see</h2>
+    <p data-i18n="intro" style="color:var(--muted);max-width:60ch">Choose a crop and a symptom. Add a photo if you can. Show the report to your supervisor.</p>
 
-<section class="hero">
+    <div class="row controls no-print" style="margin-bottom:18px">
+      <div class="seg" role="group" aria-label="Language / Idioma">
+        <button type="button" data-lang="en" lang="en" aria-pressed="true">English</button>
+        <button type="button" data-lang="es" lang="es" aria-pressed="false">Español</button>
+      </div>
+      <button class="btn ghost" type="button" id="listen-guide" data-i18n="listenGuide">🔊 Hear instructions</button>
+    </div>
+    <div class="demo-grid">
+      <div class="card demo-left">
+
+        <div class="field">
+          <label for="crop" data-i18n="cropLabel">1. Crop</label>
+          <select id="crop">
+            <option value="almond">Almond</option>
+            <option value="walnut">Walnut</option>
+            <option value="grape">Grape</option>
+            <option value="tomato">Tomato</option>
+            <option value="strawberry">Strawberry</option>
+            <option value="lettuce">Lettuce</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <span class="label-title" id="sym-label">What do you see? <small style="font-weight:500;color:var(--muted)">(choose one)</small></span>
+          <div class="tiles" role="group" aria-labelledby="sym-label" id="symptoms"></div>
+        </div>
+
+        <div class="field">
+          <label class="label-title" for="photo" data-i18n="photoLabel">3. Photo (optional)</label>
+          <p class="note" data-i18n="photoHelp">Keep the leaf in focus and include the whole leaf. Avoid faces, badges and location signs. JPEG, PNG or WebP work best; 15 MB maximum.</p>
+          <div class="drop">
+            <input type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif" id="photo" aria-label="Upload a photo">
+            <div id="drop-empty">📷 Tap to take or upload a photo</div>
+            <img id="preview" alt="Selected crop observation" hidden>
+          </div>
+          <div class="row" style="margin-top:8px">
+            <button class="btn ghost" type="button" id="sample" data-i18n="sample" style="padding:8px 14px;font-size:.9rem">Use demo illustration</button>
+            <button class="btn ghost" type="button" id="clear" data-i18n="clear" style="padding:8px 14px;font-size:.9rem">Clear photo</button>
+          </div>
+        </div>
+
+
+        <p id="photo-status" class="note" role="status"></p>
+        <details class="assess" id="assess">
+          <summary data-i18n="aiLabel">Optional AI observations</summary>
+          <div id="assess-text" role="status">Checking AI availability. You can create the report without AI.</div>
+          <p class="note" data-i18n="privacy">The report stays in this tab unless you share it. AI sends the resized photo, crop and symptom through this server to OpenAI. This app does not save uploads; provider retention rules apply.</p>
+          <a class="note" href="https://developers.openai.com/api/docs/guides/your-data" target="_blank" rel="noopener" data-i18n="privacyLink">OpenAI data policy</a>
+          <label class="consent"><input id="consent" type="checkbox"><span data-i18n="consent">I agree to send this photo and these selections to OpenAI.</span></label>
+          <div class="row" style="margin-top:10px">
+            <button class="btn" type="button" id="assess-btn" disabled>Assess photo</button>
+          </div>
+          <div id="ai-result" hidden></div>
+        </details>
+
+        <div class="warn" id="warn" data-i18n="draft">Draft wording, not partner-reviewed. Confirm observations with your supervisor or adviser.</div>
+      </div>
+
+      <div>
+        <div class="row controls no-print" style="margin-bottom:12px">
+          <button class="btn" type="button" id="report">Generate visual report</button>
+          <button class="btn ghost" type="button" id="listen" aria-label="Read the report aloud">🔊 Read aloud</button>
+          <button class="btn ghost" type="button" id="print">🖨️ Print</button>
+          <button class="btn ghost" type="button" id="share" data-i18n="share">Share / copy summary</button>
+        </div>
+        <p id="action-status" class="note no-print" role="status"></p>
+        <article class="report" id="report-card" tabindex="-1" aria-live="polite">
+          <div class="placeholder" id="rep-empty">Your visual report will appear here.</div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="hero" lang="en">
   <div class="wrap hero-grid">
     <div>
       <div class="eyebrow">Picture-based field guide · English &amp; Spanish</div>
@@ -167,44 +270,44 @@
   </div>
 </section>
 
-<section id="stats" aria-labelledby="stats-h">
+<section id="stats" aria-labelledby="stats-h" lang="en">
   <div class="wrap">
     <div class="eyebrow">Why it matters</div>
     <h2 id="stats-h">Farmworkers are the majority of the field, but outreach rarely reaches them</h2>
     <div class="stats">
-      <div class="stat"><b>880,000</b><span>estimated farmworkers in California</span></div>
-      <div class="stat"><b>130,000</b><span>growers in California, for comparison</span></div>
+      <div class="stat"><b>880,000</b><span>estimated farmworkers in California (2025 UC ANR article)</span></div>
+      <div class="stat"><b>130,000</b><span>estimated growers in California (2025 UC ANR article)</span></div>
       <div class="stat"><b>16</b><span>focus groups held across the Central Valley</span></div>
-      <div class="stat"><b>39%</b><span>of focus-group topics were pest management, the top interest</span></div>
+      <div class="stat"><b>39%</b><span>pest management share in the 2023–2024 topic-interest chart (not a population percentage)</span></div>
     </div>
-    <p class="source">Sources: UC Agriculture and Natural Resources (UC ANR), “Why It’s Important for UC ANR to Include Farmworkers as Part of Its Clientele” (ucanr.edu); UC ANR “Understanding Farmworker Agricultural Learning Needs” project summary (2025); Juarez, A., UC Davis dissertation (2024, escholarship.org).</p>
+    <p class="source">Sources: <a href="https://ucanr.edu/blog/nuestra-comunidad/article/why-its-important-uc-anr-include-farmworkers-part-its-clientele">UC ANR, August 2025</a>; <a href="https://ucanr.edu/sites/default/files/2025-08/Farmworker%20Extension%20Project%20Summary.pdf">UC ANR learning-needs summary</a>; <a href="https://communitydevelopment.ucdavis.edu/sites/g/files/dgvnsk1186/files/inline-files/Juarez_Thesis_Final.pdf">Andrea G. Juarez, 2024 master's thesis</a> (16 groups, 136 participants). In-person learning was preferred. These findings motivate this prototype; they do not validate this app. No UC ANR endorsement or review is claimed.</p>
   </div>
 </section>
 
-<section id="problem" aria-labelledby="problem-h">
+<section id="problem" aria-labelledby="problem-h" lang="en">
   <div class="wrap problem">
     <div>
       <div class="eyebrow">The problem</div>
       <h2 id="problem-h">A new worker sees a strange leaf. Words get in the way.</h2>
       <p>Most extension materials are written for growers and pest control advisers, who often have degrees and read English fluently. Many farmworkers speak Spanish or Indigenous languages, and some have limited formal schooling.</p>
-      <p>When a symptom is unfamiliar, describing it in a long English form takes longer than pointing at it. Field Signal lets the worker show the problem and choose a visual label, so the supervisor gets a clear, shareable report.</p>
+      <p>Field Signal tests whether choosing a visual label can make unfamiliar symptoms easier to communicate than an English-only form. The worker can show a bilingual report to a supervisor. Task speed, comprehension and usefulness have not yet been tested with farmworkers.</p>
     </div>
     <div class="card trust">
       <h3>Designed around the findings</h3>
       <ul>
-        <li><strong>Pictures first.</strong> Symptom categories are illustrated, so reading is optional.</li>
-        <li><strong>Bilingual by default.</strong> Every label appears in English and Spanish, with read-aloud where the browser supports it.</li>
-        <li><strong>Built with the field in mind.</strong> Large tap targets, low-literacy wording, and offline-capable core features.</li>
+        <li><strong>Pictures first.</strong> Symptom sketches support the labels. Their meaning still needs testing with workers.</li>
+        <li><strong>Bilingual by default.</strong> The worker flow switches between English and Spanish; reports show both. Voice availability depends on the device.</li>
+        <li><strong>Built with the field in mind.</strong> Large tap targets and short draft labels. Once loaded, core reports work without a connection; offline reopening is not supported.</li>
         <li><strong>Honest about limits.</strong> Field Signal does not diagnose plant disease. It documents what was observed for a qualified person to review.</li>
       </ul>
     </div>
   </div>
 </section>
 
-<section id="how" aria-labelledby="how-h" style="padding-top:8px">
+<section id="how" aria-labelledby="how-h" style="padding-top:8px" lang="en">
   <div class="wrap">
     <div class="eyebrow">How it works</div>
-    <h2 id="how-h">Four taps from a problem to a report</h2>
+    <h2 id="how-h">From an observation to a supervisor conversation</h2>
     <div class="steps">
       <div class="step"><strong>Choose a crop</strong><p class="note" style="margin:6px 0 0">Pick the plant you are looking at.</p></div>
       <div class="step"><strong>Tap a symptom</strong><p class="note" style="margin:6px 0 0">Leaf spots, yellowing, chewing, wilting and more.</p></div>
@@ -214,80 +317,9 @@
   </div>
 </section>
 
-<section id="demo" aria-labelledby="demo-h">
-  <div class="wrap">
-    <div class="eyebrow">60-second demo</div>
-    <h2 id="demo-h">Try it: spots on leaves</h2>
-    <p style="color:var(--muted);max-width:60ch">Pick a crop, tap a symptom, upload a photo (or use the sample), then switch languages and listen to the labels.</p>
 
-    <div class="demo-grid">
-      <div class="card demo-left">
 
-        <div class="field">
-          <label for="crop">Crop</label>
-          <select id="crop">
-            <option value="almond">Almond</option>
-            <option value="walnut">Walnut</option>
-            <option value="grape">Grape</option>
-            <option value="tomato">Tomato</option>
-            <option value="strawberry">Strawberry</option>
-            <option value="lettuce">Lettuce</option>
-          </select>
-        </div>
-
-        <div class="field">
-          <span class="label-title" id="sym-label">What do you see? <small style="font-weight:500;color:var(--muted)">(choose one)</small></span>
-          <div class="tiles" role="group" aria-labelledby="sym-label" id="symptoms"></div>
-        </div>
-
-        <div class="field">
-          <span class="label-title">Photo of the problem</span>
-          <div class="drop">
-            <input type="file" accept="image/*" id="photo" aria-label="Upload a photo">
-            <div id="drop-empty">📷 Tap to take or upload a photo</div>
-            <img id="preview" alt="" hidden>
-          </div>
-          <div class="row" style="margin-top:8px">
-            <button class="btn ghost" type="button" id="sample" style="padding:8px 14px;font-size:.9rem">Use sample photo</button>
-            <button class="btn ghost" type="button" id="clear" style="padding:8px 14px;font-size:.9rem">Clear photo</button>
-          </div>
-        </div>
-
-        <div class="field">
-          <span class="label-title">Language</span>
-          <div class="seg" role="group" aria-label="Language">
-            <button type="button" data-lang="en" aria-pressed="true">English</button>
-            <button type="button" data-lang="es" aria-pressed="false">Español</button>
-          </div>
-        </div>
-
-        <div class="assess" id="assess" aria-live="polite">
-          <span class="pill">AI photo assessment</span>
-          <div id="assess-text">Upload a photo, tap a symptom, then press “Assess photo” for an AI observation of possible causes and severity. It is a guide to share with your supervisor, not a diagnosis.</div>
-          <div class="row" style="margin-top:10px">
-            <button class="btn" type="button" id="assess-btn" disabled>Assess photo</button>
-          </div>
-          <div id="ai-result" hidden></div>
-        </div>
-
-        <div class="warn" id="warn">Symptom labels are reviewed wording. Always confirm with your supervisor or a local agricultural adviser before acting.</div>
-      </div>
-
-      <div>
-        <div class="row controls no-print" style="margin-bottom:12px">
-          <button class="btn" type="button" id="report">Generate visual report</button>
-          <button class="btn ghost" type="button" id="listen" aria-label="Read the report aloud">🔊 Read aloud</button>
-          <button class="btn ghost" type="button" id="print">🖨️ Print</button>
-        </div>
-        <article class="report" id="report-card" aria-live="polite">
-          <div class="placeholder" id="rep-empty">Your visual report will appear here.</div>
-        </article>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section aria-labelledby="fine-h" style="padding-top:24px">
+<section aria-label="Prototype features" style="padding-top:24px" lang="en">
   <div class="wrap cols3">
     <div class="card"><h3>Shareable</h3><p>Reports are simple, picture-led cards that a supervisor or adviser can read in seconds.</p></div>
     <div class="card"><h3>Accessible</h3><p>Large tap targets, bilingual labels, read-aloud where supported, and keyboard-friendly controls.</p></div>
@@ -297,7 +329,7 @@
 
 </main>
 
-<footer>
+<footer lang="en">
   <div class="wrap">
     <p><strong>Field Signal</strong> · Built for Sierra Hacks 2026 · Not a diagnostic tool.</p>
     <p>Farmworker research cited from UC Agriculture and Natural Resources. Labels should be reviewed by UC ANR and farmworker-serving partners before field use.</p>
@@ -306,202 +338,259 @@
 
 <script>
 (() => {
-  const $ = (s) => document.querySelector(s);
-
-  // Reviewed bilingual labels. Replace with partner-reviewed wording before field use.
+  const $ = s => document.querySelector(s);
   const SYMPTOMS = [
-    { id:"spots",   ico:"🍂", en:"Spots on leaves",  es:"Manchas en las hojas", sub:{en:"Dots or patches",  es:"Puntos o manchas"} },
-    { id:"yellow",  ico:"🟡", en:"Yellow leaves",    es:"Hojas amarillas",      sub:{en:"Color is fading",  es:"El color se pierde"} },
-    { id:"holes",   ico:"🐛", en:"Holes or chewing", es:"Hoyos o hojas mordidas", sub:{en:"Missing pieces",   es:"Partes faltantes"} },
-    { id:"wilt",    ico:"🥀", en:"Wilting",          es:"Marchitamiento",       sub:{en:"Droopy plant",      es:"Planta caída"} },
-    { id:"webs",    ico:"🕸️", en:"Webbing or sticky", es:"Telarañas o pegajoso", sub:{en:"Fine threads or residue", es:"Hilos finos o residuo"} },
-    { id:"other",   ico:"❓", en:"Something else",   es:"Otro problema",        sub:{en:"Describe in the photo", es:"Descríbalo en la foto"} }
+    { id:'spots', en:'Spots on leaves', es:'Manchas en las hojas', sub:{en:'Dots or patches',es:'Puntos o manchas'} },
+    { id:'yellow', en:'Yellow leaves', es:'Hojas amarillas', sub:{en:'Color is fading',es:'El color se pierde'} },
+    { id:'holes', en:'Holes or chewing', es:'Hojas con agujeros', sub:{en:'Missing pieces',es:'Partes faltantes'} },
+    { id:'wilt', en:'Drooping leaves', es:'Hojas caídas', sub:{en:'Leaves hang down',es:'Las hojas cuelgan'} },
+    { id:'webs', en:'Webbing or sticky', es:'Telarañas o residuo pegajoso', sub:{en:'Fine threads or residue',es:'Hilos finos o residuo'} },
+    { id:'other', en:'Something else / unsure', es:'Otra cosa / no sé', sub:{en:'Show your supervisor',es:'Muéstrelo al supervisor'} },
   ];
   const UI = {
-    en: { photoNone:"No photo added", photoOk:"Photo added", assessDefault:"Upload a photo to see a quick image check. This only confirms that a usable photo was added. It does not identify the disease.",
-          assessOk:"Photo received. Check that the problem is clear and centered, then generate the report.",
-          assessSmall:"The photo is very small. Try a closer, sharper picture.",
-          needSym:"Please tap one symptom first.", crop:"Crop", symptom:"Symptom", observed:"Observed", photo:"Photo",
-          title:"Field Observation Card", date:"Date", tagline:"Visual report · for supervisor review", footer:"Observation only. Not a diagnosis. Confirm with a supervisor or adviser.",
-          read:"Read aloud", stop:"Stop", print:"Print", generate:"Generate visual report", empty:"Your visual report will appear here.",
-          noPhoto:"No photo attached", crops:{almond:"Almond",walnut:"Walnut",grape:"Grape",tomato:"Tomato",strawberry:"Strawberry",lettuce:"Lettuce"} },
-    es: { photoNone:"No se agregó foto", photoOk:"Foto agregada", assessDefault:"Suba una foto para ver una revisión rápida. Esto solo confirma que se agregó una foto útil. No identifica la enfermedad.",
-          assessOk:"Foto recibida. Revise que el problema se vea claro y centrado, y luego genere el reporte.",
-          assessSmall:"La foto es muy pequeña. Intente una imagen más cercana y nítida.",
-          needSym:"Primero toque un síntoma.", crop:"Cultivo", symptom:"Síntoma", observed:"Observado", photo:"Foto",
-          title:"Tarjeta de observación de campo", date:"Fecha", tagline:"Reporte visual · para revisión del supervisor", footer:"Solo observación. No es un diagnóstico. Confirme con un supervisor o asesor.",
-          read:"Leer en voz alta", stop:"Detener", print:"Imprimir", generate:"Generar reporte visual", empty:"Su reporte visual aparecerá aquí.",
-          noPhoto:"Sin foto adjunta", crops:{almond:"Almendra",walnut:"Nuez",grape:"Uva",tomato:"Tomate",strawberry:"Fresa",lettuce:"Lechuga"} }
+    en:{
+      navProblem:'The problem', navWhy:'Why it matters', navHow:'How it works',
+      start:'Start', eyebrow:'Observation · human review', heading:'Show what you see', intro:'Choose a crop and a symptom. Add a photo if you can. Show the report to your supervisor.',
+      cropLabel:'1. Crop', photoLabel:'3. Photo (optional)', listenGuide:'🔊 Hear instructions',
+      photoHelp:'Keep the leaf in focus and include the whole leaf. Avoid faces, badges and location signs. JPEG, PNG or WebP work best; 15 MB maximum.',
+      sample:'Use demo illustration', clear:'Clear photo', aiLabel:'Optional AI observations',
+      privacy:'The report stays in this tab unless you share it. AI sends the resized photo, crop and symptom through this server to OpenAI. This app does not save uploads; provider retention rules apply.',
+      privacyLink:'OpenAI data policy', consent:'I agree to send this photo and these selections to OpenAI.',
+      draft:'Draft labels and Spanish wording: not reviewed by UC ANR or a farmworker-serving partner. Confirm observations with your supervisor or adviser.',
+      share:'Share / copy summary', choose:'2. What do you see? (choose one)', upload:'📷 Take or choose a photo',
+      generate:'Show bilingual report', read:'Read report aloud', print:'Print / Save PDF', empty:'Your bilingual report will appear here.',
+      crop:'Crop', symptom:'Worker-selected symptom', title:'Field observation', date:'Date', noPhoto:'No photo attached',
+      footer:'Observation only. Not a diagnosis. Ask a supervisor or agricultural adviser to review before acting.',
+      needSym:'Choose one symptom first, or choose “Something else / unsure”.',
+      sampleNote:'Demo illustration — not a field photo. AI is disabled for this sample.',
+      ready:'Photo added. Check that the problem is clear. You can create the report without AI.',
+      photoError:'This photo could not be opened. Try a JPEG, PNG or WebP, or continue without a photo.',
+      photoLarge:'Photo too large. Choose a photo under 15 MB, or continue without one.', loadingPhoto:'Opening photo…',
+      checking:'Checking AI availability… The core report works without AI.',
+      unavailable:'AI is unavailable here. You can still create the bilingual report.',
+      configured:'AI key configured; live connection not verified. Add a real photo, select a symptom and agree below to try AI.',
+      assess:'Ask AI (optional)', assessing:'Checking photo… You can still create the report.',
+      aiDone:'AI suggestions are unverified and can be wrong. A human must review them.',
+      aiError:'AI could not finish. Your photo is still here. Retry, or create the report without AI.',
+      timeout:'AI took too long. Retry, or create the report without AI.', busy:'AI is busy. Wait a minute or create the report without AI.',
+      aiHeading:'AI suggestions · unverified', possible:'Possible categories, not a diagnosis', checks:'Things to look at',
+      audioMissing:'No voice for this language is available on this device. Use the visible report.',
+      audioError:'Audio did not play. Use the visible report.', copied:'Bilingual summary copied. The photo is not copied.',
+      shared:'Summary shared using your device. The photo is not included.', shareError:'Sharing is unavailable here. Show the bilingual report on screen or use Print / Save PDF.',
+      crops:{almond:'Almond',walnut:'Walnut',grape:'Grape',tomato:'Tomato',strawberry:'Strawberry',lettuce:'Lettuce'},
+    },
+    es:{
+      navProblem:'El problema', navWhy:'Por qué importa', navHow:'Cómo funciona',
+      start:'Empezar', eyebrow:'Observación · revisión humana', heading:'Muestre lo que ve', intro:'Elija el cultivo y un síntoma. Agregue una foto si puede. Muestre el reporte a su supervisor.',
+      cropLabel:'1. Cultivo', photoLabel:'3. Foto (opcional)', listenGuide:'🔊 Escuchar instrucciones',
+      photoHelp:'Enfoque la hoja completa. Evite caras, gafetes y letreros de ubicación. Use JPEG, PNG o WebP de preferencia; máximo 15 MB.',
+      sample:'Usar ilustración de prueba', clear:'Quitar foto', aiLabel:'Observaciones con IA (opcional)',
+      privacy:'El reporte queda en esta pestaña hasta que lo comparta. La IA envía la foto reducida, el cultivo y el síntoma a OpenAI a través de este servidor. Esta aplicación no guarda las fotos; se aplican las reglas de retención del proveedor.',
+      privacyLink:'Política de datos de OpenAI', consent:'Acepto enviar esta foto y estas selecciones a OpenAI.',
+      draft:'Las etiquetas y el español son un borrador: UC ANR y las organizaciones de apoyo a trabajadores agrícolas no los han revisado. Confirme las observaciones con su supervisor o asesor.',
+      share:'Compartir / copiar resumen', choose:'2. ¿Qué ve? (elija una opción)', upload:'📷 Tomar o elegir una foto',
+      generate:'Mostrar reporte bilingüe', read:'Escuchar el reporte', print:'Imprimir / Guardar PDF', empty:'Su reporte bilingüe aparecerá aquí.',
+      crop:'Cultivo', symptom:'Síntoma seleccionado por el trabajador', title:'Observación de campo', date:'Fecha', noPhoto:'Sin foto adjunta',
+      footer:'Solo observación. No es un diagnóstico. Pida una revisión a su supervisor o asesor agrícola antes de actuar.',
+      needSym:'Elija un síntoma, o elija «Otra cosa / no sé».',
+      sampleNote:'Ilustración de prueba: no es una foto de campo. No se puede usar con IA.',
+      ready:'Foto agregada. Revise que el problema se vea claro. Puede crear el reporte sin IA.',
+      photoError:'No se pudo abrir esta foto. Intente con JPEG, PNG o WebP, o continúe sin foto.',
+      photoLarge:'La foto es demasiado grande. Elija una de menos de 15 MB o continúe sin foto.', loadingPhoto:'Abriendo foto…',
+      checking:'Comprobando la disponibilidad de IA… Puede crear el reporte sin IA.',
+      unavailable:'La IA no está disponible aquí. Puede crear el reporte bilingüe.',
+      configured:'La clave de IA está configurada; no se ha verificado la conexión. Agregue una foto real, elija un síntoma y dé su consentimiento abajo para probar la IA.',
+      assess:'Consultar IA (opcional)', assessing:'Revisando la foto… Puede crear el reporte sin esperar.',
+      aiDone:'Las sugerencias de IA no están verificadas y pueden ser incorrectas. Una persona debe revisarlas.',
+      aiError:'La IA no pudo terminar. Su foto sigue aquí. Intente de nuevo o cree el reporte sin IA.',
+      timeout:'La IA tardó demasiado. Intente de nuevo o cree el reporte sin IA.', busy:'La IA está ocupada. Espere un minuto o cree el reporte sin IA.',
+      aiHeading:'Sugerencias de IA · sin verificar', possible:'Posibles categorías, no un diagnóstico', checks:'Qué observar',
+      audioMissing:'No hay una voz disponible para este idioma en el dispositivo. Use el reporte en pantalla.',
+      audioError:'No se pudo reproducir el audio. Use el reporte en pantalla.', copied:'Se copió el resumen bilingüe. No se copió la foto.',
+      shared:'Se compartió el resumen con su dispositivo. No se incluyó la foto.', shareError:'No se puede compartir aquí. Muestre el reporte en pantalla o use Imprimir / Guardar PDF.',
+      crops:{almond:'Almendro',walnut:'Nogal',grape:'Vid',tomato:'Tomate',strawberry:'Fresa',lettuce:'Lechuga'},
+    },
   };
-
-  const state = { lang:"en", symptom:null, photo:null };
-
-  // Symptom tiles
-  const tiles = $("#symptoms");
-  SYMPTOMS.forEach(s => {
-    const b = document.createElement("button");
-    b.type = "button"; b.className = "tile"; b.dataset.id = s.id;
-    b.setAttribute("aria-pressed", "false");
-    b.innerHTML = `<span class="ico" aria-hidden="true">${s.ico}</span><span><span class="tx"></span><small></small></span>`;
-    tiles.appendChild(b);
-    b.addEventListener("click", () => {
-      state.symptom = s.id;
-      tiles.querySelectorAll(".tile").forEach(t => t.setAttribute("aria-pressed", String(t === b)));
-      renderTiles();
-    });
-  });
-
-  function renderTiles(){
-    const L = state.lang;
-    SYMPTOMS.forEach(s => {
-      const b = tiles.querySelector(`[data-id="${s.id}"]`);
-      b.querySelector(".tx").textContent = s[L];
-      b.querySelector("small").textContent = s.sub[L];
-      b.setAttribute("aria-pressed", String(state.symptom === s.id));
-    });
+  const state = { lang:'en', symptom:null, photo:null, isSample:false, ai:null, availability:'checking', aiStatus:null, photoStatus:null, actionStatus:null, busy:false, photoBusy:false, revision:0, photoVersion:0, report:false, controller:null };
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  function icon(id) {
+    const leaf = `<path d="M10 49Q10 7 54 10Q56 49 10 49Z" fill="${id === 'yellow' ? '#efd54c' : '#8db56a'}" stroke="#315d36" stroke-width="2"/><path d="M9 53L46 19" stroke="#315d36" stroke-width="2"/>`;
+    const marks = {
+      spots:'<g fill="#814629" stroke="#e6b653" stroke-width="2"><circle cx="22" cy="29" r="4"/><circle cx="38" cy="24" r="5"/><circle cx="35" cy="39" r="4"/></g>',
+      yellow:'<path d="M24 40L21 24M32 32L45 33" stroke="#95802b" stroke-width="2"/>',
+      holes:'<g fill="white" stroke="#315d36"><ellipse cx="25" cy="29" rx="5" ry="7"/><ellipse cx="40" cy="28" rx="4" ry="5"/></g>',
+      webs:'<path d="M14 20L47 43M19 16L51 37M13 30L40 47M14 20L40 47M19 16L47 43M29 13L51 37" stroke="white" stroke-width="2"/>',
+    };
+    const drawing = id === 'other' ? '<circle cx="32" cy="32" r="25" fill="#f3e7bd"/><text x="32" y="44" text-anchor="middle" font-size="38" fill="#573b22">?</text>' : id === 'wilt' ? '<path d="M17 55Q40 5 48 33" fill="none" stroke="#315d36" stroke-width="4"/><path d="M47 27Q63 43 48 56Q34 42 47 27Z" fill="#8db56a" stroke="#315d36" stroke-width="2"/>' : leaf + (marks[id] || '');
+    return `<svg viewBox="0 0 64 64" aria-hidden="true">${drawing}</svg>`;
   }
-
-  function applyLang(){
+  function message(target, key) { $(target).textContent = key ? UI[state.lang][key] : ''; }
+  function invalidateAI() {
+    state.revision++; state.controller?.abort(); state.controller = null;
+    state.busy = false; state.ai = null; state.aiStatus = null;
+    $('#consent').checked = false; state.actionStatus = null; stopSpeech();
+  }
+  function render() {
     const L = UI[state.lang];
     document.documentElement.lang = state.lang;
-    document.querySelectorAll("[data-lang]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === state.lang)));
-    $("#sym-label").firstChild.textContent = state.lang === "en" ? "What do you see? " : "¿Qué ve? ";
-    $("#sym-label small").textContent = state.lang === "en" ? "(choose one)" : "(elija una)";
-    $("#drop-empty").textContent = state.lang === "en" ? "📷 Tap to take or upload a photo" : "📷 Toque para tomar o subir una foto";
-    $("#report").textContent = L.generate;
-    $("#listen").textContent = "🔊 " + L.read;
-    $("#print").textContent = "🖨️ " + L.print;
-    const empty = $("#rep-empty");
-    if (empty) empty.textContent = L.empty;
-    renderTiles();
-    updateAssess();
+    document.querySelectorAll('[data-i18n]').forEach(el => el.textContent = L[el.dataset.i18n]);
+    document.querySelectorAll('[data-lang]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.lang === state.lang)));
+    $('#sym-label').textContent = L.choose;
+    $('#crop').querySelectorAll('option').forEach(o => o.textContent = L.crops[o.value]);
+    $('#drop-empty').textContent = L.upload;
+    $('#photo').setAttribute('aria-label', L.photoLabel);
+    $('#preview').alt = state.isSample ? L.sampleNote : L.photoLabel;
+    $('#report').textContent = L.generate; $('#report').disabled = state.photoBusy;
+    $('#listen').textContent = '🔊 ' + L.read; $('#listen').setAttribute('aria-label', L.read);
+    $('#print').textContent = L.print;
+    for (const s of SYMPTOMS) {
+      const b = $(`[data-id="${s.id}"]`);
+      b.querySelector('.tx').textContent = s[state.lang]; b.querySelector('small').textContent = s.sub[state.lang];
+      b.setAttribute('aria-pressed', String(state.symptom === s.id));
+    }
+    message('#photo-status', state.photoStatus); message('#action-status', state.actionStatus);
+    const status = state.aiStatus || (state.isSample ? 'sampleNote' : state.availability);
+    message('#assess-text', status);
+    $('#assess-btn').textContent = state.busy ? L.assessing : L.assess;
+    $('#assess-btn').disabled = state.busy || state.photoBusy || state.availability !== 'configured' || !state.photo || !state.symptom || state.isSample || !$('#consent').checked;
+    $('#consent').disabled = state.isSample || state.availability !== 'configured' || !state.photo || !state.symptom;
+    $('#assess').setAttribute('aria-busy', String(state.busy));
+    $('#ai-result').hidden = !state.ai;
+    $('#ai-result').innerHTML = state.ai ? renderAI(state.ai, state.lang) : '';
+    if (state.report) buildReport(); else $('#report-card').textContent = L.empty;
   }
-
-  document.querySelectorAll("[data-lang]").forEach(b => b.addEventListener("click", () => {
-    stopSpeech();
-    state.lang = b.dataset.lang; applyLang();
-    if (lastReport) buildReport();
-  }));
-
-  // Photo handling
-  function setPhoto(src, w, h){
-    state.photo = src;
-    const img = $("#preview");
-    img.src = src; img.hidden = false; $("#drop-empty").hidden = true;
-    state.photoSize = { w, h };
-    updateAssess();
+  for (const s of SYMPTOMS) {
+    const b = document.createElement('button'); b.type = 'button'; b.className = 'tile'; b.dataset.id = s.id;
+    b.innerHTML = `${icon(s.id)}<span><span class="tx"></span><small></small></span>`;
+    b.addEventListener('click', () => { if (state.symptom !== s.id) { invalidateAI(); state.symptom = s.id; } render(); });
+    $('#symptoms').appendChild(b);
   }
-  $("#photo").addEventListener("change", e => {
-    const f = e.target.files[0]; if (!f) return;
-    const r = new FileReader();
-    r.onload = () => loadImg(r.result);
-    r.readAsDataURL(f);
-  });
-  // Downscale photos to a JPEG under ~1280px so uploads stay small and fast on phones.
-  function loadImg(src, isSample = false){
-    const im = new Image();
-    im.onload = () => {
-      const max = 1280, scale = Math.min(1, max / Math.max(im.naturalWidth, im.naturalHeight));
-      const c = document.createElement("canvas");
-      c.width = Math.round(im.naturalWidth * scale); c.height = Math.round(im.naturalHeight * scale);
-      c.getContext("2d").drawImage(im, 0, 0, c.width, c.height);
-      state.isSample = isSample;
-      setPhoto(c.toDataURL("image/jpeg", 0.85), c.width, c.height);
-      clearAI();
-    };
-    im.src = src;
-  }
-  $("#sample").addEventListener("click", () => loadImg(samplePhoto(), true));
-  $("#clear").addEventListener("click", () => {
-    state.photo = null; state.photoSize = null; state.isSample = false; clearAI();
-    $("#preview").hidden = true; $("#preview").removeAttribute("src");
-    $("#drop-empty").hidden = false; $("#photo").value = "";
-    updateAssess();
+  $('#crop').addEventListener('change', () => { invalidateAI(); render(); });
+  document.querySelectorAll('[data-lang]').forEach(b => b.addEventListener('click', () => { stopSpeech(); state.lang = b.dataset.lang; render(); }));
+  $('#consent').addEventListener('change', () => {
+    if (!$('#consent').checked && state.busy) { invalidateAI(); }
+    render();
   });
 
-  function updateAssess(){
-    const L = UI[state.lang];
-    let t = L.assessDefault;
-    if (state.photo && state.photoSize){
-      const small = Math.min(state.photoSize.w, state.photoSize.h) < 300;
-      t = small ? L.assessSmall : L.assessOk;
-    }
-    $("#assess-text").textContent = t;
-    $("#assess-btn").disabled = !(state.photo && state.symptom) || !aiEnabled;
-    $("#assess-btn").textContent = state.lang === "en" ? "Assess photo" : "Evaluar la foto";
+  function clearPhoto() {
+    state.photoVersion++; invalidateAI(); state.photo = null; state.isSample = false; state.photoBusy = false; state.photoStatus = null;
+    $('#preview').hidden = true; $('#preview').removeAttribute('src'); $('#drop-empty').hidden = false; $('#photo').value = '';
   }
-
-  // AI assessment via the server proxy (the API key never reaches the browser)
-  let aiEnabled = false;
-  state.ai = null;
-  fetch("/api/status").then(r => r.json()).then(s => {
-    aiEnabled = !!s.aiEnabled;
-    if (!aiEnabled) $("#assess-text").textContent = state.lang === "en"
-      ? "AI assessment is not turned on for this site. The worker can still select a symptom and create the report."
-      : "La evaluación con IA no está activada en este sitio. Igual puede elegir un síntoma y crear el reporte.";
-    updateAssess();
-  }).catch(() => { $("#assess-text").textContent = "AI assessment is unavailable offline. Symptom report still works."; });
-
-  function clearAI(){
-    state.ai = null;
-    const box = $("#ai-result"); if (box){ box.hidden = true; box.innerHTML = ""; }
+  $('#clear').addEventListener('click', () => { clearPhoto(); render(); });
+  async function loadPhoto(src, isSample = false) {
+    clearPhoto(); state.photoBusy = true; state.photoStatus = 'loadingPhoto'; render();
+    const version = state.photoVersion;
+    try {
+      const im = new Image(); im.src = src; await im.decode();
+      if (version !== state.photoVersion) return;
+      if (!im.naturalWidth || im.naturalWidth * im.naturalHeight > 50000000) throw new Error('dimensions');
+      const scale = Math.min(1, 1280 / Math.max(im.naturalWidth, im.naturalHeight));
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.max(1, Math.round(im.naturalWidth * scale)); canvas.height = Math.max(1, Math.round(im.naturalHeight * scale));
+      const ctx = canvas.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0,0,canvas.width,canvas.height); ctx.drawImage(im,0,0,canvas.width,canvas.height);
+      state.photo = canvas.toDataURL('image/jpeg', .85); state.isSample = isSample;
+      state.photoStatus = isSample ? 'sampleNote' : 'ready';
+      $('#preview').src = state.photo; $('#preview').hidden = false; $('#drop-empty').hidden = true;
+    } catch { if (version === state.photoVersion) state.photoStatus = 'photoError'; }
+    finally { if (version === state.photoVersion) { state.photoBusy = false; render(); } }
   }
+  $('#photo').addEventListener('change', async event => {
+    const file = event.target.files[0]; if (!file) return;
+    if (file.size > 15 * 1024 * 1024) { clearPhoto(); state.photoStatus = 'photoLarge'; render(); return; }
+    if (!/\.(jpe?g|png|webp|heic|heif)$/i.test(file.name) && !/^image\/(jpeg|png|webp|heic|heif)$/.test(file.type)) { clearPhoto(); state.photoStatus = 'photoError'; render(); return; }
+    const url = URL.createObjectURL(file);
+    try { await loadPhoto(url); } finally { URL.revokeObjectURL(url); }
+  });
+  $('#sample').addEventListener('click', () => loadPhoto(samplePhoto(), true));
 
-  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
-
-  function renderAI(r){
-    const es = state.lang === "es";
-    const conf = { low: es ? "baja" : "low", medium: es ? "media" : "medium", high: es ? "alta" : "high" };
-    const sev = { minor: es ? "leve" : "minor", moderate: es ? "moderada" : "moderate", severe: es ? "severa" : "severe", unclear: es ? "no clara" : "unclear" };
-    if (!r.photo_usable){
-      return `<p><strong>${es ? "Foto difícil de evaluar" : "Photo hard to assess"}:</strong> ${esc(es ? "Intente una foto más cercana y clara." : r.photo_note)}</p>`;
-    }
-    const causes = (r.likely_causes || []).map(c => `
-      <li><strong>${esc(es ? (c.name_es || c.name) : c.name)}</strong>
-        <span class="note">(${es ? "confianza" : "confidence"}: ${esc(conf[c.confidence] || c.confidence)})</span><br>
-        ${esc(es ? (c.why_es || c.why) : c.why)}</li>`).join("");
-    const checks = (r.what_to_check || []).map(x => `<li>${esc(x)}</li>`).join("");
-    return `
-      ${r.urgent ? `<p style="color:var(--danger);font-weight:700">⚠️ ${es ? "Avise al supervisor hoy." : "Tell your supervisor today."}</p>` : ""}
-      <p><strong>${es ? "Severidad" : "Severity"}:</strong> ${esc(sev[r.severity] || r.severity)}</p>
-      <p><strong>${es ? "Posibles causas (no es un diagnóstico)" : "Possible causes (not a diagnosis)"}:</strong></p>
-      <ul>${causes}</ul>
-      <p><strong>${es ? "Qué revisar" : "What to check"}:</strong></p>
-      <ul>${checks}</ul>
-      <p class="note">${esc(es ? (r.photo_note || "") : (r.photo_note || ""))}</p>`;
+  function renderAI(r, lang) {
+    const L = UI[lang], es = lang === 'es';
+    const note = es ? r.photo_note_es : r.photo_note;
+    const summary = es ? r.report_to_supervisor_es : r.report_to_supervisor;
+    const causes = r.photo_usable ? r.likely_causes.map(c => `<li>${esc(es ? c.name_es : c.name)}: ${esc(es ? c.why_es : c.why)}</li>`).join('') : '';
+    const checks = r.photo_usable ? r.what_to_check.map(c => `<li>${esc(c[lang])}</li>`).join('') : '';
+    return `<div lang="${lang}"><p><strong>${L.aiHeading}</strong></p><p>${esc(summary)}</p><p>${esc(note)}</p>${causes ? `<p>${L.possible}</p><ul>${causes}</ul>` : ''}${checks ? `<p>${L.checks}</p><ul>${checks}</ul>` : ''}<p class="note">${L.aiDone}</p></div>`;
   }
-
-  async function assessWithAI(){
-    const btn = $("#assess-btn");
-    if (state.isSample){
-      $("#assess-text").textContent = state.lang === "en"
-        ? "The sample is an illustration. Upload a real photo to run the AI assessment."
-        : "La muestra es una ilustración. Suba una foto real para usar la evaluación con IA.";
-      return;
-    }
-    btn.disabled = true; btn.textContent = state.lang === "en" ? "Assessing…" : "Evaluando…";
-    try{
-      const res = await fetch("/api/assess", {
-        method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ image: state.photo, crop: $("#crop").value, symptom: state.symptom })
+  $('#assess-btn').addEventListener('click', async () => {
+    if ($('#assess-btn').disabled) return;
+    state.ai = null; state.busy = true; state.aiStatus = 'assessing';
+    const revision = state.revision, controller = new AbortController(); state.controller = controller;
+    const timeout = setTimeout(() => controller.abort(), 25000); render();
+    try {
+      const response = await fetch('/api/assess', {
+        method:'POST', headers:{'Content-Type':'application/json'}, signal:controller.signal,
+        body:JSON.stringify({ image:state.photo, crop:$('#crop').value, symptom:state.symptom, consent:true }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Request failed");
-      state.ai = data.result;
-      const box = $("#ai-result");
-      box.innerHTML = renderAI(data.result);
-      box.hidden = false;
-      $("#assess-text").textContent = data.disclaimer;
-      if (lastReport) buildReport();
-    } catch (err){
-      $("#assess-text").textContent = (state.lang === "en" ? "Could not assess the photo: " : "No se pudo evaluar la foto: ") + err.message;
-    } finally {
-      updateAssess();
+      const data = await response.json();
+      if (revision !== state.revision) return;
+      if (!response.ok) { state.aiStatus = ({timeout:'timeout',busy:'busy',not_configured:'unavailable'})[data.error] || 'aiError'; }
+      else if (!data.result || !Array.isArray(data.result.likely_causes) || !Array.isArray(data.result.what_to_check)) { state.aiStatus = 'aiError'; }
+      else { state.ai = data.result; state.aiStatus = 'aiDone'; }
+    } catch { if (revision === state.revision) state.aiStatus = controller.signal.aborted ? 'timeout' : 'aiError'; }
+    finally {
+      clearTimeout(timeout);
+      if (revision === state.revision) { state.busy = false; state.controller = null; render(); }
     }
-  }
-  $("#assess-btn").addEventListener("click", assessWithAI);
+  });
 
-  // Generated, illustrative sample leaf photo (SVG data URI, not a real field photo)
+  function reportText(lang) {
+    const L = UI[lang], sym = SYMPTOMS.find(s => s.id === state.symptom);
+    return [L.title, `${L.crop}: ${L.crops[$('#crop').value]}`, `${L.symptom}: ${sym ? sym[lang] : L.needSym}`, state.isSample ? L.sampleNote : !state.photo ? L.noPhoto : '',
+      state.ai ? `${L.aiHeading}. ${lang === 'es' ? state.ai.report_to_supervisor_es : state.ai.report_to_supervisor}. ${L.aiDone}` : '', L.footer].filter(Boolean).join('. ');
+  }
+  function buildReport() {
+    const sym = SYMPTOMS.find(s => s.id === state.symptom); if (!sym) return;
+    const crop = $('#crop').value;
+    const photo = state.photo ? `<img class="rep-photo" src="${state.photo}" alt="${esc(UI[state.lang].photoLabel)}">` : '';
+    const blocks = ['en','es'].map(lang => {
+      const L = UI[lang];
+      return `<div class="report-lang" lang="${lang}" data-report-lang="${lang}"><h3>${L.title}</h3><p class="meta">${L.date}: ${new Date().toLocaleDateString(lang === 'es' ? 'es-US' : 'en-US')}</p><p><strong>${L.crop}:</strong> ${L.crops[crop]}</p><p class="meta">${L.symptom}</p><div class="rep-sym">${icon(sym.id)}<span>${sym[lang]}</span></div>${state.isSample ? `<p>${L.sampleNote}</p>` : !state.photo ? `<p>${L.noPhoto}</p>` : ''}${state.ai ? renderAI(state.ai, lang) : ''}<p class="rep-foot">${L.footer}</p></div>`;
+    }).join('');
+    $('#report-card').innerHTML = `${photo}${blocks}`;
+  }
+  function ensureReport() {
+    if (!state.symptom || state.photoBusy) { state.actionStatus = state.photoBusy ? 'loadingPhoto' : 'needSym'; render(); $('#symptoms button').focus(); return false; }
+    state.report = true; state.actionStatus = null; buildReport(); message('#action-status', null); return true;
+  }
+  $('#report').addEventListener('click', () => { if (ensureReport()) { $('#report-card').focus(); $('#report-card').scrollIntoView({block:'start'}); } });
+  $('#print').addEventListener('click', () => { if (ensureReport()) window.print(); });
+  $('#share').addEventListener('click', async () => {
+    if (!ensureReport()) return;
+    const text = reportText('en') + '\n\n' + reportText('es');
+    try {
+      if (navigator.share) { await navigator.share({ title:'Field Signal', text }); state.actionStatus = 'shared'; }
+      else if (navigator.clipboard) { await navigator.clipboard.writeText(text); state.actionStatus = 'copied'; }
+      else { state.actionStatus = 'shareError'; }
+    } catch (error) { if (error.name !== 'AbortError') state.actionStatus = 'shareError'; }
+    message('#action-status', state.actionStatus);
+  });
+  const canSpeak = 'speechSynthesis' in window;
+  function stopSpeech() { if (canSpeak) window.speechSynthesis.cancel(); }
+  function speak(text) {
+    stopSpeech();
+    const voice = canSpeak && window.speechSynthesis.getVoices().find(v => v.localService && v.lang.toLowerCase().startsWith(state.lang));
+    if (!voice) { state.actionStatus = 'audioMissing'; message('#action-status', state.actionStatus); return; }
+    const utterance = new SpeechSynthesisUtterance(text); utterance.voice = voice; utterance.lang = voice.lang;
+    utterance.onerror = event => { if (!['canceled','interrupted'].includes(event.error)) { state.actionStatus = 'audioError'; message('#action-status', state.actionStatus); } };
+    window.speechSynthesis.speak(utterance);
+  }
+  $('#listen-guide').addEventListener('click', () => {
+    if (canSpeak && window.speechSynthesis.speaking) { stopSpeech(); return; }
+    const L = UI[state.lang]; speak([L.intro, L.choose, ...SYMPTOMS.map(s => s[state.lang]), L.photoHelp, L.privacy, L.draft].join('. '));
+  });
+  $('#listen').addEventListener('click', () => {
+    if (canSpeak && window.speechSynthesis.speaking) { stopSpeech(); return; }
+    if (ensureReport()) speak($('#report-card').querySelector(`[data-report-lang="${state.lang}"]`).innerText);
+  });
+  render();
+  if (location.protocol === 'file:') { state.availability = 'unavailable'; render(); }
+  else {
+    const controller = new AbortController(), timeout = setTimeout(() => controller.abort(), 4000);
+    fetch('/api/status', {signal:controller.signal}).then(r => { if (!r.ok) throw new Error('status'); return r.json(); })
+      .then(s => { state.availability = s.aiEnabled === true ? 'configured' : 'unavailable'; })
+      .catch(() => { state.availability = 'unavailable'; })
+      .finally(() => { clearTimeout(timeout); render(); });
+  }
   function samplePhoto(){
     const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="640" height="420" viewBox="0 0 640 420">
       <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7fb069"/><stop offset="1" stop-color="#3f7d3a"/></linearGradient></defs>
@@ -509,64 +598,11 @@
       <path d="M90 330 C140 120 380 80 560 120 C520 300 300 360 90 330Z" fill="url(#g)"/>
       <path d="M100 326 C250 240 380 180 540 130" stroke="#2f5f2c" stroke-width="6" fill="none"/>
       ${[[200,240,14],[260,210,10],[320,190,16],[380,200,9],[430,170,12],[290,265,11],[360,255,15],[470,230,8]].map(([x,y,r])=>`<circle cx="${x}" cy="${y}" r="${r}" fill="#8a4b1f" opacity=".85"/><circle cx="${x}" cy="${y}" r="${r+4}" fill="none" stroke="#d9a441" stroke-width="2" opacity=".7"/>`).join("")}
-      <text x="20" y="400" font-family="system-ui" font-size="18" fill="#2f4a2c">Sample illustration: spots on leaves</text>
+      <text x="20" y="400" font-family="system-ui" font-size="18" fill="#2f4a2c">Demo / Ilustración: spots / manchas</text>
     </svg>`;
     return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
   }
 
-  // Report
-  let lastReport = false;
-  function buildReport(){
-    lastReport = true;
-    const L = UI[state.lang];
-    const sym = SYMPTOMS.find(s => s.id === state.symptom);
-    const crop = $("#crop").value;
-    const now = new Date().toLocaleDateString(state.lang === "en" ? "en-US" : "es-US", { year:"numeric", month:"short", day:"numeric" });
-    const photoHtml = state.photo ? `<img class="rep-photo" src="${state.photo}" alt="Field photo">` : `<div class="rep-sym">📷 ${L.noPhoto}</div>`;
-    const symHtml = sym
-      ? `<div class="rep-sym"><span class="ico" aria-hidden="true">${sym.ico}</span><span>${sym[state.lang]}</span></div>`
-      : `<div class="rep-sym">⚠️ ${L.needSym}</div>`;
-    $("#report-card").innerHTML = `
-      <h3>${L.title}</h3>
-      <div class="meta">${L.date}: ${now} · ${L.tagline}</div>
-      ${photoHtml}
-      <div class="meta"><strong>${L.crop}:</strong> ${L.crops[crop]}</div>
-      <div class="meta"><strong>${L.symptom}:</strong></div>
-      ${symHtml}
-      <div class="meta" style="margin-top:10px"><strong>${L.observed}</strong> · ${state.lang === "en" ? "English" : "Español"}</div>
-      ${state.ai ? `<div class="meta" style="margin-top:10px"><strong>${state.lang === "en" ? "AI photo assessment" : "Evaluación de foto con IA"}</strong></div>
-        <div>${state.lang === "es" && state.ai.report_to_supervisor_es ? esc(state.ai.report_to_supervisor_es) : esc(state.ai.report_to_supervisor || "")}</div>
-        <div style="margin-top:6px">${renderAI(state.ai)}</div>` : ""}
-      <div class="rep-foot">${L.footer}</div>`;
-  }
-  $("#report").addEventListener("click", () => {
-    if (!state.symptom) $("#assess-text").textContent = UI[state.lang].needSym;
-    buildReport();
-  });
-
-  // Read aloud (speechSynthesis where supported)
-  const canSpeak = "speechSynthesis" in window;
-  function stopSpeech(){ if (canSpeak) window.speechSynthesis.cancel(); $("#listen").textContent = "🔊 " + UI[state.lang].read; }
-  $("#listen").addEventListener("click", () => {
-    if (!canSpeak){ $("#listen").textContent = "🔊 " + UI[state.lang].read + " (not supported here)"; return; }
-    if (window.speechSynthesis.speaking){ stopSpeech(); return; }
-    const L = UI[state.lang];
-    const sym = SYMPTOMS.find(s => s.id === state.symptom);
-    const text = [L.title, L.crop + ": " + L.crops[$("#crop").value], sym ? sym[state.lang] : L.needSym].join(". ");
-    const u = new SpeechSynthesisUtterance(text);
-    u.lang = state.lang === "en" ? "en-US" : "es-US";
-    u.onend = () => $("#listen").textContent = "🔊 " + L.read;
-    $("#listen").textContent = "⏹ " + L.stop;
-    window.speechSynthesis.speak(u);
-  });
-
-  $("#print").addEventListener("click", () => {
-    if (!lastReport) buildReport();
-    window.print();
-  });
-
-  applyLang();
-  renderTiles();
 })();
 </script>
 </body>
