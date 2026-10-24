@@ -2,6 +2,8 @@
 const http = require('node:http');
 const fs = require('node:fs');
 const path = require('node:path');
+const { randomUUID } = require('node:crypto');
+const analysis = require('./analysis');
 const MAX_BODY = 8 * 1024 * 1024;
 const CROPS = ['almond', 'walnut', 'grape', 'tomato', 'strawberry', 'lettuce', 'unsure'];
 const SYMPTOMS = ['spots', 'yellow', 'holes', 'wilt', 'webs', 'other', 'unsure'];
@@ -87,13 +89,14 @@ function firstProblem(value, schema, path = 'result') {
   for (const k of schema.required) { const bad = firstProblem(value[k], schema.properties[k], `${path}.${k}`); if (bad) return bad; }
   return '';
 }
-function createServer({ key = process.env.OPENAI_API_KEY, model = process.env.OPENAI_MODEL || 'gpt-4o-mini', baseUrl = process.env.AI_BASE_URL || 'https://api.openai.com/v1', fetchImpl = fetch, timeoutMs = 20000 } = {}) {
+function createServer({ key = process.env.OPENAI_API_KEY, model = process.env.OPENAI_MODEL || 'gpt-4o-mini', baseUrl = process.env.AI_BASE_URL || 'https://api.openai.com/v1', fetchImpl = fetch, timeoutMs = 45000 } = {}) {
   // OpenAI supports strict json_schema; OpenAI-compatible free providers (Gemini, Ollama) get json_object plus the schema in the prompt.
   const endpoint = new URL(baseUrl);
   const openai = endpoint.origin === 'https://api.openai.com';
   const provider = openai ? { name: 'OpenAI', privacyUrl: 'https://developers.openai.com/api/docs/guides/your-data' }
     : endpoint.hostname === 'generativelanguage.googleapis.com' ? { name: 'Google Gemini', privacyUrl: 'https://ai.google.dev/gemini-api/terms' }
-    : { name: 'the configured AI provider / el proveedor de IA configurado', privacyUrl: null };
+    : { name: 'the configured AI provider', privacyUrl: null };
+  let connectionVerified = false;
   // Single-process demo budget; public hosting also needs authentication and provider spend limits.
   let minuteStart = 0, minuteCount = 0, inFlight = 0;
   async function assess(req, res) {
@@ -109,15 +112,22 @@ function createServer({ key = process.env.OPENAI_API_KEY, model = process.env.OP
     try { body = JSON.parse(await readBody(req)); }
     catch (e) { return send(res, e.message === 'too_large' ? 413 : 400, { error: 'invalid_request' }); }
     if (!body || typeof body !== 'object' || Array.isArray(body)) return fail(res, 400, 'invalid_request');
-    const { image, crop = 'unsure', symptom = 'other', consent, mode = 'seeds' } = body;
+    const { image, detailImage, crop = 'unsure', symptom = 'other', consent, mode = 'seeds', language = 'en', followUp, analysisVersion } = body;
+    const enhanced = analysisVersion === 3;
     if (consent !== true) return fail(res, 400, 'consent_required');
     if (!MODES.includes(mode)) return fail(res, 400, 'invalid_request', 'mode must be seeds or harvest');
+    if (!['en', 'es'].includes(language)) return fail(res, 400, 'invalid_request');
+    if (detailImage !== undefined && (typeof detailImage !== 'string' || !/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/]+={0,2}$/.test(detailImage))) return fail(res, 400, 'invalid_request');
+    if (followUp !== undefined && (!followUp || typeof followUp.question !== 'string' || !followUp.question.trim() || followUp.question.length > 400 || typeof followUp.answer !== 'string' || !followUp.answer.trim() || followUp.answer.length > 200)) return fail(res, 400, 'invalid_request');
     if (!CROPS.includes(crop) || !SYMPTOMS.includes(symptom) || typeof image !== 'string'
         || !/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/]+={0,2}$/.test(image)) return fail(res, 400, 'invalid_request');
     if (Date.now() - minuteStart >= 60000) { minuteStart = Date.now(); minuteCount = 0; }
     if (minuteCount >= 10 || inFlight >= 2) return fail(res, 429, 'busy');
     minuteCount++; inFlight++;
     const controller = new AbortController();
+    const started = Date.now();
+    const schema = enhanced ? analysis.SCHEMA : SCHEMA;
+    const prompt = enhanced ? analysis.PROMPT : SYSTEM_PROMPT;
     const timeout = setTimeout(() => controller.abort(), timeoutMs);
     const cancel = () => { if (!res.writableEnded) controller.abort(); };
     res.on('close', cancel);
@@ -126,15 +136,16 @@ function createServer({ key = process.env.OPENAI_API_KEY, model = process.env.OP
         method: 'POST', signal: controller.signal,
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` },
         body: JSON.stringify({
-          model, temperature: 0.2, max_tokens: 1800,
+          model, temperature: 0.2, max_tokens: enhanced ? 3000 : 2800,
           ...(openai
-            ? { store: false, response_format: { type: 'json_schema', json_schema: { name: 'field_observation', strict: true, schema: SCHEMA } } }
+            ? { store: false, response_format: { type: 'json_schema', json_schema: { name: enhanced ? 'crop_evidence' : 'field_observation', strict: true, schema } } }
             : { response_format: { type: 'json_object' } }),
           messages: [
-            { role: 'system', content: openai ? SYSTEM_PROMPT : `${SYSTEM_PROMPT}\nReturn only a JSON object that matches this JSON Schema: ${JSON.stringify(SCHEMA)}` },
+            { role: 'system', content: openai ? prompt : `${prompt}\nReturn only a JSON object that matches this JSON Schema: ${JSON.stringify(schema)}` },
             { role: 'user', content: [
-              { type: 'text', text: `Focus: ${mode}. Worker-selected crop: ${crop}. Worker-selected symptom: ${symptom}.` },
-              { type: 'image_url', image_url: { url: image, detail: 'low' } },
+              { type: 'text', text: `Focus: ${mode}. Language: ${language === 'es' ? 'Spanish' : 'English'}. Worker-selected crop: ${crop}. Worker-selected symptom: ${symptom}. The following image is the overview.${followUp ? ` User-reported context (not visually verified): ${JSON.stringify({ question: followUp.question, answer: followUp.answer })}.` : ''}` },
+              { type: 'image_url', image_url: { url: image, detail: enhanced ? 'auto' : 'low' } },
+              ...(enhanced && detailImage ? [{ type: 'text', text: 'The following image is the detail view of the same observation.' }, { type: 'image_url', image_url: { url: detailImage, detail: 'auto' } }] : []),
             ] },
           ],
         }),
@@ -144,12 +155,22 @@ function createServer({ key = process.env.OPENAI_API_KEY, model = process.env.OP
         let code = '';
         try { const value = (await upstream.json())?.error?.code; code = typeof value === 'string' && /^[a-zA-Z0-9_:-]{1,64}$/.test(value) ? value : ''; } catch { code = ''; }
         console.error(`AI provider returned HTTP ${upstream.status}${code ? ` (${code})` : ''}. Check the key, billing balance and model name.`);
-        return fail(res, 502, 'upstream_error');
+        const kind = upstream.status === 401 ? 'invalid_key' : code === 'insufficient_quota' ? 'quota_exhausted' : upstream.status === 429 ? 'provider_busy' : upstream.status === 404 ? 'model_unavailable' : 'upstream_error';
+        return fail(res, 502, kind);
       }
       const data = await upstream.json();
       const choice = data.choices?.[0];
-      if (choice?.message?.refusal || choice?.finish_reason !== 'stop') return fail(res, 502, 'unreadable_response', 'incomplete or refused response');
+      if (choice?.message?.refusal) return fail(res, 502, 'refused_response');
+      if (choice?.finish_reason === 'length') return fail(res, 502, 'incomplete_response');
+      if (choice?.finish_reason !== 'stop') return fail(res, 502, 'unreadable_response', 'incomplete response');
       const result = JSON.parse(choice.message.content);
+      if (enhanced) {
+        const checked = analysis.normalize(result, { hasDetail: Boolean(detailImage), language });
+        // One follow-up per observation keeps the field workflow finite and preserves its context.
+        if (followUp) checked.follow_up = { question: '', options: [] };
+        connectionVerified = true;
+        return send(res, 200, { result: checked, meta: { analysisVersion: 3, model, provider: provider.name, imageCount: detailImage ? 2 : 1, elapsedMs: Date.now() - started, requestId: randomUUID(), language } });
+      }
       const bad = firstProblem(result, SCHEMA);
       if (bad) return fail(res, 502, 'unreadable_response', bad);
       if (result.possible_problems.length > 3) return fail(res, 502, 'unreadable_response', 'too many possible problems');
@@ -168,7 +189,8 @@ function createServer({ key = process.env.OPENAI_API_KEY, model = process.env.OP
         result.report_to_supervisor = { en: 'The automated observations were inconsistent. Please review this photo with your supervisor.', es: 'Las observaciones automáticas fueron contradictorias. Revise esta foto con su supervisor.' };
       }
       if (result.overall === 'looks_healthy') result.tell_supervisor_today = false;
-      return send(res, 200, { result });
+      connectionVerified = true;
+      return send(res, 200, { result, meta: { analysisVersion: 2, model, provider: provider.name, elapsedMs: Date.now() - started, requestId: randomUUID() } });
     } catch {
       if (!res.destroyed) fail(res, controller.signal.aborted ? 504 : 502, controller.signal.aborted ? 'timeout' : 'unreadable_response');
     } finally {
@@ -181,9 +203,9 @@ function createServer({ key = process.env.OPENAI_API_KEY, model = process.env.OP
     try {
       const url = new URL(req.url, 'http://localhost');
       if (req.method === 'POST' && url.pathname === '/api/assess') return await assess(req, res);
-      if (req.method === 'GET' && url.pathname === '/api/status') return send(res, 200, { aiEnabled: Boolean(key), model, provider, connectionVerified: false, version: 'cropsight-seeds-harvest-2' });
+      if (req.method === 'GET' && url.pathname === '/api/status') return send(res, 200, { aiEnabled: Boolean(key), model, provider, connectionVerified, analysisVersion: 3, version: 'cropsight-evidence-3' });
       if (req.method === 'GET' && url.pathname === '/favicon.ico') { res.writeHead(204); return res.end(); }
-      if (req.method === 'GET' && ['/', '/index.html'].includes(url.pathname)) {
+      if (req.method === 'GET' && ['/', '/index.html', '/settings'].includes(url.pathname)) {
         const data = await fs.promises.readFile(path.join(__dirname, 'index.html'));
         res.writeHead(200, { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store' });
         return res.end(data);
@@ -195,10 +217,17 @@ function createServer({ key = process.env.OPENAI_API_KEY, model = process.env.OP
   return server;
 }
 if (require.main === module) {
+  // Read only supported local settings, never print their values. Existing environment wins.
+  try {
+    for (const line of fs.readFileSync(path.join(__dirname, '.env'), 'utf8').split(/\r?\n/)) {
+      const match = line.match(/^\s*(OPENAI_API_KEY|OPENAI_MODEL|AI_BASE_URL|HOST|PORT)\s*=\s*(.*?)\s*$/);
+      if (match && !process.env[match[1]]) process.env[match[1]] = match[2].replace(/^(['"])(.*)\1$/, '$2');
+    }
+  } catch (error) { if (error.code !== 'ENOENT') console.error('Could not read local .env settings.'); }
   const port = process.env.PORT || 3000, host = process.env.HOST || '127.0.0.1';
   createServer().listen(port, host, () => {
     console.log(`CropSight running at http://${host}:${port}`);
-    console.log('CropSight Seeds/Harvest v2 — bounded error logging; no photo or response text logged.');
+    console.log('CropSight Evidence v3 — English-first, two-view analysis, Settings.');
     console.log(process.env.OPENAI_API_KEY ? 'AI key configured; live connection not yet verified.' : 'Set OPENAI_API_KEY to enable analysis. The interface alone does not generate results.');
   });
 }

@@ -50,7 +50,7 @@ test('unknown symptom is allowed as "unsure" so a photo can be assessed first', 
 test('valid bilingual observations use strict schema, bounded tokens and no stored completion', async t => {
   let request; const f = await fixture(t, { fetchImpl: async (url, options) => { request = JSON.parse(options.body); assert.equal(url, 'https://api.openai.com/v1/chat/completions'); return reply(envelope(observation())); } });
   const r = await f.post(); assert.equal(r.status, 200); assert.deepEqual((await r.json()).result, observation());
-  assert.equal(request.store, false); assert.equal(request.response_format.json_schema.strict, true); assert.equal(request.max_tokens, 1800);
+  assert.equal(request.store, false); assert.equal(request.response_format.json_schema.strict, true); assert.equal(request.max_tokens, 2800);
   assert.equal(r.headers.get('cache-control'), 'no-store');
 });
 test('malformed, incomplete, refused and invalid upstream responses fail closed', async t => {
@@ -127,4 +127,62 @@ test('compatible provider receives JSON mode and status identifies it for consen
   let request;const f=await fixture(t,{baseUrl:'https://generativelanguage.googleapis.com/v1beta/openai',model:'test-model',fetchImpl:async(url,options)=>{assert.equal(url,'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions');request=JSON.parse(options.body);return reply(envelope(observation()));}});
   assert.equal((await f.post()).status,200);assert.equal(request.response_format.type,'json_object');assert.match(request.messages[0].content,/JSON Schema/);
   assert.equal((await(await fetch(f.base+'/api/status')).json()).provider.name,'Google Gemini');
+});
+
+const evidence = () => ({
+ photo_usable:true,crop:'Tomato',stage_match:'matches',stage_note:'',overall:'problem_found',
+ observation_summary:'Brown patches are visible on the fruit.',
+ evidence:[{view:'overview',observation:'The fruit has brown patches.'}],
+ possible_problems:[{name:'Possible surface injury',evidence_indices:[0],why_possible:'Damage appears on one exposed side.',how_to_distinguish:'Check whether the same side is affected on nearby fruit.'}],
+ next_steps:['Show the affected fruit to your supervisor.'],
+ follow_up:{question:'Do nearby fruit show the same marks?',options:['Yes','No','Not sure']},
+ limits:'A photo cannot establish the cause.',report_to_supervisor:'Please review the brown patches visible on this fruit.'
+});
+const enhanced = {...input,analysisVersion:3,mode:'harvest',language:'en'};
+test('v3 compares two views, requests one language, reports provenance and verifies a successful call',async t=>{
+ let request;const f=await fixture(t,{fetchImpl:async(_url,options)=>{request=JSON.parse(options.body);return reply(envelope({...evidence(),evidence:[...evidence().evidence,{view:'detail',observation:'The patch has a dry edge.'}]}));}});
+ const response=await f.post({...enhanced,detailImage:photo});assert.equal(response.status,200);const {result,meta}=await response.json();
+ assert.equal(request.messages[1].content.filter(c=>c.type==='image_url').length,2);assert.match(request.messages[1].content[0].text,/Language: English/);
+ assert.equal(request.response_format.json_schema.name,'crop_evidence');assert.equal(request.max_tokens,3000);assert.equal(result.evidence[1].view,'detail');
+ assert.equal(meta.imageCount,2);assert.equal(meta.analysisVersion,3);assert.equal(meta.model,'gpt-4o-mini');assert.equal(typeof meta.requestId,'string');assert.ok(meta.elapsedMs>=0);
+ assert.equal((await(await fetch(f.base+'/api/status')).json()).connectionVerified,true);
+ assert.equal((await fetch(f.base+'/settings')).status,200);
+});
+test('v3 follow-up is user-reported context, requests Spanish only, and completes the one-question loop',async t=>{
+ let request;const f=await fixture(t,{fetchImpl:async(_url,options)=>{request=JSON.parse(options.body);return reply(envelope(evidence()));}});
+ const response=await f.post({...enhanced,language:'es',followUp:{question:'Nearby plants?',answer:'Not sure'}});
+ assert.equal(response.status,200);assert.match(request.messages[1].content[0].text,/Language: Spanish/);assert.match(request.messages[1].content[0].text,/User-reported context \(not visually verified\)/);assert.match(request.messages[1].content[0].text,/Not sure/);
+ assert.deepEqual((await response.json()).result.follow_up,{question:'',options:[]});
+});
+test('v3 rejects nonexistent image/evidence links, empty evidence, unsafe schema extras and invalid choices',async t=>{
+ const cases=[
+  {...evidence(),evidence:[{view:'detail',observation:'Not supplied.'}]},
+  {...evidence(),evidence:[]},
+  {...evidence(),evidence:[{view:'other',observation:'Invalid view.'}]},
+  {...evidence(),possible_problems:[{...evidence().possible_problems[0],evidence_indices:[4]}]},
+  {...evidence(),possible_problems:[{...evidence().possible_problems[0],evidence_indices:[-1]}]},
+  {...evidence(),possible_problems:[{...evidence().possible_problems[0],evidence_indices:[]}]},
+  {...evidence(),confidence:99},
+  {...evidence(),stage_match:'certain'},
+  {...evidence(),follow_up:{question:'Question?',options:['Only one answer']}},
+ ];
+ for(const result of cases){const f=await fixture(t,{fetchImpl:async()=>reply(envelope(result))});assert.equal((await f.post(enhanced)).status,502);assert.equal((await(await fetch(f.base+'/api/status')).json()).connectionVerified,false);}
+});
+test('v3 normalizes unusable photos and conflicting healthy claims without inventing a crop',async t=>{
+ for(const language of ['en','es']){
+  const f=await fixture(t,{fetchImpl:async()=>reply(envelope({...evidence(),photo_usable:false,overall:'looks_healthy'}))});
+  const {result}=await(await f.post({...enhanced,language})).json();assert.equal(result.overall,'unclear');assert.deepEqual(result.evidence,[]);assert.deepEqual(result.possible_problems,[]);assert.deepEqual(result.follow_up.options,[]);assert.equal(result.observation_summary,result.report_to_supervisor);assert.notEqual(result.crop,'Tomato');
+ }
+ const f=await fixture(t,{fetchImpl:async()=>reply(envelope({...evidence(),overall:'looks_healthy',crop:''}))});const {result}=await(await f.post(enhanced)).json();assert.equal(result.overall,'unclear');assert.equal(result.crop,'Unknown');assert.match(result.report_to_supervisor,/conflict/);
+});
+test('v3 invalid language, follow-up and detail image do not spend a provider call',async t=>{
+ let calls=0;const f=await fixture(t,{fetchImpl:async()=>{calls++;return reply(envelope(evidence()));}});
+ for(const extra of [{language:'xx'},{followUp:{}},{followUp:{question:'q',answer:'a'.repeat(201)}},{detailImage:'https://example.com/private'},{detailImage:null}])assert.equal((await f.post({...enhanced,...extra})).status,400);
+ assert.equal(calls,0);
+});
+test('provider failures distinguish invalid key, quota, busy, unavailable model and truncated response',async t=>{
+ for(const [status,code,expected] of [[401,'invalid_api_key','invalid_key'],[429,'insufficient_quota','quota_exhausted'],[429,'rate_limit_exceeded','provider_busy'],[404,'model_not_found','model_unavailable']]){
+  const f=await fixture(t,{fetchImpl:async()=>new Response(JSON.stringify({error:{code}}),{status})});assert.equal((await(await f.post(enhanced)).json()).error,expected);
+ }
+ const f=await fixture(t,{fetchImpl:async()=>reply({choices:[{finish_reason:'length',message:{content:'{}'}}]})});assert.equal((await(await f.post(enhanced)).json()).error,'incomplete_response');
 });

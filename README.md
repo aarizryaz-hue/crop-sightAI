@@ -1,77 +1,81 @@
 # CropSight
 
-A photo-based crop observation tool for farmworkers and supervisors. Choose **Seeds** or **Harvest**, add a photo, consent to processing, and press **Analyze photo**. The result puts the detected crop first, followed by visible observations, checks and a bilingual supervisor summary.
+A crop-observation assistant that turns photos into evidence, possible explanations and one useful next question. Choose **Seeds** or **Harvest**, add a whole-plant photo and optionally a close-up, then analyze. Every possible explanation refers to numbered model observations from a supplied photo. Answering the follow-up sends the same photos and your reported observation for a fresh analysis.
 
-- **Seeds:** seeds, seedlings, germination and early transplants.
-- **Harvest:** ripeness, fruit/produce condition and visible damage.
-- English and Spanish appear together. There is no language switch or manual crop/symptom form.
-- The problem story and research remain on the page, organized below the tool with expandable source details.
-- This is a prototype for human review, not a diagnosis, seed viability test or food-safety assessment.
+English is the default. **Settings → Display language** is the only language switch; Spanish is opt-in. Results use the selected language, not both languages at once. The problem story and expandable research remain below the tool.
+
+This prototype supports a conversation with a supervisor. It does not establish disease, seed viability, food safety or permission to harvest/treat a crop. It uses a pretrained vision API, not a newly trained model.
 
 ## Run
 
 Requires Node.js 18+; no application dependencies.
 
 ```sh
+cp .env.example .env
+# Edit .env locally and set OPENAI_API_KEY. Do not paste it in chat.
 node server.js
 # http://127.0.0.1:3000
 ```
 
-Set `OPENAI_API_KEY` in the server's environment before starting. The default model is `gpt-4o-mini`; `OPENAI_MODEL` overrides it. `.env` files are ignored by Git but are not automatically loaded. Keep keys out of browser code, chat, screenshots and commits.
+Alternatively, keep using your existing terminal environment. Environment variables override `.env`. Supported settings: `OPENAI_API_KEY`, `OPENAI_MODEL` (default `gpt-4o-mini`), `AI_BASE_URL`, `HOST` (default `127.0.0.1`), and `PORT` (default `3000`). The key stays on the server.
 
-If the server is already running, restart it with your existing launch command and the same secret settings. A page refresh loads the new HTML but **does not reload server.js**. Current startup includes:
+**Restart Node after server changes.** Refreshing the page reloads HTML but does not reload the backend. The new startup marker is `CropSight Evidence v3`; Settings and `/api/status` show `cropsight-evidence-3` and `analysisVersion: 3`.
 
-```text
-CropSight Seeds/Harvest v2 — bounded error logging; no photo or response text logged.
-```
+The page detects an older running server and preserves its single-photo flow. Two-photo comparison and follow-up need v3. Settings distinguishes a configured key from a successful live analysis; checking status does not spend an API call.
 
-`GET /api/status` returns `version: "cropsight-seeds-harvest-2"`. `aiEnabled: true` means a key is configured, not that billing/model access or a live request has been verified.
+A static host cannot analyze photos. A Node-capable host can set `HOST=0.0.0.0`. Public deployment also needs HTTPS, access control, deployment-level rate limits and provider spending limits. The built-in 10 requests/minute and 2 concurrent requests are single-process demo safeguards.
 
-`HOST` defaults to `127.0.0.1`; `PORT` defaults to `3000`. A Node-capable host can set `HOST=0.0.0.0` and its assigned port. Static hosting displays the interface but **cannot analyze photos**. Public AI hosting needs HTTPS, authenticated access, deployment-level request limits and a provider spending budget. The 10 requests/minute, 2 concurrent requests per process are demo safeguards only.
+## Why AI is central
 
-## Alternative providers
+The model decides which visible patterns support alternative explanations and what field observation would help distinguish them. The workflow is:
 
-The existing OpenAI-compatible adapter is preserved. Set `AI_BASE_URL` and `OPENAI_MODEL`, with the provider's key in `OPENAI_API_KEY`. For example, Gemini's compatibility base URL is `https://generativelanguage.googleapis.com/v1beta/openai`; select a currently available image-capable model for your account. OpenAI uses strict JSON Schema; compatible providers receive JSON mode plus the schema in the prompt. Every response is validated locally.
+1. **Observe:** compare the whole plant with an optional close-up of the same plant.
+2. **Explain:** link possible causes to numbered observations, with a concrete distinguishing check.
+3. **Ask:** ask one short multiple-choice field question when useful.
+4. **Update:** reanalyze with the answer labeled as worker-reported context, then produce a supervisor summary.
 
-The status endpoint identifies OpenAI or Google Gemini so consent names the actual recipient. Unknown providers get generic wording. Custom-provider compatibility is tested using mocked responses, not a live Gemini call. Pricing, model availability and retention are provider/account dependent.
+These are model-generated observations, not independently verified evidence. Schema and reference checks prevent malformed results and nonexistent photo references; they do not prove an observation or cause is correct. No confidence percentage is displayed.
 
-## Demo
+The interface shows provider, model, number of views and measured response duration. The backend exposes a request ID without logging photos, answers or model response text.
 
-1. Choose **Seeds** for a seedling/early-growth photo, or **Harvest** for a fruit/produce photo.
-2. Add a prepared, non-sensitive JPG, PNG or WebP. Check consent and press **Analyze photo**.
-3. Show the detected crop, visible condition and English/Spanish observations.
-4. Use **Copy / Copiar** to copy the bilingual supervisor summary. It copies text, not the photo.
-5. If useful for judging, open **The research behind the idea** below the tool.
+## 60-second demo
 
-Changing the stage clears old results and requires a new Analyze action; it does not silently spend another API request. Replacing/removing a photo cancels pending work, clears results and resets consent. Only the selected stage is remembered between page loads; photos and results are not persisted.
+Prepare non-sensitive **real photographs** of one plant: overview and close-up. Rehearse with the final server and network first.
 
-For a 60-second pitch, rehearse with the actual provider and network first. An API failure leaves the photo available for retry. Do not represent mocked results as a live analysis.
+- **0–8 seconds:** “A new worker sees a crop problem but needs help describing it to a supervisor.” Select the appropriate Seeds/Harvest stage.
+- **8–20 seconds:** Upload the overview and close-up, allow processing, and press **Compare both photos**. Say: “The vision model compares visible patterns and chooses the next observation that would help distinguish causes.”
+- **20–40 seconds:** Show the crop, numbered observations and one explanation. Tap its photo-view link. Explain that this is a possible cause, not a diagnosis.
+- **40–55 seconds:** Answer the follow-up honestly and show the revised supervisor summary. If the model asks no useful follow-up, explain its specific photo limitation instead; do not fabricate an answer.
+- **55–60 seconds:** Show the model label and **Copy summary**. Credits and language controls are in Settings.
 
-## Validation
+API latency varies; two calls may exceed 60 seconds. Practice and use a longer live-demo window if allowed. Do not present mock screenshots as live output or promise a diagnosis/accuracy percentage. The provided Sierra Hacks slides require a live AI demo, named model/API and tool/code credit; beginner eligibility depends on the team's actual experience.
+
+## Checks
 
 ```sh
 node --test test/server.test.js
 ```
 
-**16 server tests pass.** These cover consent, request sizes, category/mode validation, structured responses, blank or malformed content, timeouts, budgets, unusable photos, contradictory verdicts and the compatible-provider adapter.
+**22 tests pass.** They cover consent, request validation, bounded inputs and calls, timeouts, schema validation, two-image requests, language selection, follow-up context, invalid evidence references, unusable photos, contradictory verdicts, provider-specific errors and legacy compatibility. Provider responses are mocked; these are software tests, not model-accuracy measurements.
 
-Browser QA uses Playwright with installed Chrome. It exercises both stage payloads, consent, photo replacement, stale-result cancellation, error recovery, bilingual results/copy, research disclosure, no-key behavior and layouts at 320, 390, 768 and 1280 pixels. See [HANDOFF.md](HANDOFF.md) for the full change record and verification details.
+Browser checks use Playwright and installed Chrome: English default, Settings/Spanish persistence, upload/consent, comparison, evidence links, follow-up, copy, cancellation, API errors and responsive layouts at 320/390/768/1280 pixels. See [HANDOFF.md](HANDOFF.md) for the change record and verification limits.
 
-The presenter reported a successful live tomato assessment and supplied screenshots. This editing session did not repeat a paid provider call. API accuracy, real iOS/Android camera behavior and native Spanish wording remain unvalidated.
+## Alternative providers
 
-## Privacy and limits
+An OpenAI-compatible adapter remains available through `AI_BASE_URL` and `OPENAI_MODEL`, with the provider key in `OPENAI_API_KEY`. For Gemini the compatibility base is `https://generativelanguage.googleapis.com/v1beta/openai`; choose an image-capable model available to your account. OpenAI gets strict JSON Schema; compatible providers get JSON mode plus the schema, with local validation afterward. Gemini/custom-provider behavior is mock-tested, not live-verified here. Free tiers, model access and data policies depend on the provider/account.
 
-- A file selection stays local. Only Analyze sends the resized JPEG, selected stage and compatibility defaults through the server to the configured provider.
-- Maximum file size: 15 MB; maximum decoded image: 50 megapixels; JPEG output: 1280 pixels on the long edge. Browser HEIC support varies. Re-encoding strips original metadata, but faces and landmarks may remain in the pixels.
-- The app stores no photos/reports on disk and logs no model response text. `store: false` is sent to OpenAI. Hosting infrastructure and providers have their own retention rules: [OpenAI](https://developers.openai.com/api/docs/guides/your-data), [Gemini](https://ai.google.dev/gemini-api/terms).
-- The prompt excludes pesticides, doses and definite diagnoses. It allows possible problems and general non-chemical options to discuss with a supervisor. Prompts/schema checks cannot guarantee safe or accurate content.
-- A crop name is displayed when returned by the model. Missing/unclear identification gets a readable fallback; the app never fills it with an invented certainty.
-- An unusable photo cannot show a healthy verdict, identified crop, problem list or urgent flag. A contradictory healthy/problem response is downgraded to unclear.
-- “No obvious damage in this photo” is not proof the plant is healthy, the seed will germinate, or the produce is safe to eat.
-- No worker study, accuracy percentage, professional translation review or institutional endorsement is claimed.
+## Data and limitations
 
-## Research
+- File selection is local. Consent plus Analyze sends the resized JPEG(s), stage, selected language and any follow-up answer through the server to the configured provider. The answer button clearly says it sends a new request.
+- Maximum source file: 15 MB and 50 megapixels. Each photo is re-encoded to JPEG at up to 1280 pixels on its long edge. Browser HEIC support varies; JPG/PNG/WebP are reliable choices. Re-encoding removes original metadata, but visible faces/landmarks remain.
+- Only mode and language preferences persist in localStorage. Photos/results stay in tab memory and are not saved by the app. `store: false` is sent to OpenAI; provider/infrastructure retention still applies: [OpenAI](https://developers.openai.com/api/docs/guides/your-data), [Gemini](https://ai.google.dev/gemini-api/terms).
+- Changing mode/language or replacing a photo cancels old analysis. Replacing/removing a photo resets consent. No automatic paid call occurs on a preference change.
+- The v3 prompt requests visual checks and reporting, excludes pesticide/treatment instructions, and asks the model to reject illustrations, unrelated objects and unusable photos. Prompt compliance is not guaranteed.
+- Unusable results are normalized to a retake request, without identified crop or possible causes. Conflicting healthy/problem outputs become unclear. Unknown crops remain unknown.
+- Accuracy, farmworker usability, actual phone camera behavior and professional Spanish translation have not been validated. No UC ANR endorsement is claimed.
 
-[UC ANR's August 2025 article](https://ucanr.edu/blog/nuestra-comunidad/article/why-its-important-uc-anr-include-farmworkers-part-its-clientele) reports estimates of 880,000 California farmworkers and 130,000 growers. Its [learning-needs summary](https://ucanr.edu/sites/default/files/2025-08/Farmworker%20Extension%20Project%20Summary.pdf) places pest management at 39% in the 2023–2024 topic-interest chart and identifies in-person learning as preferred. [Andrea G. Juarez's 2024 master's thesis](https://communitydevelopment.ucdavis.edu/sites/g/files/dgvnsk1186/files/inline-files/Juarez_Thesis_Final.pdf) reports 16 focus groups and 136 participants.
+## Research and credits
 
-These findings motivate accessible agricultural communication; they do not measure CropSight's effectiveness. The next useful study compares this workflow against an ordinary photo/message, measuring worker completion and supervisor comprehension.
+[UC ANR's August 2025 article](https://ucanr.edu/blog/nuestra-comunidad/article/why-its-important-uc-anr-include-farmworkers-part-its-clientele) reports estimates of 880,000 California farmworkers and 130,000 growers. Its [learning-needs summary](https://ucanr.edu/sites/default/files/2025-08/Farmworker%20Extension%20Project%20Summary.pdf) puts pest management at 39% of its 2023–2024 topic-interest chart and notes a preference for in-person learning. [Andrea G. Juarez's 2024 thesis](https://communitydevelopment.ucdavis.edu/sites/g/files/dgvnsk1186/files/inline-files/Juarez_Thesis_Final.pdf) reports 16 focus groups and 136 participants. These findings motivate the idea; they do not test this app.
+
+Built with assistance from OpenAI Codex and Claude. AI uses the configured provider/model shown in Settings. No new model was trained or benchmark dataset used. Respect licenses and credit the source of any third-party photographs used in the presentation.

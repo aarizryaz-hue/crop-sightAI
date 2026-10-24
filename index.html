@@ -1,12 +1,5 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="theme-color" content="#173f32">
-<title>CropSight — From seeds to harvest</title>
-<meta name="description" content="A photo-based crop guide. Explore seeds and early growth or harvest observations, with a bilingual summary for your supervisor.">
-<style>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#173f32"><title>CropSight — See the signs</title><meta name="description" content="Compare crop photos, understand visible evidence, and find the next useful field observation."><style>
 :root{--bg:#f5f6ef;--surface:#fff;--soft:#edf3e8;--ink:#183c30;--text:#273d32;--muted:#607367;--line:#dce5d9;--accent:#215c42;--on-accent:#fff;--lime:#d6e8a2;--amber:#8b570d;--amber-bg:#fff3d7;--error:#a33225;--shadow:0 12px 40px #183c3008;--radius:24px;color-scheme:light}
 @media(prefers-color-scheme:dark){:root{--bg:#111c17;--surface:#192920;--soft:#20382a;--ink:#e9f2dc;--text:#e0e9df;--muted:#a7b9aa;--line:#344b3a;--accent:#b5d894;--on-accent:#152c1d;--lime:#b5d894;--amber:#f3cb7b;--amber-bg:#3a301b;--error:#ffb2a8;--shadow:none;color-scheme:dark}}
 *{box-sizing:border-box} [hidden]{display:none!important} html{scroll-behavior:smooth;scroll-padding-top:110px} body{margin:0;background:var(--bg);color:var(--text);font:16px/1.6 system-ui,-apple-system,"Segoe UI",sans-serif} button,input{font:inherit}button,a{-webkit-tap-highlight-color:transparent}button{cursor:pointer}a{color:inherit}button:disabled{cursor:not-allowed;opacity:.55}button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid #d6a638;outline-offset:4px} .wrap{max-width:1120px;padding:0 28px;margin:auto}h1,h2,h3,p{margin:0}h1,h2,h3{color:var(--ink);line-height:1.2}h1{font-size:clamp(2rem,4.3vw,3rem);letter-spacing:-.045em;font-weight:750}h2{font-size:1.2rem;letter-spacing:-.02em}h3{font-size:1rem}.es{display:block;font-weight:400;font-size:.86em;color:var(--muted);line-height:1.5}.eyebrow{font-size:.73rem;letter-spacing:.13em;text-transform:uppercase;font-weight:750;color:var(--accent)}.muted{color:var(--muted)}svg{display:block;flex-shrink:0} .skip{position:absolute;top:-100px;background:var(--surface);padding:12px;z-index:20}.skip:focus{top:0}
@@ -18,196 +11,169 @@ header{position:sticky;top:0;z-index:10;background:var(--bg);border-bottom:1px s
 @media(max-width:800px){.workspace{grid-template-columns:1fr}.result-empty{min-height:300px}.story-top{grid-template-columns:1fr;gap:24px}.nav-link{display:none}.intro{padding-top:32px}.bar{gap:12px}.hotbar button{padding:8px 18px}}
 @media(max-width:450px){.wrap{padding:0 16px}.bar{min-height:83px;gap:8px}.brand{font-size:1.05rem;gap:7px}.brand-mark{width:30px;height:30px;border-radius:9px}.brand-mark svg{width:20px;height:20px}.hotbar{gap:1px;padding:3px;border-radius:14px}.hotbar button{padding:8px 10px;gap:5px;font-size:.78rem;border-radius:10px;min-height:50px}.hotbar button svg{width:18px;height:18px}.hotbar .es{font-size:.77em}.card{padding:20px;border-radius:20px}.intro{padding:26px 0}.intro h1{font-size:2.25rem}.intro>p{font-size:.9rem}.photo{min-height:235px;padding:16px}.result-empty{padding:30px 20px}.stats{grid-template-columns:1fr 1fr;gap:18px}.footer-inner{flex-direction:column;gap:7px}.story{margin-top:30px}.story-points{gap:15px}.crop-name{font-size:2rem}}
 @media(max-width:350px){.hotbar button svg{display:none}.hotbar button{padding:8px}.brand{font-size:1rem}.bar{gap:5px}.brand-mark{width:27px;height:27px}}
-</style>
-</head>
-<body>
-<a class="skip" href="#workspace">Skip to photo / Ir a la foto</a>
-<header><div class="wrap bar">
+
+.nav-actions{display:flex;align-items:center;gap:20px}.settings-link{display:inline-flex;align-items:center;gap:7px;text-decoration:none;font-size:.84rem;font-weight:650;min-height:44px}.settings-link svg{width:20px;height:20px}.settings-page{max-width:740px;padding:40px 0 60px;margin:auto}.settings-page h1{font-size:2.3rem;margin:18px 0 28px}.settings-page .card{margin:16px 0}.settings-page .card>p{color:var(--muted);font-size:.86rem;margin:12px 0}.language-toggle{display:flex;gap:8px;margin-top:16px}.language-toggle button{flex:1;min-height:48px;border:1px solid var(--line);background:var(--soft);color:var(--ink);border-radius:12px;font-weight:700}.language-toggle button[aria-pressed=true]{background:var(--accent);color:var(--on-accent)}.connection-list{display:grid;grid-template-columns:110px 1fr;gap:8px;font-size:.85rem;margin:20px 0}.connection-list dt{color:var(--muted)}.connection-list dd{margin:0;overflow-wrap:anywhere}.secondary{border:1px solid var(--line);background:var(--soft);color:var(--accent);padding:10px 16px;border-radius:12px;min-height:44px;font-weight:650}.version-alert{padding:12px 16px;border-radius:12px;background:var(--amber-bg);color:var(--amber);font-size:.8rem;margin:0 0 22px}.detail-area{margin-top:12px}.detail-upload{position:relative;display:flex;gap:12px;align-items:center;padding:14px;border:1px dashed var(--line);border-radius:14px;cursor:pointer;background:var(--bg)}.detail-upload input{position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer}.detail-upload:focus-within{outline:3px solid #d6a638;outline-offset:3px}.detail-upload img{width:90px;height:85px;object-fit:contain;border-radius:9px}.detail-upload strong{display:block;font-size:.85rem;color:var(--ink)}.detail-upload p{font-size:.76rem;color:var(--muted)}.detail-upload svg{width:30px;height:30px;color:var(--accent)}.photo-selected{outline:3px solid #d6a638!important;outline-offset:3px}.provenance{font-size:.7rem;letter-spacing:.03em;color:var(--muted);margin:0 0 16px;padding-bottom:14px;border-bottom:1px solid var(--line)}.evidence-list{list-style:none;padding:0;margin:16px 0 0}.evidence-list li{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--line);font-size:.87rem}.evidence-number{display:grid;place-items:center;flex-shrink:0;width:28px;height:28px;border-radius:9px;background:var(--soft);color:var(--accent);font-size:.75rem;font-weight:800}.evidence-view{display:block;border:0;padding:5px 0;background:none;color:var(--accent);font-size:.72rem;font-weight:650;min-height:44px}.hypothesis-head{display:flex;justify-content:space-between;gap:12px}.reference{font-size:.7rem;color:var(--accent);padding:3px 7px;border:1px solid var(--line);border-radius:6px;white-space:nowrap}.distinguish{background:var(--soft);border-radius:10px;padding:10px 12px;font-size:.8rem}.follow-up{margin-top:20px;padding:18px;border:1px solid var(--line);border-radius:16px;background:var(--soft)}.follow-up h3{margin:8px 0 14px;font-size:1.05rem}.answer-options{display:flex;flex-wrap:wrap;gap:8px}.answer-options button{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:9px 12px;color:var(--ink);min-height:44px;text-align:left;font-size:.8rem;font-weight:600}.answer-options button:hover{border-color:var(--accent)}.follow-up>p{font-size:.75rem;color:var(--muted);margin-top:12px}.context-note{font-size:.8rem;padding:12px;background:var(--soft);border-radius:10px;margin:12px 0}.limits-note{font-size:.8rem;margin-top:18px;color:var(--muted)}.ready-points{display:grid;gap:12px;text-align:left;font-size:.84rem;color:var(--muted);margin:0 auto;max-width:330px}.ready-points span{display:flex;gap:12px}.ready-points b{color:var(--accent)}.photo-help{margin-bottom:10px}.intro .ai-caption{font-size:.76rem;color:var(--accent);margin-top:12px}.card:has(#result-empty){min-width:0}
+@media(max-width:600px){.bar{flex-wrap:wrap;padding-top:12px;padding-bottom:12px;gap:8px;min-height:74px}.hotbar{order:3;flex:1 0 100%;justify-content:center}.hotbar button{flex:1;justify-content:center;min-height:44px;font-size:.87rem;padding:8px 12px}.hotbar button svg{display:block}.settings-link{min-width:44px;justify-content:center}.settings-link span{display:none}.nav-actions{margin-left:auto}.result-shell{scroll-margin-top:150px}html{scroll-padding-top:150px}.intro{padding-top:24px}.connection-list{grid-template-columns:85px 1fr}}
+</style></head><body><a class="skip" href="#workspace">Skip to analysis</a><header><div class="wrap bar">
   <a class="brand" href="#workspace" aria-label="CropSight home"><span class="brand-mark"><svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 20C4 10 10 4 20 4c0 10-5 16-15 16Z"/><path d="m5 20 10-10M11 14V9"/></svg></span>CropSight</a>
-  <div class="hotbar" role="group" aria-label="Growing stage / Etapa de cultivo">
-    <button type="button" data-mode="seeds" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 21v-9M12 16C4 16 3 10 3 7c6 0 9 4 9 9ZM12 12c0-6 4-9 9-9 0 5-3 9-9 9ZM6 21h12"/></svg><span>Seeds<span class="es" lang="es">Semillas</span></span></button>
-    <button type="button" data-mode="harvest" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 7V3m0 3c2-3 5-3 7-2-1 3-4 4-7 3Z"/><path d="M12 8C1 3 1 20 9 21l3-1 3 1c8-1 8-18-3-13Z"/></svg><span>Harvest<span class="es" lang="es">Cosecha</span></span></button>
+  <div class="hotbar" role="group" aria-label="Growing stage">
+    <button type="button" data-mode="seeds" aria-pressed="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 21v-9M12 16C4 16 3 10 3 7c6 0 9 4 9 9ZM12 12c0-6 4-9 9-9 0 5-3 9-9 9ZM6 21h12"/></svg><span data-t="seeds">Seeds</span></button>
+    <button type="button" data-mode="harvest" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M12 7V3m0 3c2-3 5-3 7-2-1 3-4 4-7 3Z"/><path d="M12 8C1 3 1 20 9 21l3-1 3 1c8-1 8-18-3-13Z"/></svg><span data-t="harvest">Harvest</span></button>
   </div>
-  <a class="nav-link" href="#about">Why CropSight ↗</a>
+  <div class="nav-actions"><a class="nav-link" href="#about" data-t="why">Why CropSight</a><a class="settings-link" href="#settings" aria-label="Settings"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="m9 3-1 3-3 1v4l-2 1 2 1v4l3 1 1 3h6l1-3 3-1v-4l2-1-2-1V7l-3-1-1-3Z"/><circle cx="12" cy="12" r="3"/></svg><span data-t="settings">Settings</span></a></div>
 </div></header>
 <main class="wrap">
-  <section class="intro" aria-labelledby="main-title"><div class="eyebrow">From seeds to harvest</div><h1 id="main-title">A closer look.<br>A clearer next step.</h1><p>Choose a stage, add a photo, and get observations to share with your supervisor.<span class="es" lang="es">Elija una etapa, agregue una foto y obtenga observaciones para compartir con su supervisor.</span></p></section>
-  <section class="workspace" id="workspace" aria-label="Crop photo analysis">
-    <div class="card">
-      <div class="card-top"><h2>Your photo<span class="es" lang="es">Su foto</span></h2><span class="focus-pill" id="focus-pill">Seeds / Semillas</span></div>
-      <p class="focus-description" id="focus-description"></p>
-      <label class="photo" id="drop">
-        <input type="file" accept="image/jpeg,image/png,image/webp,image/heic,image/heif" id="photo" aria-label="Take or upload a photo / Tome o suba una foto" aria-describedby="photo-help">
-        <span id="drop-hint"><svg class="photo-symbol" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="7" y="10" width="50" height="44" rx="11"/><path d="M12 43 24 30l10 10 7-7 12 13"/><circle cx="43" cy="23" r="5"/><path d="M28 5h8M28 59h8"/></svg><strong>Take or upload a photo</strong><span class="es" lang="es">Tome o suba una foto</span><span class="formats">JPG, PNG, WebP · max. 15 MB</span></span>
-        <img id="preview" alt="Selected crop photo / Foto del cultivo" hidden>
-      </label>
-      <div class="photo-tools" id="photo-tools" hidden><span class="filename" id="filename"></span><button class="text-button" id="clear" type="button">Remove / Quitar</button></div>
-      <p class="photo-help" id="photo-help">Keep the plant in focus. Avoid faces and personal details.<span class="es" lang="es">Enfoque la planta. Evite caras y datos personales.</span></p>
-      <label class="consent"><input id="consent" type="checkbox"><span id="consent-text">I agree to send this photo to the AI provider for analysis.<span class="es" lang="es">Acepto enviar esta foto al proveedor de IA para analizarla.</span></span></label>
-      <button class="go" type="button" id="analyze" disabled><span><span id="analyze-label">Analyze photo</span><span class="es" id="analyze-es" lang="es">Analizar foto</span></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></button>
-      <p id="status" class="status" role="status" aria-live="polite"></p>
-    </div>
-    <div class="result-shell" id="result-shell" aria-busy="false">
-      <div class="card result-empty" id="result-empty"><div class="result-symbol"><svg width="42" height="42" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 18V9a2 2 0 0 1 2-2h9m12 0h9a2 2 0 0 1 2 2v9m0 12v9a2 2 0 0 1-2 2h-9m-12 0H9a2 2 0 0 1-2-2v-9"/><path d="M17 32c-2-12 4-17 16-17 0 12-5 18-16 17Zm0 0 9-10"/></svg></div><h2 id="empty-title">Your crop, at a glance</h2><p id="empty-copy">Add a photo to see the crop, visible condition, and what to check next.<span class="es" lang="es">Agregue una foto para ver el cultivo, su estado visible y qué revisar.</span></p><div class="result-steps" id="result-steps"><span>Identify / Identificar</span><span>Observe / Observar</span><span>Share / Compartir</span></div></div>
-      <article class="card" id="result" tabindex="-1" aria-label="Photo observations / Observaciones de la foto" hidden></article>
-    </div>
-  </section>
-  <section class="story" id="about" aria-labelledby="about-title">
-    <div class="story-top"><div><div class="eyebrow">Why CropSight</div><h2>A photo can start<br>a better conversation.</h2><p class="story-copy">An unfamiliar symptom can be hard to describe. CropSight puts the photo and a short bilingual explanation together, so a worker has something concrete to show a supervisor.</p></div>
-    <div class="story-points"><div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M12 21V11M12 15C5 15 3 10 3 6c7 0 9 4 9 9ZM12 11c0-6 3-8 9-8 0 6-3 8-9 8"/></svg><h3>Two stages. One simple flow.</h3><p>Seeds focuses on early growth. Harvest focuses on ripeness and visible produce damage. Both start with a photo.</p></div><div><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 4h18v13H9l-5 4v-4H3V4Z"/><path d="M7 8h10M7 12h6"/></svg><h3>Built for the handoff.</h3><p>English and Spanish appear together. A concise supervisor summary keeps the observation easy to share.</p></div></div></div>
-    <details class="research"><summary>The research behind the idea <span class="muted">· UC Agriculture and Natural Resources</span></summary><div class="research-content"><div class="stats"><div class="stat"><strong>880,000</strong><span>estimated California farmworkers</span></div><div class="stat"><strong>130,000</strong><span>estimated growers, for context</span></div><div class="stat"><strong>16</strong><span>focus groups · 136 participants</span></div><div class="stat"><strong>39%</strong><span>pest management share of the topic-interest chart</span></div></div><div class="sources"><p>UC ANR research found interest in pest management and a preference for in-person learning. CropSight explores a way to support those conversations; the research did not test this app.</p><p>Sources: <a href="https://ucanr.edu/blog/nuestra-comunidad/article/why-its-important-uc-anr-include-farmworkers-part-its-clientele">UC ANR, August 2025</a> · <a href="https://ucanr.edu/sites/default/files/2025-08/Farmworker%20Extension%20Project%20Summary.pdf">2023–2024 learning-needs summary</a> · <a href="https://communitydevelopment.ucdavis.edu/sites/g/files/dgvnsk1186/files/inline-files/Juarez_Thesis_Final.pdf">Juarez, 2024 master's thesis</a>.</p><p>These are contextual estimates and study findings, not app outcomes. Spanish wording is a draft; no UC ANR endorsement is claimed.</p></div></div></details>
-  </section>
-  <footer class="footer"><div class="footer-inner"><strong>CropSight · Sierra Hacks 2026</strong><p>AI observations, not a diagnosis. Confirm with your supervisor or adviser.<span lang="es" class="es">Observaciones de IA, no un diagnóstico. Confirme con su supervisor o asesor.</span></p></div></footer>
+<div id="app-view">
+<section class="intro"><div class="eyebrow" data-t="eyebrow">From seeds to harvest</div><h1 data-t="headline">See the signs.<br>Know what to check.</h1><p data-t="intro">One crop. Two views. Clear observations and the next question that matters.</p><p class="ai-caption" data-t="aiCaption">Visual evidence → possible causes → a smarter next check</p></section>
+<p id="version-alert" class="version-alert" hidden></p>
+<section class="workspace" id="workspace" aria-label="Crop analysis">
+<div class="card">
+<div class="card-top"><h2 data-t="yourPhoto">Your photo</h2><span class="focus-pill" id="focus-pill">Seeds</span></div>
+<p class="focus-description" id="focus-description"></p>
+<label class="photo" id="drop"><input type="file" id="photo" accept="image/jpeg,image/png,image/webp,image/heic,image/heif" aria-label="Upload whole-plant photo"><span id="drop-hint"><svg class="photo-symbol" viewBox="0 0 64 64" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="7" y="10" width="50" height="44" rx="11"/><path d="M12 43 24 30l10 10 7-7 12 13"/><circle cx="43" cy="23" r="5"/></svg><strong data-t="upload">Take or upload a photo</strong><span class="formats" data-t="formats">JPG, PNG, WebP · max. 15 MB</span></span><img id="preview" alt="Whole-plant photo" hidden></label>
+<div class="photo-tools" id="photo-tools" hidden><span class="filename" id="filename"></span><button class="text-button" id="clear" type="button" data-t="remove">Remove</button></div>
+<div class="detail-area" id="detail-area" hidden><label class="detail-upload" id="detail-drop"><input type="file" id="detail-photo" accept="image/jpeg,image/png,image/webp,image/heic,image/heif" aria-label="Add close-up photo"><svg id="detail-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="18" height="18" rx="5"/><path d="M12 7v10M7 12h10"/></svg><img id="detail-preview" alt="Close-up photo" hidden><span><strong data-t="detailTitle">Add a close-up</strong><p data-t="detailHelp">Same plant, closer view. Compare the details.</p></span></label><button id="clear-detail" class="text-button" type="button" hidden data-t="removeDetail">Remove close-up</button></div>
+<p class="photo-help" data-t="photoHelp">Keep the plant in focus. Avoid faces and personal details.</p>
+<label class="consent"><input id="consent" type="checkbox"><span id="consent-text"></span></label>
+<button class="go" id="analyze" type="button" disabled><span id="analyze-label">Analyze photo</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 12h15m-6-6 6 6-6 6"/></svg></button>
+<p id="status" class="status" role="status" aria-live="polite"></p><button id="retry-connection" class="text-button" type="button" data-t="retryConnection" hidden>Check connection again</button>
+</div>
+<div class="result-shell" id="result-shell" aria-busy="false"><div class="card result-empty" id="result-empty"><div class="result-symbol"><svg width="42" height="42" viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 18V9a2 2 0 0 1 2-2h9m12 0h9a2 2 0 0 1 2 2v9m0 12v9a2 2 0 0 1-2 2h-9m-12 0H9a2 2 0 0 1-2-2v-9"/><path d="M17 32c-2-12 4-17 16-17 0 12-5 18-16 17Zm0 0 9-10"/></svg></div><h2 id="empty-title"></h2><p id="empty-copy"></p><div class="ready-points" id="ready-points"><span><b>01</b><span data-t="point1">See what is visible in each photo.</span></span><span><b>02</b><span data-t="point2">Compare possible explanations.</span></span><span><b>03</b><span data-t="point3">Answer one question to refine the next step.</span></span></div></div><article class="card" id="result" tabindex="-1" aria-label="Analysis result" hidden></article></div>
+</section>
+<section class="story" id="about"><div class="story-top"><div><div class="eyebrow" data-t="why">Why CropSight</div><h2 data-t="storyTitle">A photo can start<br>a better conversation.</h2><p class="story-copy" data-t="storyCopy">CropSight helps a farmworker turn an unfamiliar crop symptom into concrete observations to discuss with a supervisor.</p></div><div class="story-points"><div><h3 data-t="storyEvidence">Show the evidence.</h3><p data-t="storyEvidenceCopy">Each possible cause points back to something visible. A whole-plant view and a close-up give the model different information.</p></div><div><h3 data-t="storyQuestion">Ask a better next question.</h3><p data-t="storyQuestionCopy">A short field observation can help separate similar-looking problems. Your answer informs a fresh analysis.</p></div></div></div>
+    <details class="research" lang="en"><summary>The research behind the idea <span class="muted">· UC Agriculture and Natural Resources</span></summary><div class="research-content"><div class="stats"><div class="stat"><strong>880,000</strong><span>estimated California farmworkers</span></div><div class="stat"><strong>130,000</strong><span>estimated growers, for context</span></div><div class="stat"><strong>16</strong><span>focus groups · 136 participants</span></div><div class="stat"><strong>39%</strong><span>pest management share of the topic-interest chart</span></div></div><div class="sources"><p>UC ANR research found interest in pest management and a preference for in-person learning. CropSight explores a way to support those conversations; the research did not test this app.</p><p>Sources: <a href="https://ucanr.edu/blog/nuestra-comunidad/article/why-its-important-uc-anr-include-farmworkers-part-its-clientele">UC ANR, August 2025</a> · <a href="https://ucanr.edu/sites/default/files/2025-08/Farmworker%20Extension%20Project%20Summary.pdf">2023–2024 learning-needs summary</a> · <a href="https://communitydevelopment.ucdavis.edu/sites/g/files/dgvnsk1186/files/inline-files/Juarez_Thesis_Final.pdf">Juarez, 2024 master's thesis</a>.</p><p>These are contextual estimates and study findings, not app outcomes. Spanish wording is a draft; no UC ANR endorsement is claimed.</p></div></div></details>
+</section><footer class="footer"><div class="footer-inner"><strong>CropSight · Sierra Hacks 2026</strong><p data-t="disclaimer">AI observations, not a diagnosis. Confirm with your supervisor or adviser.</p></div></footer>
+</div>
+<section id="settings-view" class="settings-page" hidden aria-labelledby="settings-title">
+<a href="#workspace" class="text-button" data-t="back">← Back to CropSight</a><h1 id="settings-title" data-t="settings">Settings</h1>
+<div class="card"><h2 data-t="languageTitle">Display language</h2><p data-t="languageHelp">English is the default. Switch to Spanish here.</p><div class="language-toggle" role="group" aria-label="Display language"><button type="button" data-language="en" aria-pressed="true">English</button><button type="button" data-language="es" aria-pressed="false" lang="es">Español</button></div></div>
+<div class="card"><h2 data-t="connectionTitle">Analysis connection</h2><dl class="connection-list"><dt data-t="provider">Provider</dt><dd id="setting-provider">—</dd><dt data-t="model">Model</dt><dd id="setting-model">—</dd><dt data-t="statusLabel">Status</dt><dd id="setting-status">—</dd><dt data-t="build">Server build</dt><dd id="setting-build">—</dd></dl><button id="refresh-status" class="secondary" type="button" data-t="retryConnection">Check connection again</button><p id="setting-guidance"></p></div>
+<div class="card"><h2 data-t="privacyTitle">Your photos</h2><p data-t="privacyCopy">Photos stay in this tab until you consent and analyze. The app does not save uploads. The AI provider’s retention policy still applies.</p><a id="privacy-link" target="_blank" rel="noopener" data-t="privacyLink">Provider data policy</a></div>
+<div class="card"><h2 data-t="credits">How it works & credits</h2><p data-t="decisionSentence">The vision model compares crop photos, links possible problems to visible evidence, and chooses a useful next observation.</p><p data-t="creditsCopy">CropSight uses a pretrained model through an API; it does not train a new model. Built with assistance from OpenAI Codex and Claude. Research context: UC ANR and Andrea G. Juarez, UC Davis.</p><p data-t="limitsCopy">Accuracy has not been measured on a labeled crop dataset. Spanish wording has not received a professional review.</p></div>
+</section>
 </main>
+
 <script>
-(() => {
-  const $ = s => document.querySelector(s);
-  const esc = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const pair = o => o ? `${esc(o.en)}<span class="es" lang="es">${esc(o.es)}</span>` : '';
-  const MODES = {
-    seeds: {label:'Seeds / Semillas',en:'Seeds, seedlings & early growth.',es:'Semillas, plántulas y crecimiento inicial.'},
-    harvest: {label:'Harvest / Cosecha',en:'Ripeness, fruit & visible harvest damage.',es:'Madurez, frutos y daños visibles en la cosecha.'},
-  };
-  let savedMode; try { savedMode = localStorage.getItem('cropsight-mode'); } catch {}
-  const state = {mode:MODES[savedMode] ? savedMode : 'seeds', photo:null, busy:false, loading:false, revision:0, photoVersion:0, controller:null, result:null, aiEnabled:null, provider:null};
-  const MESSAGES = {
-    default:'Analysis did not finish. Your photo is still here. Try again. · El análisis no terminó. Su foto sigue aquí. Inténtelo de nuevo.',
-    not_configured:'Analysis is unavailable on this site right now. · El análisis no está disponible en este sitio por ahora.',
-    busy:'Too many requests. Wait a minute and try again. · Demasiadas solicitudes. Espere un minuto e inténtelo de nuevo.',
-    timeout:'This is taking too long. Try again. · Está tardando demasiado. Inténtelo de nuevo.',
-    consent_required:'Select the consent box first. · Marque la casilla de consentimiento primero.',
-    too_large:'Choose a photo smaller than 15 MB. · Elija una foto de menos de 15 MB.',
-    photo_error:'Could not open this photo. Try a JPG, PNG or WebP. · No se pudo abrir la foto. Pruebe JPG, PNG o WebP.',
-    mode_changed:'Stage changed. Analyze this photo again for the new stage. · La etapa cambió. Analice de nuevo la foto para esta etapa.',
-  };
-  function setStatus(text='',tone='error'){ $('#status').textContent=text; $('#status').dataset.tone=tone; }
-  function updateButton(){
-    $('#analyze').disabled=state.busy||state.loading||!state.photo||!$('#consent').checked||state.aiEnabled!==true;
-    $('#consent').disabled=state.loading||!state.photo;
-    $('#analyze-label').textContent=state.busy?'Analyzing photo…':'Analyze photo';
-    $('#analyze-es').textContent=state.busy?'Analizando foto…':'Analizar foto';
-    $('#result-shell').setAttribute('aria-busy',String(state.busy));
-  }
-  function emptyResult(loading=false){
-    $('#result').hidden=true; $('#result').innerHTML=''; $('#result-empty').hidden=false;
-    $('#result-empty').classList.toggle('loading',loading);
-    $('#empty-title').textContent=loading?'Taking a closer look…':state.photo?'Your photo is ready':'Your crop, at a glance';
-    $('#empty-copy').innerHTML=loading?'Checking the photo for '+esc(MODES[state.mode].label)+'.<span class="es" lang="es">Revisando la foto para la etapa elegida.</span>':'Add a photo to see the crop, visible condition, and what to check next.<span class="es" lang="es">Agregue una foto para ver el cultivo, su estado visible y qué revisar.</span>';
-    if(!loading&&state.photo)$('#empty-copy').innerHTML='Select Analyze photo to see observations for this stage.<span class="es" lang="es">Seleccione Analizar foto para ver observaciones de esta etapa.</span>';
-    $('#result-steps').hidden=loading;
-  }
-  function invalidate(){
-    state.revision++; state.controller?.abort(); state.controller=null; state.busy=false; state.result=null;
-    emptyResult();
-  }
-  function updateMode(){
-    document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.mode===state.mode)));
-    $('#focus-pill').textContent=MODES[state.mode].label;
-    $('#focus-description').innerHTML=pair(MODES[state.mode]);
-  }
-  document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{
-    if(state.mode===b.dataset.mode)return;
-    invalidate(); state.mode=b.dataset.mode;
-    try {localStorage.setItem('cropsight-mode',state.mode);} catch {}
-    updateMode(); setStatus(state.photo?MESSAGES.mode_changed:'','info'); updateButton();
-  }));
-  function clearPhoto(){
-    state.photoVersion++; invalidate(); state.photo=null; state.loading=false;
-    $('#consent').checked=false; $('#preview').hidden=true; $('#preview').removeAttribute('src');
-    $('#drop-hint').hidden=false; $('#photo-tools').hidden=true; $('#filename').textContent=''; $('#photo').value='';
-    emptyResult(); setStatus(); updateButton();
-  }
-  $('#clear').addEventListener('click',clearPhoto);
-  $('#photo').addEventListener('change',async e=>{
-    const file=e.target.files[0]; if(!file)return;
-    clearPhoto();
-    if(file.size>15*1024*1024){setStatus(MESSAGES.too_large);return;}
-    if(!/^image\/(jpeg|png|webp|heic|heif)$/.test(file.type)&&! /\.(jpe?g|png|webp|heic|heif)$/i.test(file.name)){setStatus(MESSAGES.photo_error);return;}
-    state.loading=true;updateButton();setStatus('Opening photo… · Abriendo foto…','info');
-    const version=state.photoVersion, url=URL.createObjectURL(file);
-    try{
-      const img=new Image();img.src=url;await img.decode();
-      if(version!==state.photoVersion)return;
-      if(!img.naturalWidth||img.naturalWidth*img.naturalHeight>50000000)throw new Error('dimensions');
-      const scale=Math.min(1,1280/Math.max(img.naturalWidth,img.naturalHeight)),c=document.createElement('canvas');
-      c.width=Math.max(1,Math.round(img.naturalWidth*scale));c.height=Math.max(1,Math.round(img.naturalHeight*scale));
-      const context=c.getContext('2d');context.fillStyle='#fff';context.fillRect(0,0,c.width,c.height);context.drawImage(img,0,0,c.width,c.height);
-      state.photo=c.toDataURL('image/jpeg',.85);$('#preview').src=state.photo;$('#preview').hidden=false;
-      $('#drop-hint').hidden=true;$('#photo-tools').hidden=false;$('#filename').textContent=file.name;emptyResult();
-      setStatus(state.aiEnabled===false?MESSAGES.not_configured:'',state.aiEnabled===false?'error':'info');
-    }catch{if(version===state.photoVersion)setStatus(MESSAGES.photo_error);}
-    finally{URL.revokeObjectURL(url);if(version===state.photoVersion){state.loading=false;updateButton();}}
-  });
-  $('#consent').addEventListener('change',()=>{if(!$('#consent').checked&&state.busy){invalidate();setStatus();}updateButton();});
-  function validResult(r){
-    const bi=o=>o&&typeof o.en==='string'&&typeof o.es==='string';
-    return r&&typeof r.photo_usable==='boolean'&&['looks_healthy','problem_found','unclear'].includes(r.overall)
-      &&bi(r.crop_seen)&&bi(r.photo_note)&&bi(r.report_to_supervisor)&&['en','es'].every(l=>r.photo_note[l].trim()&&r.report_to_supervisor[l].trim())&&typeof r.tell_supervisor_today==='boolean'
-      &&Array.isArray(r.possible_problems)&&r.possible_problems.length<=3&&r.possible_problems.every(p=>p&&['name_en','name_es','looks_like_en','looks_like_es'].every(k=>typeof p[k]==='string')&&Array.isArray(p.first_steps)&&p.first_steps.length<=4&&p.first_steps.every(bi));
-  }
-  function cropName(value,lang){
-    const v=String(value||'').trim();
-    if(!v||/^(unsure|unknown|not sure|no sé|no se|desconocido|incierto)$/i.test(v))return lang==='es'?'No se pudo identificar':'Could not identify';
-    return v.charAt(0).toLocaleUpperCase(lang)+v.slice(1);
-  }
-  function renderResult(r){
-    const verdicts={looks_healthy:['No obvious damage in this photo','Sin daños evidentes en esta foto'],problem_found:['Possible problem to review','Posible problema que revisar'],unclear:['A closer look is needed','Hace falta revisar más de cerca']};
-    const [en,es]=verdicts[r.overall];
-    const mark=r.overall==='looks_healthy'?'<path d="m5 12 4 4L19 6"/>':'<path d="M12 7v6m0 3v1"/><circle cx="12" cy="12" r="10"/>';
-    const problems=r.photo_usable?r.possible_problems.map(p=>`<li class="problem-item"><h3>${esc(p.name_en)}<span class="es" lang="es">${esc(p.name_es)}</span></h3><p>${pair({en:p.looks_like_en,es:p.looks_like_es})}</p>${p.first_steps.length?`<ul class="checks">${p.first_steps.map(s=>`<li>${pair(s)}</li>`).join('')}</ul>`:''}</li>`).join(''):'';
-    $('#result').innerHTML=`<div class="result-heading"><span class="step-label">${esc(MODES[state.mode].label)} · Observation</span><time>${new Date().toLocaleDateString(undefined,{month:'short',day:'numeric'})}</time></div><h2 class="crop-name">${esc(cropName(r.crop_seen.en,'en'))}</h2><p class="es crop-translation" lang="es">${esc(cropName(r.crop_seen.es,'es'))}</p><div class="verdict ${r.overall}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">${mark}</svg><span>${en}<span class="es" lang="es">${es}</span></span></div><div class="observation"><h3>In this photo<span class="es" lang="es">En esta foto</span></h3><p>${pair(r.photo_note)}</p></div>${r.tell_supervisor_today&&r.photo_usable?'<p class="alert">Show your supervisor today.<span class="es" lang="es">Muéstrelo a su supervisor hoy.</span></p>':''}${problems?`<ul class="problem-list">${problems}</ul>`:''}<div class="supervisor"><div class="supervisor-head"><h3>For your supervisor<span class="es" lang="es">Para su supervisor</span></h3><button class="text-button" id="copy-summary" type="button">Copy / Copiar</button></div><p>${pair(r.report_to_supervisor)}</p><p id="copy-status" class="status" role="status"></p></div><p class="result-note">AI can be wrong. This is a photo observation, not a diagnosis. Confirm with your supervisor or adviser.<span class="es" lang="es">La IA puede equivocarse. Es una observación de la foto, no un diagnóstico. Confirme con su supervisor o asesor.</span></p>`;
-    $('#result-empty').hidden=true;$('#result').hidden=false;
-    $('#copy-summary').addEventListener('click',async()=>{
-      const text=`CropSight · ${MODES[state.mode].label}\n${cropName(r.crop_seen.en,'en')} / ${cropName(r.crop_seen.es,'es')}\n\n${r.report_to_supervisor.en}\n\n${r.report_to_supervisor.es}\n\nAI observation, not a diagnosis. Confirm with a supervisor. / Observación de IA, no es un diagnóstico. Confirme con un supervisor.`;
-      const feedback=$('#copy-status');
-      try{await navigator.clipboard.writeText(text);if(feedback.isConnected){feedback.textContent='Summary copied · Resumen copiado';feedback.dataset.tone='info';}}
-      catch{if(feedback.isConnected)feedback.textContent='Select and copy the summary above. · Seleccione y copie el resumen de arriba.';}
-    });
-    // Do not move the user's focus when a response arrives. On phones bring the result into view.
-    if(matchMedia('(max-width:800px)').matches)$('#result-shell').scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion:reduce)').matches?'auto':'smooth'});
-    setStatus('Analysis complete. Your observations are ready. · Análisis completo. Sus observaciones están listas.','info');
-  }
-  async function analyze(){
-    if($('#analyze').disabled)return;
-    invalidate();const revision=state.revision;state.busy=true;const controller=new AbortController();state.controller=controller;
-    updateButton();emptyResult(true);setStatus('Analyzing… · Analizando…','info');
-    const timer=setTimeout(()=>controller.abort(),25000);
-    try{
-      const res=await fetch('/api/assess',{method:'POST',headers:{'Content-Type':'application/json'},signal:controller.signal,
-        // Legacy defaults keep compatibility with already-running demo servers.
-        body:JSON.stringify({image:state.photo,crop:'unsure',symptom:'other',consent:true,mode:state.mode})});
-      const data=await res.json().catch(()=>({}));if(revision!==state.revision)return;
-      if(!res.ok){emptyResult();setStatus(MESSAGES[data.error]||MESSAGES.default);return;}
-      if(!validResult(data.result)){emptyResult();setStatus(MESSAGES.default);return;}
-      const r=data.result;
-      if(!r.photo_usable){r.overall='unclear';r.possible_problems=[];r.tell_supervisor_today=false;r.crop_seen={en:'Could not identify',es:'No se pudo identificar'};r.report_to_supervisor={en:'The photo is not clear enough to assess. Please take another photo for review.',es:'La foto no es lo bastante clara para evaluarla. Tome otra foto para revisarla.'};}
-      if(r.overall==='looks_healthy'&&r.possible_problems.length){r.overall='unclear';r.report_to_supervisor={en:'The automated observations were inconsistent. Please review this photo with your supervisor.',es:'Las observaciones automáticas fueron contradictorias. Revise esta foto con su supervisor.'};}
-      if(r.overall==='looks_healthy')r.tell_supervisor_today=false;
-      state.result=r;renderResult(r);
-    }catch{if(revision===state.revision){emptyResult();setStatus(controller.signal.aborted?MESSAGES.timeout:MESSAGES.default);}}
-    finally{clearTimeout(timer);if(revision===state.revision){state.busy=false;state.controller=null;updateButton();}}
-  }
-  $('#analyze').addEventListener('click',analyze);
-  async function checkStatus(){
-    const controller=new AbortController(),timer=setTimeout(()=>controller.abort(),4000);
-    try{
-      if(location.protocol==='file:')throw new Error('server required');
-      const res=await fetch('/api/status',{signal:controller.signal});if(!res.ok)throw new Error('status');
-      const data=await res.json();state.aiEnabled=data.aiEnabled===true;
-      // Legacy servers in the supplied OpenAI demo have no provider metadata.
-      state.provider=data.provider||{name:'OpenAI',privacyUrl:'https://developers.openai.com/api/docs/guides/your-data'};
-      const name=esc(state.provider.name);
-      $('#consent-text').innerHTML=`<strong>I agree to send this photo to ${name} for analysis.</strong><span class="es" lang="es">Acepto enviar esta foto a ${name} para analizarla.</span>`;
-      const note=document.createElement('p');note.className='photo-help';note.id='privacy-note';
-      note.innerHTML='This app does not save photos. Provider retention rules apply.<span class="es" lang="es">Esta app no guarda fotos. Se aplican las reglas de retención del proveedor.</span>';
-      if(state.provider.privacyUrl&&['https://developers.openai.com/api/docs/guides/your-data','https://ai.google.dev/gemini-api/terms'].includes(state.provider.privacyUrl))note.innerHTML+=` <a href="${state.provider.privacyUrl}" target="_blank" rel="noopener">Data policy / Política de datos ↗</a>`;
-      $('.consent').after(note);
-      if(!state.aiEnabled)setStatus(MESSAGES.not_configured);
-    }catch{state.aiEnabled=false;setStatus(MESSAGES.not_configured);}
-    finally{clearTimeout(timer);updateButton();}
-  }
-  updateMode();updateButton();checkStatus();
-})();
+'use strict';
+const $ = id => document.getElementById(id);
+const english = Object.fromEntries([...document.querySelectorAll('[data-t]')].map(el => [el.dataset.t,['headline','storyTitle'].includes(el.dataset.t)?el.innerHTML:el.textContent]));
+const es = {
+ seeds:'Semillas',harvest:'Cosecha',why:'Por qué CropSight',settings:'Ajustes',eyebrow:'De la semilla a la cosecha',headline:'Observe las señales.<br>Sepa qué revisar.',intro:'Un cultivo. Dos vistas. Observaciones claras y una pregunta útil.',aiCaption:'Evidencia visual → posibles causas → qué revisar',yourPhoto:'Su foto',upload:'Tome o suba una foto',formats:'JPG, PNG, WebP · máximo 15 MB',remove:'Quitar',detailTitle:'Añadir un acercamiento',detailHelp:'La misma planta, de cerca. Compare los detalles.',removeDetail:'Quitar acercamiento',photoHelp:'Enfoque la planta. Evite rostros y datos personales.',retryConnection:'Comprobar conexión',point1:'Vea lo que aparece en cada foto.',point2:'Compare posibles explicaciones.',point3:'Responda una pregunta para precisar el siguiente paso.',storyTitle:'Una foto puede iniciar<br>una mejor conversación.',storyCopy:'CropSight ayuda a describir un síntoma desconocido con observaciones concretas para hablar con un supervisor.',storyEvidence:'Muestre la evidencia.',storyEvidenceCopy:'Cada posible causa se vincula con algo visible. La planta completa y un acercamiento aportan información distinta.',storyQuestion:'Haga una pregunta útil.',storyQuestionCopy:'Una observación breve puede ayudar a distinguir problemas parecidos. Su respuesta orienta un nuevo análisis.',disclaimer:'Observaciones de IA, no un diagnóstico. Confirme con su supervisor o asesor.',back:'← Volver a CropSight',languageTitle:'Idioma',languageHelp:'El idioma inicial es inglés. Aquí puede cambiar a español.',connectionTitle:'Conexión del análisis',provider:'Proveedor',model:'Modelo',statusLabel:'Estado',build:'Versión del servidor',privacyTitle:'Sus fotos',privacyCopy:'Las fotos permanecen en esta pestaña hasta que autorice el análisis. La aplicación no guarda las fotos. Se aplica la política de retención del proveedor de IA.',privacyLink:'Política de datos del proveedor',credits:'Cómo funciona y créditos',decisionSentence:'El modelo compara fotos del cultivo, vincula posibles problemas con evidencia visible y propone una observación útil.',creditsCopy:'CropSight usa un modelo preentrenado mediante una API; no entrena un modelo nuevo. Creado con ayuda de OpenAI Codex y Claude. Contexto de investigación: UC ANR y Andrea G. Juarez, UC Davis.',limitsCopy:'La precisión no se ha medido con un conjunto de fotos etiquetadas. El texto en español no ha recibido una revisión profesional.'
+};
+const words = {
+ en:{seedsFocus:'Seeds, seedlings & early growth.',harvestFocus:'Ripeness, produce damage & harvest observations.',emptyTitle:'Start with what you can see.',emptyCopy:'Add a clear plant photo. A close-up helps show the details.',loadingTitle:'Looking at the evidence…',loadingCopy:'Comparing the views and choosing useful next checks. This may take up to a minute.',analyze:'Analyze photo',analyzeTwo:'Compare both photos',loading:'Analyzing…',send:'I agree to send these photos to {provider} for analysis.',configured:'Key configured · live call not yet verified',verified:'Successful analysis completed',unavailable:'Server unavailable',noKey:'API key missing',ready:'Add a photo and allow analysis to begin.',missingKey:'The server needs an API key. Add OPENAI_API_KEY to .env, then restart node server.js.',offline:'Cannot reach the analysis server. Start node server.js and open the address it prints.',old:'The running server needs a restart for two-photo analysis and follow-up questions. Single-photo analysis still works.',oldSettings:'Restart node server.js to load Evidence v3.',newSettings:'Connection is verified only after a successful analysis.',prep:'Preparing photo…',fileTooLarge:'Choose a photo smaller than 15 MB.',fileFormat:'This photo could not be opened. Try a JPG, PNG or WebP. On iPhone, export HEIC as JPEG.',filePixels:'This photo is too large to process. Choose a smaller image.',added:'Photo ready. Allow analysis below to continue.',changed:'Selection changed. Analyze again for a fresh result.',languageChanged:'Language changed. Analyze again to get the result in English.',choose:'Add a photo and allow analysis first.',complete:'Analysis ready. Review the observations below.',updated:'Analysis updated with your answer.',unknown:'Unknown crop',crop:'Crop observed',looks_healthy:'No obvious damage in these views',problem_found:'Visible signs to review',unclear:'More information needed',evidence:'What the model sees',overview:'View whole-plant photo',detail:'View close-up photo',possible:'Possible explanations',distinguish:'What would help tell:',next:'What to check next',question:'One more observation',questionHelp:'Choose what you observed. This sends the photos and your answer for a fresh analysis.',answer:'Your reported observation',supervisor:'For your supervisor',copy:'Copy summary',copied:'Copied',copyFail:'Select the summary below and copy it.',limits:'What the photos cannot tell',legacy:'Single-photo analysis',modelLabel:'Model',views:'views',view:'view',photoChanged:'Photo changed. Allow analysis again.',not_configured:'The server needs an API key. Add OPENAI_API_KEY to .env and restart.',invalid_key:'The AI provider rejected the key. Check the server key and restart.',quota_exhausted:'The API account has no available quota. Check provider billing or use a funded key.',provider_busy:'The AI provider is busy. Wait a moment, then try again.',model_unavailable:'This model is not available for the API account. Check OPENAI_MODEL and restart.',upstream_error:'The AI provider could not complete the request. Try again shortly.',busy:'Too many analyses at once. Wait a minute, then retry.',timeout:'Analysis took too long. Try one clear photo and retry.',invalid_response:'The AI response was incomplete or inconsistent. Please try again.',incomplete_response:'The AI response was cut short. Please retry.',refused_response:'The AI could not assess this image. Try a clear plant photo.',invalid_request:'The request could not be read. Refresh the page and choose the photo again.',consent_required:'Allow photo analysis before continuing.',too_large:'The photos are too large to send. Choose smaller images.',network:'Connection interrupted. Check the server and internet, then retry.'},
+ es:{seedsFocus:'Semillas, plántulas y crecimiento inicial.',harvestFocus:'Madurez, daños y observaciones de cosecha.',emptyTitle:'Empiece con lo que puede ver.',emptyCopy:'Añada una foto clara de la planta. Un acercamiento muestra los detalles.',loadingTitle:'Revisando la evidencia…',loadingCopy:'Comparando las vistas y buscando qué revisar. Puede tardar hasta un minuto.',analyze:'Analizar foto',analyzeTwo:'Comparar ambas fotos',loading:'Analizando…',send:'Acepto enviar estas fotos a {provider} para su análisis.',configured:'Clave configurada · conexión aún no verificada',verified:'Análisis completado correctamente',unavailable:'Servidor no disponible',noKey:'Falta la clave API',ready:'Añada una foto y autorice el análisis.',missingKey:'El servidor necesita una clave API. Añada OPENAI_API_KEY a .env y reinicie node server.js.',offline:'No se puede conectar al servidor. Inicie node server.js y abra la dirección indicada.',old:'Reinicie el servidor para analizar dos fotos y responder preguntas. El análisis de una foto sigue disponible.',oldSettings:'Reinicie node server.js para cargar Evidence v3.',newSettings:'La conexión se verifica después de un análisis correcto.',prep:'Preparando foto…',fileTooLarge:'Elija una foto de menos de 15 MB.',fileFormat:'No se pudo abrir la foto. Pruebe JPG, PNG o WebP. Exporte HEIC como JPEG.',filePixels:'La foto es demasiado grande. Elija una imagen más pequeña.',added:'Foto lista. Autorice el análisis para continuar.',changed:'Cambió la selección. Analice de nuevo.',languageChanged:'Cambió el idioma. Analice de nuevo para obtener el resultado en español.',choose:'Añada una foto y autorice el análisis.',complete:'Análisis listo. Revise las observaciones.',updated:'Análisis actualizado con su respuesta.',unknown:'Cultivo no identificado',crop:'Cultivo observado',looks_healthy:'Sin daños evidentes en estas vistas',problem_found:'Señales visibles para revisar',unclear:'Se necesita más información',evidence:'Lo que observa el modelo',overview:'Ver planta completa',detail:'Ver acercamiento',possible:'Posibles explicaciones',distinguish:'Para distinguir:',next:'Qué revisar',question:'Una observación más',questionHelp:'Elija lo que observó. Se envían las fotos y su respuesta para un nuevo análisis.',answer:'Su observación reportada',supervisor:'Para su supervisor',copy:'Copiar resumen',copied:'Copiado',copyFail:'Seleccione el resumen y cópielo.',limits:'Lo que las fotos no muestran',legacy:'Análisis de una foto',modelLabel:'Modelo',views:'vistas',view:'vista',photoChanged:'Cambió la foto. Autorice el análisis de nuevo.',not_configured:'Falta la clave API del servidor. Añada OPENAI_API_KEY a .env y reinicie.',invalid_key:'El proveedor rechazó la clave. Revise la clave y reinicie el servidor.',quota_exhausted:'La cuenta API no tiene cuota disponible. Revise la facturación del proveedor.',provider_busy:'El proveedor está ocupado. Espere e inténtelo de nuevo.',model_unavailable:'El modelo no está disponible. Revise OPENAI_MODEL y reinicie.',upstream_error:'El proveedor no completó la solicitud. Inténtelo de nuevo.',busy:'Hay demasiados análisis. Espere un minuto.',timeout:'El análisis tardó demasiado. Pruebe una foto clara.',invalid_response:'La respuesta fue incompleta o contradictoria. Inténtelo de nuevo.',incomplete_response:'La respuesta se cortó. Inténtelo de nuevo.',refused_response:'No se pudo analizar la imagen. Pruebe una foto clara de la planta.',invalid_request:'No se pudo leer la solicitud. Actualice la página y elija la foto de nuevo.',consent_required:'Autorice el análisis de las fotos.',too_large:'Las fotos son demasiado grandes. Elija imágenes más pequeñas.',network:'Se interrumpió la conexión. Revise el servidor e internet.'}
+};
+function saved(key,fallback){try{return localStorage.getItem(key)||fallback;}catch{return fallback;}}
+const state={language:saved('cropsight-language','en')==='es'?'es':'en',mode:saved('cropsight-mode','seeds')==='harvest'?'harvest':'seeds',image:null,detail:null,info:null,busy:false,preparing:0,revision:0,controller:null,versions:{overview:0,detail:0},result:null};
+const t = key => { if(key==='unreadable_response') key='invalid_response'; return words[state.language][key] || words.en[key] || key; };
+const tr = key => state.language==='es' ? es[key]||english[key] : english[key];
+const escape = value => String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function status(message='',tone='info'){$('status').textContent=message;$('status').dataset.tone=tone;}
+function persist(key,value){try{localStorage.setItem(key,value);}catch{}}
+function refresh(){
+ document.documentElement.lang=state.language;
+ for(const el of document.querySelectorAll('[data-t]')){const key=el.dataset.t;if(['headline','storyTitle'].includes(key))el.innerHTML=tr(key);else el.textContent=tr(key);}
+ document.querySelectorAll('[data-mode]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.mode===state.mode));
+ document.querySelectorAll('[data-language]').forEach(b=>b.setAttribute('aria-pressed',b.dataset.language===state.language));
+ $('focus-pill').textContent=tr(state.mode);$('focus-description').textContent=t(state.mode+'Focus');
+ $('analyze-label').textContent=t(state.busy?'loading':state.detail?'analyzeTwo':'analyze');
+ $('analyze').disabled=state.busy||!!state.preparing||!state.image||!$('consent').checked||!state.info?.aiEnabled;
+ $('empty-title').textContent=t(state.busy?'loadingTitle':'emptyTitle');$('empty-copy').textContent=t(state.busy?'loadingCopy':'emptyCopy');
+ $('ready-points').hidden=state.busy;$('result-empty').classList.toggle('loading',state.busy);$('result-shell').setAttribute('aria-busy',state.busy);
+ $('consent-text').textContent=t('send').replace('{provider}',state.info?.provider?.name||'AI');
+ $('detail-area').hidden=!state.image||state.info?.analysisVersion!==3;
+ $('version-alert').hidden=!state.info?.aiEnabled||state.info.analysisVersion===3;$('version-alert').textContent=t('old');
+ $('setting-provider').textContent=state.info?.provider?.name||'—';$('setting-model').textContent=state.info?.model||'—';$('setting-build').textContent=state.info?.version||'—';
+ $('setting-status').textContent=t(!state.info?'unavailable':!state.info.aiEnabled?'noKey':state.info.connectionVerified?'verified':'configured');
+ $('setting-guidance').textContent=t(!state.info?'offline':!state.info.aiEnabled?'missingKey':state.info.analysisVersion!==3?'oldSettings':'newSettings');
+ const privacy=state.info?.provider?.privacyUrl;$('privacy-link').hidden=!privacy;if(privacy&&/^https:\/\//.test(privacy))$('privacy-link').href=privacy;
+ $('retry-connection').hidden=!!state.info?.aiEnabled;
+ document.querySelector('.settings-link').setAttribute('aria-label',tr('settings'));
+ $('photo').setAttribute('aria-label',tr('upload'));$('detail-photo').setAttribute('aria-label',tr('detailTitle'));
+ $('preview').alt=t('overview');$('detail-preview').alt=t('detail');
+}
+function invalidate(){state.revision++;state.controller?.abort();state.controller=null;state.busy=false;state.result=null;$('result').hidden=true;$('result').replaceChildren();$('result-empty').hidden=false;refresh();}
+function route(){const settings=location.hash==='#settings'||(!location.hash&&location.pathname==='/settings');$('app-view').hidden=settings;$('settings-view').hidden=!settings;document.querySelector('.hotbar').hidden=settings;document.querySelector('.nav-link').hidden=settings;if(settings)window.scrollTo(0,0);}
+async function connection(){
+ try{const response=await fetch('/api/status',{cache:'no-store',signal:AbortSignal.timeout(6000)});const info=await response.json();if(!response.ok||typeof info.aiEnabled!=='boolean')throw Error();state.info=info;status(t(info.aiEnabled?'ready':'missingKey'),info.aiEnabled?'info':'error');}
+ catch{state.info=null;status(t('offline'),'error');}refresh();
+}
+function photoUI(){
+ $('preview').hidden=!state.image;$('drop-hint').hidden=!!state.image;$('photo-tools').hidden=!state.image;
+ if(state.image)$('preview').src=state.image;else $('preview').removeAttribute('src');
+ $('detail-preview').hidden=!state.detail;$('detail-icon').hidden=!!state.detail;$('clear-detail').hidden=!state.detail;
+ if(state.detail)$('detail-preview').src=state.detail;else $('detail-preview').removeAttribute('src');refresh();
+}
+async function photo(file,kind){
+ if(!file)return;
+ const version=++state.versions[kind];invalidate();state.preparing++;$('consent').checked=false;status(t('prep'));refresh();
+ let url;
+ try{
+  if(file.size>15*1024*1024)throw Error('fileTooLarge');
+  url=URL.createObjectURL(file);const img=new Image();img.src=url;
+  await img.decode().catch(()=>{throw Error('fileFormat');});
+  if(!img.naturalWidth||img.naturalWidth*img.naturalHeight>50000000)throw Error('filePixels');
+  const factor=Math.min(1,1280/Math.max(img.naturalWidth,img.naturalHeight)),canvas=document.createElement('canvas');
+  canvas.width=Math.round(img.naturalWidth*factor);canvas.height=Math.round(img.naturalHeight*factor);
+  const ctx=canvas.getContext('2d');ctx.fillStyle='#fff';ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(img,0,0,canvas.width,canvas.height);
+  if(version!==state.versions[kind])return;
+  if(kind==='overview'){state.image=canvas.toDataURL('image/jpeg',.85);state.detail=null;state.versions.detail++;$('detail-photo').value='';$('filename').textContent=file.name;}
+  else state.detail=canvas.toDataURL('image/jpeg',.85);
+  status(t('added'));photoUI();
+ }catch(error){if(version===state.versions[kind])status(t(error.message in words.en?error.message:'fileFormat'),'error');}
+ finally{if(url)URL.revokeObjectURL(url);state.preparing--;refresh();}
+}
+function adaptLegacy(r){
+ if(!r||!r.crop_seen||!r.report_to_supervisor||!Array.isArray(r.possible_problems)||!['looks_healthy','problem_found','unclear'].includes(r.overall))throw Error('invalid_response');
+ const lang=state.language;
+ return {crop:r.crop_seen[lang]||t('unknown'),overall:r.overall,stage_match:'unclear',stage_note:'',observation_summary:r.photo_note?.[lang]||'',evidence:[],possible_problems:r.possible_problems.map(p=>({name:p['name_'+lang],why_possible:p['looks_like_'+lang],how_to_distinguish:'',evidence_indices:[]})),next_steps:[...new Set(r.possible_problems.flatMap(p=>(p.first_steps||[]).map(s=>s[lang])))].slice(0,3),follow_up:{question:'',options:[]},limits:'',report_to_supervisor:r.report_to_supervisor[lang]};
+}
+function render(r,meta,answer){
+ const legacy=meta.analysisVersion!==3, count=meta.imageCount||1;
+ $('result').innerHTML=`<div class="provenance">${escape(meta.provider||state.info?.provider?.name||'AI')} · ${escape(meta.model||state.info?.model||'')} · ${count} ${t(count===1?'view':'views')} · ${(meta.elapsedMs/1000).toFixed(1)}s${legacy?' · '+t('legacy'):''}</div>
+ <div class="eyebrow">${t('crop')}</div><h2 class="crop-name">${escape(r.crop||t('unknown'))}</h2><div class="verdict ${r.overall}">${t(r.overall)}</div>
+ ${r.stage_match==='different_stage'?`<p class="alert">${escape(r.stage_note)}</p>`:''}<p class="observation">${escape(r.observation_summary)}</p>
+ ${answer?`<p class="context-note">${t('answer')}: ${escape(answer.question)} — ${escape(answer.answer)}</p>`:''}
+ ${r.evidence.length?`<section style="margin-top:22px"><h3>${t('evidence')}</h3><ol class="evidence-list">${r.evidence.map((e,i)=>`<li><span class="evidence-number">${i+1}</span><div>${escape(e.observation)}<button type="button" class="evidence-view" data-view="${e.view}">${t(e.view)} ↗</button></div></li>`).join('')}</ol></section>`:''}
+ ${r.possible_problems.length?`<section style="margin-top:22px"><h3>${t('possible')}</h3><ul class="problem-list">${r.possible_problems.map(p=>`<li class="problem-item"><div class="hypothesis-head"><strong>${escape(p.name)}</strong>${p.evidence_indices.length?`<span class="reference">${p.evidence_indices.map(i=>'#'+(i+1)).join(' ')}</span>`:''}</div><p>${escape(p.why_possible)}</p>${p.how_to_distinguish?`<div class="distinguish"><strong>${t('distinguish')}</strong> ${escape(p.how_to_distinguish)}</div>`:''}</li>`).join('')}</ul></section>`:''}
+ ${r.next_steps.length?`<section style="margin-top:22px"><h3>${t('next')}</h3><ul class="checks">${r.next_steps.map(s=>`<li>${escape(s)}</li>`).join('')}</ul></section>`:''}
+ ${!legacy&&r.follow_up.question&&r.follow_up.options.length?`<section class="follow-up"><div class="eyebrow">${t('question')}</div><h3>${escape(r.follow_up.question)}</h3><div class="answer-options">${r.follow_up.options.map((o,i)=>`<button type="button" data-answer="${i}">${escape(o)}</button>`).join('')}</div><p>${t('questionHelp')}</p></section>`:''}
+ <section class="supervisor"><div class="supervisor-head"><h3>${t('supervisor')}</h3><button type="button" class="text-button" id="copy-result">${t('copy')}</button></div><p id="supervisor-summary">${escape(r.report_to_supervisor)}</p></section>
+ ${r.limits?`<p class="limits-note"><strong>${t('limits')}:</strong> ${escape(r.limits)}</p>`:''}<p class="result-note">${tr('disclaimer')}</p>`;
+ $('result-empty').hidden=true;$('result').hidden=false;state.result={r,meta,answer};
+ $('copy-result').onclick=async()=>{try{await navigator.clipboard.writeText(`CropSight · ${r.crop}\n${r.report_to_supervisor}\n${tr('disclaimer')}`);$('copy-result').textContent=t('copied');}catch{status(t('copyFail'));const range=document.createRange();range.selectNodeContents($('supervisor-summary'));const selection=getSelection();selection.removeAllRanges();selection.addRange(range);}};
+ $('result').querySelectorAll('[data-view]').forEach(b=>b.onclick=()=>{const target=$(b.dataset.view==='detail'?'detail-drop':'drop');document.querySelectorAll('.photo-selected').forEach(e=>e.classList.remove('photo-selected'));target.classList.add('photo-selected');target.scrollIntoView({block:'center',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});});
+ $('result').querySelectorAll('[data-answer]').forEach(b=>b.onclick=()=>analyze({question:r.follow_up.question,answer:r.follow_up.options[Number(b.dataset.answer)]}));
+}
+async function analyze(answer){
+ if(state.busy||state.preparing||!state.image||!$('consent').checked){status(t('choose'));return;}
+ const previous=state.result, revision=++state.revision, started=performance.now(),controller=new AbortController();state.controller=controller;state.busy=true;
+ $('result').hidden=true;$('result-empty').hidden=false;status(t('loading'));refresh();
+ const timer=setTimeout(()=>controller.abort(),60000);
+ try{
+  const enhanced=state.info?.analysisVersion===3;
+  const body={image:state.image,mode:state.mode,crop:'unsure',symptom:'other',consent:true,language:state.language,...(enhanced?{analysisVersion:3,...(state.detail?{detailImage:state.detail}:{}),...(answer?{followUp:answer}:{})}:{})};
+  const response=await fetch('/api/assess',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body),signal:controller.signal});
+  const data=await response.json().catch(()=>{throw Error('invalid_response');});
+  if(revision!==state.revision)return;
+  if(!response.ok)throw Error(data.error||'upstream_error');
+  const meta=data.meta||{analysisVersion:2,imageCount:1,elapsedMs:performance.now()-started};
+  const r=meta.analysisVersion===3?data.result:adaptLegacy(data.result);
+  if(!r||!Array.isArray(r.evidence)||!Array.isArray(r.next_steps)||!r.follow_up||!Array.isArray(r.possible_problems))throw Error('invalid_response');
+  render(r,meta,answer);state.info.connectionVerified=true;status(t(answer?'updated':'complete'));
+  $('result').focus({preventScroll:true});if(innerWidth<801)$('result-shell').scrollIntoView({block:'start',behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth'});
+ }catch(error){if(revision===state.revision){if(previous)render(previous.r,previous.meta,previous.answer);status(t(error.name==='AbortError'?'timeout':error.message==='unreadable_response'?'invalid_response':error.message in words.en?error.message:'network'),'error');}}
+ finally{clearTimeout(timer);if(revision===state.revision){state.busy=false;state.controller=null;refresh();}}
+}
+document.querySelectorAll('[data-mode]').forEach(b=>b.onclick=()=>{if(state.mode===b.dataset.mode)return;state.mode=b.dataset.mode;persist('cropsight-mode',state.mode);invalidate();status(t('changed'));});
+document.querySelectorAll('[data-language]').forEach(b=>b.onclick=()=>{if(state.language===b.dataset.language)return;state.language=b.dataset.language;persist('cropsight-language',state.language);invalidate();status(t('languageChanged'));});
+$('photo').onchange=e=>photo(e.target.files[0],'overview');$('detail-photo').onchange=e=>photo(e.target.files[0],'detail');
+$('clear').onclick=()=>{state.versions.overview++;state.versions.detail++;state.image=null;state.detail=null;$('photo').value='';$('detail-photo').value='';$('consent').checked=false;invalidate();photoUI();status();};
+$('clear-detail').onclick=()=>{state.versions.detail++;state.detail=null;$('detail-photo').value='';$('consent').checked=false;invalidate();photoUI();status(t('photoChanged'));};
+$('consent').onchange=()=>{if(!$('consent').checked&&state.busy){invalidate();status();}refresh();};
+$('analyze').onclick=()=>analyze();$('retry-connection').onclick=connection;$('refresh-status').onclick=connection;
+window.addEventListener('hashchange',route);refresh();route();connection();
+
 </script>
-</body>
-</html>
+</body></html>
