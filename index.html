@@ -1,0 +1,573 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Field Signal — Picture-based crop observation for farmworkers</title>
+<meta name="description" content="Field Signal helps farmworkers show what they see in the field: pick a crop, tap a symptom, add a photo, and share a bilingual visual report with a supervisor.">
+<style>
+  :root{
+    --leaf:#2f6b3a; --leaf-2:#4f8f4f; --sun:#f2b33d; --soil:#6b4a2f;
+    --paper:#fbfaf5; --ink:#1d2a1f; --muted:#5d6b5f; --line:#e3e6dc; --card:#ffffff;
+    --danger:#b3412e; --radius:16px; --shadow:0 10px 30px rgba(29,42,31,.08);
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#141a15; --ink:#eef3ea; --muted:#a6b3a6; --line:#2a3429; --card:#1c241d; --shadow:none;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#141a15; --ink:#eef3ea; --muted:#a6b3a6; --line:#2a3429; --card:#1c241d; --shadow:none;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--paper);color:var(--ink);font:16px/1.55 system-ui,-apple-system,"Segoe UI",Roboto,"Noto Sans",sans-serif}
+  img{max-width:100%}
+  a{color:var(--leaf)}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 16px}
+  h1,h2,h3{line-height:1.2;margin:0 0 .5em}
+  h1{font-size:clamp(2rem,5vw,3.4rem);letter-spacing:-.02em}
+  h2{font-size:clamp(1.5rem,3vw,2.1rem)}
+  p{margin:0 0 1em}
+  .eyebrow{font-size:.8rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--leaf)}
+  .btn{display:inline-flex;align-items:center;gap:8px;border:0;border-radius:999px;padding:12px 22px;font-family:inherit;font-weight:600;font-size:1rem;line-height:1;cursor:pointer;text-decoration:none;background:var(--leaf);color:#fff;transition:transform .15s,background .15s}
+  .btn:hover{background:#255630;transform:translateY(-1px)}
+  .btn.ghost{background:transparent;color:var(--leaf);box-shadow:inset 0 0 0 2px var(--leaf)}
+  .btn:focus-visible,.tile:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid var(--sun);outline-offset:2px}
+
+  /* Header */
+  header.top{position:sticky;top:0;z-index:10;background:color-mix(in srgb,var(--paper) 90%,transparent);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+  header.top .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;text-decoration:none;color:var(--ink)}
+  .logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--leaf),var(--leaf-2));display:grid;place-items:center}
+  nav a{margin-left:18px;text-decoration:none;color:var(--muted);font-weight:600;font-size:.95rem}
+  nav a:hover{color:var(--ink)}
+  @media (max-width:640px){nav a:not(.keep){display:none}}
+
+  /* Hero */
+  .hero{padding:64px 0 40px;background:radial-gradient(1200px 400px at 85% -10%,rgba(242,179,61,.25),transparent 60%),linear-gradient(180deg,rgba(47,107,58,.08),transparent)}
+  .hero-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+  @media (max-width:860px){.hero-grid{grid-template-columns:1fr}}
+  .hero p.lead{font-size:1.15rem;color:var(--muted);max-width:52ch}
+  .cta-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:24px}
+  .phone{background:var(--card);border-radius:28px;box-shadow:var(--shadow);border:1px solid var(--line);padding:18px;max-width:340px;margin:0 auto;transform:rotate(1.5deg)}
+  .phone .bar{height:6px;width:60px;background:var(--line);border-radius:6px;margin:0 auto 14px}
+  .mock-tile{display:flex;align-items:center;gap:10px;padding:12px;border-radius:12px;border:1px solid var(--line);margin-bottom:10px;font-weight:600}
+  .mock-tile.on{border-color:var(--leaf);background:color-mix(in srgb,var(--leaf) 10%,transparent)}
+  .mock-card{margin-top:12px;border-radius:12px;background:linear-gradient(135deg,#dfe9c8,#b9d3a0);height:120px;display:grid;place-items:center;color:var(--leaf);font-weight:700}
+
+  /* Stats */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin:8px 0 0}
+  @media (max-width:800px){.stats{grid-template-columns:repeat(2,1fr)}}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:20px}
+  .stat b{display:block;font-size:2rem;color:var(--leaf);letter-spacing:-.02em}
+  .stat span{color:var(--muted);font-size:.9rem}
+  .source{font-size:.85rem;color:var(--muted);margin-top:12px}
+
+  section{padding:56px 0}
+  .problem{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+  @media (max-width:800px){.problem{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow)}
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;counter-reset:s}
+  @media (max-width:800px){.steps{grid-template-columns:1fr 1fr}}
+  @media (max-width:520px){.steps{grid-template-columns:1fr}}
+  .step{position:relative;padding:20px;border-radius:var(--radius);background:var(--card);border:1px solid var(--line)}
+  .step::before{counter-increment:s;content:counter(s);display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--sun);color:#3b2a00;font-weight:800;margin-bottom:10px}
+
+  /* Demo */
+  #demo{background:color-mix(in srgb,var(--leaf) 6%,var(--paper));border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  .demo-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+  @media (max-width:860px){.demo-grid{grid-template-columns:1fr}}
+  .field{margin-bottom:18px}
+  .field > label,.label-title{display:block;font-weight:700;margin-bottom:8px}
+  select,input[type=text]{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit}
+  .tiles{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+  @media (max-width:420px){.tiles{grid-template-columns:1fr}}
+  .tile{display:flex;align-items:center;gap:12px;padding:14px;border-radius:14px;border:2px solid var(--line);background:var(--card);cursor:pointer;text-align:left;font:inherit;color:var(--ink);min-height:64px}
+  .tile .ico{font-size:1.6rem;line-height:1}
+  .tile .tx{font-weight:700;line-height:1.2}
+  .tile small{display:block;font-weight:500;color:var(--muted);font-size:.8rem}
+  .tile[aria-pressed="true"]{border-color:var(--leaf);background:color-mix(in srgb,var(--leaf) 12%,var(--card))}
+  .drop{border:2px dashed var(--leaf-2);border-radius:14px;padding:18px;text-align:center;cursor:pointer;background:var(--card);position:relative}
+  .drop img{max-height:180px;border-radius:10px;display:block;margin:0 auto}
+  .drop input{position:absolute;inset:0;opacity:0;cursor:pointer}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+  .seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+  .seg button{border:0;background:transparent;padding:9px 16px;font-family:inherit;font-weight:600;font-size:.9rem;cursor:pointer;color:var(--muted)}
+  .seg button[aria-pressed="true"]{background:var(--leaf);color:#fff}
+  .note{font-size:.85rem;color:var(--muted);margin-top:8px}
+  .warn{border-left:4px solid var(--sun);padding:10px 14px;background:color-mix(in srgb,var(--sun) 14%,transparent);border-radius:8px;font-size:.92rem;margin-top:12px}
+
+  /* Report */
+  .report{background:#fff;color:#1d2a1f;border-radius:14px;border:1px solid #d9dfd0;padding:22px;box-shadow:var(--shadow)}
+  .report h3{color:#2f6b3a;margin-bottom:4px}
+  .report .meta{font-size:.9rem;color:#5d6b5f;margin-bottom:14px}
+  .rep-photo{width:100%;max-height:260px;object-fit:cover;border-radius:10px;margin-bottom:14px}
+  .rep-sym{display:flex;gap:10px;align-items:center;padding:10px;border-radius:10px;background:#f2f6ea;margin-bottom:8px;font-weight:600}
+  .rep-sym .ico{font-size:1.4rem}
+  .rep-foot{font-size:.8rem;color:#5d6b5f;margin-top:14px;border-top:1px solid #e3e6dc;padding-top:10px}
+  .placeholder{color:#5d6b5f;text-align:center;padding:40px 10px}
+  .speak{margin-left:auto}
+
+  /* Assess */
+  .assess{margin-top:14px;padding:14px;border-radius:12px;border:1px solid var(--line);background:var(--card);font-size:.95rem}
+  .assess .pill{display:inline-block;padding:3px 10px;border-radius:999px;background:var(--sun);color:#3b2a00;font-weight:700;font-size:.8rem;margin-bottom:6px}
+
+  .trust ul{padding-left:20px;margin:0}
+  .trust li{margin-bottom:8px}
+  .cols3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  @media (max-width:800px){.cols3{grid-template-columns:1fr}}
+  footer{padding:32px 0 48px;color:var(--muted);font-size:.9rem;border-top:1px solid var(--line)}
+  .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+  @media print{
+    header.top,#demo .controls,.no-print,footer,.hero,section:not(#demo),.demo-left{display:none!important}
+    #demo{background:#fff;border:0}
+    .report{box-shadow:none;border:0}
+  }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Field Signal home">
+      <span class="logo" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M4 20c0-8 5-13 16-16-1 11-6 16-14 16"/><path d="M4 20l8-8"/></svg></span>
+      Field Signal
+    </a>
+    <nav aria-label="Primary">
+      <a href="#problem">The problem</a>
+      <a href="#stats">Why it matters</a>
+      <a href="#how">How it works</a>
+      <a href="#demo" class="keep btn" style="padding:9px 16px;color:#fff">Try the demo</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Picture-based field guide · English &amp; Spanish</div>
+      <h1>Show it. Select it. Share it.</h1>
+      <p class="lead">Field Signal helps farmworkers describe an unfamiliar crop problem to a supervisor or adviser, using pictures, tap-to-select symptoms, and read-aloud labels instead of a long English-only form.</p>
+      <div class="cta-row">
+        <a class="btn" href="#demo">Try the 60-second demo →</a>
+        <a class="btn ghost" href="#how">See how it works</a>
+      </div>
+    </div>
+    <div class="phone" aria-hidden="true">
+      <div class="bar"></div>
+      <div class="mock-tile on">🍃 <span>Spots on leaves</span></div>
+      <div class="mock-tile">🌱 <span>Yellowing</span></div>
+      <div class="mock-tile">🐛 <span>Holes or chewing</span></div>
+      <div class="mock-tile">🥀 <span>Wilting</span></div>
+      <div class="mock-card">📷 Your photo here</div>
+    </div>
+  </div>
+</section>
+
+<section id="stats" aria-labelledby="stats-h">
+  <div class="wrap">
+    <div class="eyebrow">Why it matters</div>
+    <h2 id="stats-h">Farmworkers are the majority of the field, but outreach rarely reaches them</h2>
+    <div class="stats">
+      <div class="stat"><b>880,000</b><span>estimated farmworkers in California</span></div>
+      <div class="stat"><b>130,000</b><span>growers in California, for comparison</span></div>
+      <div class="stat"><b>16</b><span>focus groups held across the Central Valley</span></div>
+      <div class="stat"><b>39%</b><span>of focus-group topics were pest management, the top interest</span></div>
+    </div>
+    <p class="source">Sources: UC Agriculture and Natural Resources (UC ANR), “Why It’s Important for UC ANR to Include Farmworkers as Part of Its Clientele” (ucanr.edu); UC ANR “Understanding Farmworker Agricultural Learning Needs” project summary (2025); Juarez, A., UC Davis dissertation (2024, escholarship.org).</p>
+  </div>
+</section>
+
+<section id="problem" aria-labelledby="problem-h">
+  <div class="wrap problem">
+    <div>
+      <div class="eyebrow">The problem</div>
+      <h2 id="problem-h">A new worker sees a strange leaf. Words get in the way.</h2>
+      <p>Most extension materials are written for growers and pest control advisers, who often have degrees and read English fluently. Many farmworkers speak Spanish or Indigenous languages, and some have limited formal schooling.</p>
+      <p>When a symptom is unfamiliar, describing it in a long English form takes longer than pointing at it. Field Signal lets the worker show the problem and choose a visual label, so the supervisor gets a clear, shareable report.</p>
+    </div>
+    <div class="card trust">
+      <h3>Designed around the findings</h3>
+      <ul>
+        <li><strong>Pictures first.</strong> Symptom categories are illustrated, so reading is optional.</li>
+        <li><strong>Bilingual by default.</strong> Every label appears in English and Spanish, with read-aloud where the browser supports it.</li>
+        <li><strong>Built with the field in mind.</strong> Large tap targets, low-literacy wording, and offline-capable core features.</li>
+        <li><strong>Honest about limits.</strong> Field Signal does not diagnose plant disease. It documents what was observed for a qualified person to review.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="how" aria-labelledby="how-h" style="padding-top:8px">
+  <div class="wrap">
+    <div class="eyebrow">How it works</div>
+    <h2 id="how-h">Four taps from a problem to a report</h2>
+    <div class="steps">
+      <div class="step"><strong>Choose a crop</strong><p class="note" style="margin:6px 0 0">Pick the plant you are looking at.</p></div>
+      <div class="step"><strong>Tap a symptom</strong><p class="note" style="margin:6px 0 0">Leaf spots, yellowing, chewing, wilting and more.</p></div>
+      <div class="step"><strong>Add a photo</strong><p class="note" style="margin:6px 0 0">Snap or upload one clear picture of the problem.</p></div>
+      <div class="step"><strong>Share the card</strong><p class="note" style="margin:6px 0 0">Print it or show it on screen to a supervisor.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="demo" aria-labelledby="demo-h">
+  <div class="wrap">
+    <div class="eyebrow">60-second demo</div>
+    <h2 id="demo-h">Try it: spots on leaves</h2>
+    <p style="color:var(--muted);max-width:60ch">Pick a crop, tap a symptom, upload a photo (or use the sample), then switch languages and listen to the labels.</p>
+
+    <div class="demo-grid">
+      <div class="card demo-left">
+
+        <div class="field">
+          <label for="crop">Crop</label>
+          <select id="crop">
+            <option value="almond">Almond</option>
+            <option value="walnut">Walnut</option>
+            <option value="grape">Grape</option>
+            <option value="tomato">Tomato</option>
+            <option value="strawberry">Strawberry</option>
+            <option value="lettuce">Lettuce</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <span class="label-title" id="sym-label">What do you see? <small style="font-weight:500;color:var(--muted)">(choose one)</small></span>
+          <div class="tiles" role="group" aria-labelledby="sym-label" id="symptoms"></div>
+        </div>
+
+        <div class="field">
+          <span class="label-title">Photo of the problem</span>
+          <div class="drop">
+            <input type="file" accept="image/*" id="photo" aria-label="Upload a photo">
+            <div id="drop-empty">📷 Tap to take or upload a photo</div>
+            <img id="preview" alt="" hidden>
+          </div>
+          <div class="row" style="margin-top:8px">
+            <button class="btn ghost" type="button" id="sample" style="padding:8px 14px;font-size:.9rem">Use sample photo</button>
+            <button class="btn ghost" type="button" id="clear" style="padding:8px 14px;font-size:.9rem">Clear photo</button>
+          </div>
+        </div>
+
+        <div class="field">
+          <span class="label-title">Language</span>
+          <div class="seg" role="group" aria-label="Language">
+            <button type="button" data-lang="en" aria-pressed="true">English</button>
+            <button type="button" data-lang="es" aria-pressed="false">Español</button>
+          </div>
+        </div>
+
+        <div class="assess" id="assess" aria-live="polite">
+          <span class="pill">AI photo assessment</span>
+          <div id="assess-text">Upload a photo, tap a symptom, then press “Assess photo” for an AI observation of possible causes and severity. It is a guide to share with your supervisor, not a diagnosis.</div>
+          <div class="row" style="margin-top:10px">
+            <button class="btn" type="button" id="assess-btn" disabled>Assess photo</button>
+          </div>
+          <div id="ai-result" hidden></div>
+        </div>
+
+        <div class="warn" id="warn">Symptom labels are reviewed wording. Always confirm with your supervisor or a local agricultural adviser before acting.</div>
+      </div>
+
+      <div>
+        <div class="row controls no-print" style="margin-bottom:12px">
+          <button class="btn" type="button" id="report">Generate visual report</button>
+          <button class="btn ghost" type="button" id="listen" aria-label="Read the report aloud">🔊 Read aloud</button>
+          <button class="btn ghost" type="button" id="print">🖨️ Print</button>
+        </div>
+        <article class="report" id="report-card" aria-live="polite">
+          <div class="placeholder" id="rep-empty">Your visual report will appear here.</div>
+        </article>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section aria-labelledby="fine-h" style="padding-top:24px">
+  <div class="wrap cols3">
+    <div class="card"><h3>Shareable</h3><p>Reports are simple, picture-led cards that a supervisor or adviser can read in seconds.</p></div>
+    <div class="card"><h3>Accessible</h3><p>Large tap targets, bilingual labels, read-aloud where supported, and keyboard-friendly controls.</p></div>
+    <div class="card"><h3>No key needed</h3><p>The core version works without any AI service. Symptom selection and reports run entirely in the browser.</p></div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p><strong>Field Signal</strong> · Built for Sierra Hacks 2026 · Not a diagnostic tool.</p>
+    <p>Farmworker research cited from UC Agriculture and Natural Resources. Labels should be reviewed by UC ANR and farmworker-serving partners before field use.</p>
+  </div>
+</footer>
+
+<script>
+(() => {
+  const $ = (s) => document.querySelector(s);
+
+  // Reviewed bilingual labels. Replace with partner-reviewed wording before field use.
+  const SYMPTOMS = [
+    { id:"spots",   ico:"🍂", en:"Spots on leaves",  es:"Manchas en las hojas", sub:{en:"Dots or patches",  es:"Puntos o manchas"} },
+    { id:"yellow",  ico:"🟡", en:"Yellow leaves",    es:"Hojas amarillas",      sub:{en:"Color is fading",  es:"El color se pierde"} },
+    { id:"holes",   ico:"🐛", en:"Holes or chewing", es:"Hoyos o hojas mordidas", sub:{en:"Missing pieces",   es:"Partes faltantes"} },
+    { id:"wilt",    ico:"🥀", en:"Wilting",          es:"Marchitamiento",       sub:{en:"Droopy plant",      es:"Planta caída"} },
+    { id:"webs",    ico:"🕸️", en:"Webbing or sticky", es:"Telarañas o pegajoso", sub:{en:"Fine threads or residue", es:"Hilos finos o residuo"} },
+    { id:"other",   ico:"❓", en:"Something else",   es:"Otro problema",        sub:{en:"Describe in the photo", es:"Descríbalo en la foto"} }
+  ];
+  const UI = {
+    en: { photoNone:"No photo added", photoOk:"Photo added", assessDefault:"Upload a photo to see a quick image check. This only confirms that a usable photo was added. It does not identify the disease.",
+          assessOk:"Photo received. Check that the problem is clear and centered, then generate the report.",
+          assessSmall:"The photo is very small. Try a closer, sharper picture.",
+          needSym:"Please tap one symptom first.", crop:"Crop", symptom:"Symptom", observed:"Observed", photo:"Photo",
+          title:"Field Observation Card", date:"Date", tagline:"Visual report · for supervisor review", footer:"Observation only. Not a diagnosis. Confirm with a supervisor or adviser.",
+          read:"Read aloud", stop:"Stop", print:"Print", generate:"Generate visual report", empty:"Your visual report will appear here.",
+          noPhoto:"No photo attached", crops:{almond:"Almond",walnut:"Walnut",grape:"Grape",tomato:"Tomato",strawberry:"Strawberry",lettuce:"Lettuce"} },
+    es: { photoNone:"No se agregó foto", photoOk:"Foto agregada", assessDefault:"Suba una foto para ver una revisión rápida. Esto solo confirma que se agregó una foto útil. No identifica la enfermedad.",
+          assessOk:"Foto recibida. Revise que el problema se vea claro y centrado, y luego genere el reporte.",
+          assessSmall:"La foto es muy pequeña. Intente una imagen más cercana y nítida.",
+          needSym:"Primero toque un síntoma.", crop:"Cultivo", symptom:"Síntoma", observed:"Observado", photo:"Foto",
+          title:"Tarjeta de observación de campo", date:"Fecha", tagline:"Reporte visual · para revisión del supervisor", footer:"Solo observación. No es un diagnóstico. Confirme con un supervisor o asesor.",
+          read:"Leer en voz alta", stop:"Detener", print:"Imprimir", generate:"Generar reporte visual", empty:"Su reporte visual aparecerá aquí.",
+          noPhoto:"Sin foto adjunta", crops:{almond:"Almendra",walnut:"Nuez",grape:"Uva",tomato:"Tomate",strawberry:"Fresa",lettuce:"Lechuga"} }
+  };
+
+  const state = { lang:"en", symptom:null, photo:null };
+
+  // Symptom tiles
+  const tiles = $("#symptoms");
+  SYMPTOMS.forEach(s => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "tile"; b.dataset.id = s.id;
+    b.setAttribute("aria-pressed", "false");
+    b.innerHTML = `<span class="ico" aria-hidden="true">${s.ico}</span><span><span class="tx"></span><small></small></span>`;
+    tiles.appendChild(b);
+    b.addEventListener("click", () => {
+      state.symptom = s.id;
+      tiles.querySelectorAll(".tile").forEach(t => t.setAttribute("aria-pressed", String(t === b)));
+      renderTiles();
+    });
+  });
+
+  function renderTiles(){
+    const L = state.lang;
+    SYMPTOMS.forEach(s => {
+      const b = tiles.querySelector(`[data-id="${s.id}"]`);
+      b.querySelector(".tx").textContent = s[L];
+      b.querySelector("small").textContent = s.sub[L];
+      b.setAttribute("aria-pressed", String(state.symptom === s.id));
+    });
+  }
+
+  function applyLang(){
+    const L = UI[state.lang];
+    document.documentElement.lang = state.lang;
+    document.querySelectorAll("[data-lang]").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.lang === state.lang)));
+    $("#sym-label").firstChild.textContent = state.lang === "en" ? "What do you see? " : "¿Qué ve? ";
+    $("#sym-label small").textContent = state.lang === "en" ? "(choose one)" : "(elija una)";
+    $("#drop-empty").textContent = state.lang === "en" ? "📷 Tap to take or upload a photo" : "📷 Toque para tomar o subir una foto";
+    $("#report").textContent = L.generate;
+    $("#listen").textContent = "🔊 " + L.read;
+    $("#print").textContent = "🖨️ " + L.print;
+    const empty = $("#rep-empty");
+    if (empty) empty.textContent = L.empty;
+    renderTiles();
+    updateAssess();
+  }
+
+  document.querySelectorAll("[data-lang]").forEach(b => b.addEventListener("click", () => {
+    stopSpeech();
+    state.lang = b.dataset.lang; applyLang();
+    if (lastReport) buildReport();
+  }));
+
+  // Photo handling
+  function setPhoto(src, w, h){
+    state.photo = src;
+    const img = $("#preview");
+    img.src = src; img.hidden = false; $("#drop-empty").hidden = true;
+    state.photoSize = { w, h };
+    updateAssess();
+  }
+  $("#photo").addEventListener("change", e => {
+    const f = e.target.files[0]; if (!f) return;
+    const r = new FileReader();
+    r.onload = () => loadImg(r.result);
+    r.readAsDataURL(f);
+  });
+  // Downscale photos to a JPEG under ~1280px so uploads stay small and fast on phones.
+  function loadImg(src, isSample = false){
+    const im = new Image();
+    im.onload = () => {
+      const max = 1280, scale = Math.min(1, max / Math.max(im.naturalWidth, im.naturalHeight));
+      const c = document.createElement("canvas");
+      c.width = Math.round(im.naturalWidth * scale); c.height = Math.round(im.naturalHeight * scale);
+      c.getContext("2d").drawImage(im, 0, 0, c.width, c.height);
+      state.isSample = isSample;
+      setPhoto(c.toDataURL("image/jpeg", 0.85), c.width, c.height);
+      clearAI();
+    };
+    im.src = src;
+  }
+  $("#sample").addEventListener("click", () => loadImg(samplePhoto(), true));
+  $("#clear").addEventListener("click", () => {
+    state.photo = null; state.photoSize = null; state.isSample = false; clearAI();
+    $("#preview").hidden = true; $("#preview").removeAttribute("src");
+    $("#drop-empty").hidden = false; $("#photo").value = "";
+    updateAssess();
+  });
+
+  function updateAssess(){
+    const L = UI[state.lang];
+    let t = L.assessDefault;
+    if (state.photo && state.photoSize){
+      const small = Math.min(state.photoSize.w, state.photoSize.h) < 300;
+      t = small ? L.assessSmall : L.assessOk;
+    }
+    $("#assess-text").textContent = t;
+    $("#assess-btn").disabled = !(state.photo && state.symptom) || !aiEnabled;
+    $("#assess-btn").textContent = state.lang === "en" ? "Assess photo" : "Evaluar la foto";
+  }
+
+  // AI assessment via the server proxy (the API key never reaches the browser)
+  let aiEnabled = false;
+  state.ai = null;
+  fetch("/api/status").then(r => r.json()).then(s => {
+    aiEnabled = !!s.aiEnabled;
+    if (!aiEnabled) $("#assess-text").textContent = state.lang === "en"
+      ? "AI assessment is not turned on for this site. The worker can still select a symptom and create the report."
+      : "La evaluación con IA no está activada en este sitio. Igual puede elegir un síntoma y crear el reporte.";
+    updateAssess();
+  }).catch(() => { $("#assess-text").textContent = "AI assessment is unavailable offline. Symptom report still works."; });
+
+  function clearAI(){
+    state.ai = null;
+    const box = $("#ai-result"); if (box){ box.hidden = true; box.innerHTML = ""; }
+  }
+
+  const esc = (s) => String(s ?? "").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+  function renderAI(r){
+    const es = state.lang === "es";
+    const conf = { low: es ? "baja" : "low", medium: es ? "media" : "medium", high: es ? "alta" : "high" };
+    const sev = { minor: es ? "leve" : "minor", moderate: es ? "moderada" : "moderate", severe: es ? "severa" : "severe", unclear: es ? "no clara" : "unclear" };
+    if (!r.photo_usable){
+      return `<p><strong>${es ? "Foto difícil de evaluar" : "Photo hard to assess"}:</strong> ${esc(es ? "Intente una foto más cercana y clara." : r.photo_note)}</p>`;
+    }
+    const causes = (r.likely_causes || []).map(c => `
+      <li><strong>${esc(es ? (c.name_es || c.name) : c.name)}</strong>
+        <span class="note">(${es ? "confianza" : "confidence"}: ${esc(conf[c.confidence] || c.confidence)})</span><br>
+        ${esc(es ? (c.why_es || c.why) : c.why)}</li>`).join("");
+    const checks = (r.what_to_check || []).map(x => `<li>${esc(x)}</li>`).join("");
+    return `
+      ${r.urgent ? `<p style="color:var(--danger);font-weight:700">⚠️ ${es ? "Avise al supervisor hoy." : "Tell your supervisor today."}</p>` : ""}
+      <p><strong>${es ? "Severidad" : "Severity"}:</strong> ${esc(sev[r.severity] || r.severity)}</p>
+      <p><strong>${es ? "Posibles causas (no es un diagnóstico)" : "Possible causes (not a diagnosis)"}:</strong></p>
+      <ul>${causes}</ul>
+      <p><strong>${es ? "Qué revisar" : "What to check"}:</strong></p>
+      <ul>${checks}</ul>
+      <p class="note">${esc(es ? (r.photo_note || "") : (r.photo_note || ""))}</p>`;
+  }
+
+  async function assessWithAI(){
+    const btn = $("#assess-btn");
+    if (state.isSample){
+      $("#assess-text").textContent = state.lang === "en"
+        ? "The sample is an illustration. Upload a real photo to run the AI assessment."
+        : "La muestra es una ilustración. Suba una foto real para usar la evaluación con IA.";
+      return;
+    }
+    btn.disabled = true; btn.textContent = state.lang === "en" ? "Assessing…" : "Evaluando…";
+    try{
+      const res = await fetch("/api/assess", {
+        method: "POST", headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ image: state.photo, crop: $("#crop").value, symptom: state.symptom })
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Request failed");
+      state.ai = data.result;
+      const box = $("#ai-result");
+      box.innerHTML = renderAI(data.result);
+      box.hidden = false;
+      $("#assess-text").textContent = data.disclaimer;
+      if (lastReport) buildReport();
+    } catch (err){
+      $("#assess-text").textContent = (state.lang === "en" ? "Could not assess the photo: " : "No se pudo evaluar la foto: ") + err.message;
+    } finally {
+      updateAssess();
+    }
+  }
+  $("#assess-btn").addEventListener("click", assessWithAI);
+
+  // Generated, illustrative sample leaf photo (SVG data URI, not a real field photo)
+  function samplePhoto(){
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="640" height="420" viewBox="0 0 640 420">
+      <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#7fb069"/><stop offset="1" stop-color="#3f7d3a"/></linearGradient></defs>
+      <rect width="640" height="420" fill="#cfe3b8"/>
+      <path d="M90 330 C140 120 380 80 560 120 C520 300 300 360 90 330Z" fill="url(#g)"/>
+      <path d="M100 326 C250 240 380 180 540 130" stroke="#2f5f2c" stroke-width="6" fill="none"/>
+      ${[[200,240,14],[260,210,10],[320,190,16],[380,200,9],[430,170,12],[290,265,11],[360,255,15],[470,230,8]].map(([x,y,r])=>`<circle cx="${x}" cy="${y}" r="${r}" fill="#8a4b1f" opacity=".85"/><circle cx="${x}" cy="${y}" r="${r+4}" fill="none" stroke="#d9a441" stroke-width="2" opacity=".7"/>`).join("")}
+      <text x="20" y="400" font-family="system-ui" font-size="18" fill="#2f4a2c">Sample illustration: spots on leaves</text>
+    </svg>`;
+    return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
+  }
+
+  // Report
+  let lastReport = false;
+  function buildReport(){
+    lastReport = true;
+    const L = UI[state.lang];
+    const sym = SYMPTOMS.find(s => s.id === state.symptom);
+    const crop = $("#crop").value;
+    const now = new Date().toLocaleDateString(state.lang === "en" ? "en-US" : "es-US", { year:"numeric", month:"short", day:"numeric" });
+    const photoHtml = state.photo ? `<img class="rep-photo" src="${state.photo}" alt="Field photo">` : `<div class="rep-sym">📷 ${L.noPhoto}</div>`;
+    const symHtml = sym
+      ? `<div class="rep-sym"><span class="ico" aria-hidden="true">${sym.ico}</span><span>${sym[state.lang]}</span></div>`
+      : `<div class="rep-sym">⚠️ ${L.needSym}</div>`;
+    $("#report-card").innerHTML = `
+      <h3>${L.title}</h3>
+      <div class="meta">${L.date}: ${now} · ${L.tagline}</div>
+      ${photoHtml}
+      <div class="meta"><strong>${L.crop}:</strong> ${L.crops[crop]}</div>
+      <div class="meta"><strong>${L.symptom}:</strong></div>
+      ${symHtml}
+      <div class="meta" style="margin-top:10px"><strong>${L.observed}</strong> · ${state.lang === "en" ? "English" : "Español"}</div>
+      ${state.ai ? `<div class="meta" style="margin-top:10px"><strong>${state.lang === "en" ? "AI photo assessment" : "Evaluación de foto con IA"}</strong></div>
+        <div>${state.lang === "es" && state.ai.report_to_supervisor_es ? esc(state.ai.report_to_supervisor_es) : esc(state.ai.report_to_supervisor || "")}</div>
+        <div style="margin-top:6px">${renderAI(state.ai)}</div>` : ""}
+      <div class="rep-foot">${L.footer}</div>`;
+  }
+  $("#report").addEventListener("click", () => {
+    if (!state.symptom) $("#assess-text").textContent = UI[state.lang].needSym;
+    buildReport();
+  });
+
+  // Read aloud (speechSynthesis where supported)
+  const canSpeak = "speechSynthesis" in window;
+  function stopSpeech(){ if (canSpeak) window.speechSynthesis.cancel(); $("#listen").textContent = "🔊 " + UI[state.lang].read; }
+  $("#listen").addEventListener("click", () => {
+    if (!canSpeak){ $("#listen").textContent = "🔊 " + UI[state.lang].read + " (not supported here)"; return; }
+    if (window.speechSynthesis.speaking){ stopSpeech(); return; }
+    const L = UI[state.lang];
+    const sym = SYMPTOMS.find(s => s.id === state.symptom);
+    const text = [L.title, L.crop + ": " + L.crops[$("#crop").value], sym ? sym[state.lang] : L.needSym].join(". ");
+    const u = new SpeechSynthesisUtterance(text);
+    u.lang = state.lang === "en" ? "en-US" : "es-US";
+    u.onend = () => $("#listen").textContent = "🔊 " + L.read;
+    $("#listen").textContent = "⏹ " + L.stop;
+    window.speechSynthesis.speak(u);
+  });
+
+  $("#print").addEventListener("click", () => {
+    if (!lastReport) buildReport();
+    window.print();
+  });
+
+  applyLang();
+  renderTiles();
+})();
+</script>
+</body>
+</html>
