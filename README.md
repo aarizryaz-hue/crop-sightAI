@@ -1,6 +1,6 @@
 # CropSight
 
-A crop-observation assistant that turns photos into evidence, possible explanations and one useful next question. Choose **Seeds** or **Harvest**, add a whole-plant photo and optionally a close-up, then analyze. Every possible explanation refers to numbered model observations from a supplied photo. Answering the follow-up sends the same photos and your reported observation for a fresh analysis.
+An installable crop-observation assistant that turns photos into evidence, possible explanations and one useful next question. Choose **Seeds** or **Harvest**, add a whole-plant photo and optionally a close-up, then analyze. Every possible explanation refers to numbered model observations from a supplied photo. Answering the follow-up sends the same photos and your reported observation for a fresh analysis.
 
 English is the default. **Settings → Display language** is the only language switch; Spanish is opt-in. Results use the selected language, not both languages at once. The problem story and expandable research remain below the tool.
 
@@ -8,7 +8,7 @@ This prototype supports a conversation with a supervisor. It does not establish 
 
 ## Run
 
-Requires Node.js 18+; no application dependencies.
+Requires Node.js 20+; no server runtime dependencies. Android packaging uses the pinned Bubblewrap development dependency.
 
 ```sh
 cp .env.example .env
@@ -19,11 +19,25 @@ node server.js
 
 Alternatively, keep using your existing terminal environment. Environment variables override `.env`. Supported settings: `OPENAI_API_KEY`, `OPENAI_MODEL` (default `gpt-4o-mini`), `AI_BASE_URL`, `HOST` (default `127.0.0.1`), and `PORT` (default `3000`). The key stays on the server.
 
-**Restart Node after server changes.** Refreshing the page reloads HTML but does not reload the backend. The new startup marker is `CropSight Evidence v3`; Settings and `/api/status` show `cropsight-evidence-3` and `analysisVersion: 3`.
+**Restart Node after server changes.** Refreshing the page reloads HTML but does not reload the backend. The startup marker is `CropSight Android v4`; Settings and `/api/status` show `cropsight-android-4` and `analysisVersion: 3`.
 
 The page detects an older running server and preserves its single-photo flow. Two-photo comparison and follow-up need v3. Settings distinguishes a configured key from a successful live analysis; checking status does not spend an API call.
 
 A static host cannot analyze photos. A Node-capable host can set `HOST=0.0.0.0`. Public deployment also needs HTTPS, access control, deployment-level rate limits and provider spending limits. The built-in 10 requests/minute and 2 concurrent requests are single-process demo safeguards.
+
+## Android installation and Google Play
+
+The web app now has an install manifest, normal/maskable icons, a service worker, an installation control in Settings and a privacy page. It can open its interface offline after installation; analysis still requires internet. Photos and results are not cached by the service worker.
+
+**No APK/AAB has been built and no Play listing has been published.** First deploy the complete application to a public HTTPS origin. Do not upload only the previous three files: include `webapp.js`, `public/` and `references/` too.
+
+[Android release instructions](release/PLAY-STORE.md) cover hosting, publisher contact, private persistent report storage, Bubblewrap generation, signing, Digital Asset Links and Play testing. [Store listing draft](release/STORE-LISTING.md) includes the prepared icon/feature graphic and the remaining publisher-owned details.
+
+## Uncertainty and evidence
+
+The response schema includes `crop_identification` (`identified`, `tentative`, `unknown`). A tentative name displays as “Possible …” / “Posible …”; an unknown crop stays unknown even when the image is usable. Seed mode no longer forces a crop from a restricted list or infers identity from a possible-problem name. Team-written crop/seed guides are retained as unverified comparison context, not a labeled training/evaluation dataset.
+
+Results with nonexistent detail-photo references, invalid evidence indices or unsupported explanations are rejected. References are never reassigned to another photo to make the result look valid. The user can retry rather than receiving an invented evidence trail. These checks do not prove model observations are accurate.
 
 ## Why AI is central
 
@@ -53,10 +67,10 @@ API latency varies; two calls may exceed 60 seconds. Practice and use a longer l
 ## Checks
 
 ```sh
-node --test test/server.test.js
+node --test test/*.test.js
 ```
 
-**22 tests pass.** They cover consent, request validation, bounded inputs and calls, timeouts, schema validation, two-image requests, language selection, follow-up context, invalid evidence references, unusable photos, contradictory verdicts, provider-specific errors and legacy compatibility. Provider responses are mocked; these are software tests, not model-accuracy measurements.
+**37 tests pass.** They cover consent, request validation, bounded inputs and calls, timeouts, schema validation, two-image requests, language selection, follow-up context, invalid evidence references, unusable photos, contradictory verdicts, provider-specific errors, explicit crop uncertainty, report consent/retention, install assets, Android preflight guards and legacy compatibility. Provider responses are mocked; these are software tests, not model-accuracy measurements.
 
 Browser checks use Playwright and installed Chrome: English default, Settings/Spanish persistence, upload/consent, comparison, evidence links, follow-up, copy, cancellation, API errors and responsive layouts at 320/390/768/1280 pixels. See [HANDOFF.md](HANDOFF.md) for the change record and verification limits.
 
@@ -68,6 +82,7 @@ An OpenAI-compatible adapter remains available through `AI_BASE_URL` and `OPENAI
 
 - File selection is local. Consent plus Analyze sends the resized JPEG(s), stage, selected language and any follow-up answer through the server to the configured provider. The answer button clearly says it sends a new request.
 - Maximum source file: 15 MB and 50 megapixels. Each photo is re-encoded to JPEG at up to 1280 pixels on its long edge. Browser HEIC support varies; JPG/PNG/WebP are reliable choices. Re-encoding removes original metadata, but visible faces/landmarks remain.
+- Voluntary result reports have separate consent and send result text, a reason, a comment and a request ID without photos. Reports are saved privately under `REPORTS_DIR` (local default `data/reports`) and deleted after 30 days by an hourly cleanup. Production needs a real publisher/contact and durable report storage.
 - Only mode and language preferences persist in localStorage. Photos/results stay in tab memory and are not saved by the app. `store: false` is sent to OpenAI; provider/infrastructure retention still applies: [OpenAI](https://developers.openai.com/api/docs/guides/your-data), [Gemini](https://ai.google.dev/gemini-api/terms).
 - Changing mode/language or replacing a photo cancels old analysis. Replacing/removing a photo resets consent. No automatic paid call occurs on a preference change.
 - The v3 prompt requests visual checks and reporting, excludes pesticide/treatment instructions, and asks the model to reject illustrations, unrelated objects and unusable photos. Prompt compliance is not guaranteed.

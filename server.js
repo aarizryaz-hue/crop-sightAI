@@ -4,6 +4,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const { randomUUID } = require('node:crypto');
 const analysis = require('./analysis');
+const {createWebApp} = require('./webapp');
 const MAX_BODY = 8 * 1024 * 1024;
 const CROPS = ['almond', 'walnut', 'grape', 'tomato', 'strawberry', 'lettuce', 'unsure'];
 const SYMPTOMS = ['spots', 'yellow', 'holes', 'wilt', 'webs', 'other', 'unsure'];
@@ -67,6 +68,13 @@ function readBody(req) {
 }
 // Structured output does not guarantee completion, truth or safety. Validate locally too.
 function valid(value, schema) { return firstProblem(value, schema) === ''; }
+// Parses the model's JSON reply, accepting a plain JSON object or one wrapped in a Markdown code fence.
+function parseModelJson(content) {
+  const text = String(content ?? '').trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
+  const value = JSON.parse(text);
+  if (!value || typeof value !== 'object' || Array.isArray(value)) throw new Error('model reply is not a JSON object');
+  return value;
+}
 // Returns the path of the first field that does not match the schema, or '' when all fields match.
 // Empty text is allowed (it displays blank); overly long text is rejected.
 function firstProblem(value, schema, path = 'result') {
@@ -89,13 +97,20 @@ function firstProblem(value, schema, path = 'result') {
   for (const k of schema.required) { const bad = firstProblem(value[k], schema.properties[k], `${path}.${k}`); if (bad) return bad; }
   return '';
 }
-function createServer({ key = process.env.OPENAI_API_KEY, model = process.env.OPENAI_MODEL || 'gpt-4o-mini', baseUrl = process.env.AI_BASE_URL || 'https://api.openai.com/v1', fetchImpl = fetch, timeoutMs = 45000 } = {}) {
+function createServer({ key = process.env.OPENAI_API_KEY, model = process.env.OPENAI_MODEL || 'gpt-4o-mini', baseUrl = process.env.AI_BASE_URL || 'https://api.openai.com/v1', fetchImpl = fetch, timeoutMs = 45000, referencesDir = path.join(__dirname, 'references'), webAppOptions = {} } = {}) {
+  // Team-labeled examples are read once at startup and sent with each v3 request as comparison images.
+  const referenceExamples = analysis.loadReferences(referencesDir);
+  // The detailed guide replaces the short one when present, so the short one is only a fallback.
+  const cropGuide = analysis.loadCropGuide(path.join(referencesDir, 'crop_guide_detailed.txt'))
+    || analysis.loadCropGuide(path.join(referencesDir, 'crop_guide.txt'));
+  const seedGuide = analysis.loadSeedGuide(path.join(referencesDir, 'seed_guide.txt'));
   // OpenAI supports strict json_schema; OpenAI-compatible free providers (Gemini, Ollama) get json_object plus the schema in the prompt.
   const endpoint = new URL(baseUrl);
   const openai = endpoint.origin === 'https://api.openai.com';
   const provider = openai ? { name: 'OpenAI', privacyUrl: 'https://developers.openai.com/api/docs/guides/your-data' }
     : endpoint.hostname === 'generativelanguage.googleapis.com' ? { name: 'Google Gemini', privacyUrl: 'https://ai.google.dev/gemini-api/terms' }
     : { name: 'the configured AI provider', privacyUrl: null };
+  const webApp = createWebApp({...webAppOptions, provider});
   let connectionVerified = false;
   // Single-process demo budget; public hosting also needs authentication and provider spend limits.
   let minuteStart = 0, minuteCount = 0, inFlight = 0;
@@ -127,7 +142,7 @@ function createServer({ key = process.env.OPENAI_API_KEY, model = process.env.OP
     const controller = new AbortController();
     const started = Date.now();
     const schema = enhanced ? analysis.SCHEMA : SCHEMA;
-    const prompt = enhanced ? analysis.PROMPT : SYSTEM_PROMPT;
+    const prompt = enhanced ? analysis.promptFor(mode, cropGuide, seedGuide) : SYSTEM_PROMPT;
     const timeout = setTimeout(() => controller.abort(), timeoutMs);
     const cancel = () => { if (!res.writableEnded) controller.abort(); };
     res.on('close', cancel);
@@ -143,8 +158,9 @@ function createServer({ key = process.env.OPENAI_API_KEY, model = process.env.OP
           messages: [
             { role: 'system', content: openai ? prompt : `${prompt}\nReturn only a JSON object that matches this JSON Schema: ${JSON.stringify(schema)}` },
             { role: 'user', content: [
+              ...(enhanced ? analysis.referenceBlocks(referenceExamples) : []),
               { type: 'text', text: `Focus: ${mode}. Language: ${language === 'es' ? 'Spanish' : 'English'}. Worker-selected crop: ${crop}. Worker-selected symptom: ${symptom}. The following image is the overview.${followUp ? ` User-reported context (not visually verified): ${JSON.stringify({ question: followUp.question, answer: followUp.answer })}.` : ''}` },
-              { type: 'image_url', image_url: { url: image, detail: enhanced ? 'auto' : 'low' } },
+              { type: 'image_url', image_url: { url: image, detail: enhanced ? 'high' : 'low' } },
               ...(enhanced && detailImage ? [{ type: 'text', text: 'The following image is the detail view of the same observation.' }, { type: 'image_url', image_url: { url: detailImage, detail: 'auto' } }] : []),
             ] },
           ],
@@ -163,7 +179,8 @@ function createServer({ key = process.env.OPENAI_API_KEY, model = process.env.OP
       if (choice?.message?.refusal) return fail(res, 502, 'refused_response');
       if (choice?.finish_reason === 'length') return fail(res, 502, 'incomplete_response');
       if (choice?.finish_reason !== 'stop') return fail(res, 502, 'unreadable_response', 'incomplete response');
-      const result = JSON.parse(choice.message.content);
+      // Some providers wrap JSON in a Markdown code fence; accept that, nothing else.
+      const result = parseModelJson(choice.message.content);
       if (enhanced) {
         const checked = analysis.normalize(result, { hasDetail: Boolean(detailImage), language });
         // One follow-up per observation keeps the field workflow finite and preserves its context.
@@ -173,12 +190,13 @@ function createServer({ key = process.env.OPENAI_API_KEY, model = process.env.OP
       }
       const bad = firstProblem(result, SCHEMA);
       if (bad) return fail(res, 502, 'unreadable_response', bad);
-      if (result.possible_problems.length > 3) return fail(res, 502, 'unreadable_response', 'too many possible problems');
+      // Keep the model's answer; fill blanks and trim extras rather than discarding a usable result.
+      result.possible_problems = result.possible_problems.slice(0, 3);
+      for (const problem of result.possible_problems) problem.first_steps = problem.first_steps.slice(0, 4);
       for (const lang of ['en', 'es']) {
-        if (!result.photo_note[lang].trim() || !result.report_to_supervisor[lang].trim()) {
-          return fail(res, 502, 'unreadable_response', 'missing observation or summary text');
-        }
         if (!result.crop_seen[lang].trim()) result.crop_seen[lang] = lang === 'en' ? 'Could not identify' : 'No se pudo identificar';
+        if (!result.report_to_supervisor[lang].trim()) result.report_to_supervisor[lang] = result.photo_note[lang].trim() || (lang === 'en' ? 'Please review this photo with your supervisor.' : 'Revise esta foto con su supervisor.');
+        if (!result.photo_note[lang].trim()) result.photo_note[lang] = result.report_to_supervisor[lang];
       }
       if (!result.photo_usable) {
         result.overall = 'unclear'; result.possible_problems = []; result.tell_supervisor_today = false;
@@ -191,7 +209,7 @@ function createServer({ key = process.env.OPENAI_API_KEY, model = process.env.OP
       if (result.overall === 'looks_healthy') result.tell_supervisor_today = false;
       connectionVerified = true;
       return send(res, 200, { result, meta: { analysisVersion: 2, model, provider: provider.name, elapsedMs: Date.now() - started, requestId: randomUUID() } });
-    } catch {
+    } catch (err) {
       if (!res.destroyed) fail(res, controller.signal.aborted ? 504 : 502, controller.signal.aborted ? 'timeout' : 'unreadable_response');
     } finally {
       clearTimeout(timeout); res.off('close', cancel); inFlight--;
@@ -202,8 +220,9 @@ function createServer({ key = process.env.OPENAI_API_KEY, model = process.env.OP
     res.setHeader('Referrer-Policy', 'no-referrer');
     try {
       const url = new URL(req.url, 'http://localhost');
+      if (await webApp.handle(req, res, url)) return;
       if (req.method === 'POST' && url.pathname === '/api/assess') return await assess(req, res);
-      if (req.method === 'GET' && url.pathname === '/api/status') return send(res, 200, { aiEnabled: Boolean(key), model, provider, connectionVerified, analysisVersion: 3, version: 'cropsight-evidence-3' });
+      if (req.method === 'GET' && url.pathname === '/api/status') return send(res, 200, { aiEnabled: Boolean(key), model, provider, connectionVerified, analysisVersion: 3, version: 'cropsight-android-4' });
       if (req.method === 'GET' && url.pathname === '/favicon.ico') { res.writeHead(204); return res.end(); }
       if (req.method === 'GET' && ['/', '/index.html', '/settings'].includes(url.pathname)) {
         const data = await fs.promises.readFile(path.join(__dirname, 'index.html'));
@@ -213,6 +232,7 @@ function createServer({ key = process.env.OPENAI_API_KEY, model = process.env.OP
       send(res, 404, { error: 'not_found' });
     } catch { if (!res.headersSent) send(res, 500, { error: 'server_error' }); else res.end(); }
   });
+  server.on('close', () => webApp.close());
   server.requestTimeout = 30000;
   return server;
 }
@@ -220,14 +240,14 @@ if (require.main === module) {
   // Read only supported local settings, never print their values. Existing environment wins.
   try {
     for (const line of fs.readFileSync(path.join(__dirname, '.env'), 'utf8').split(/\r?\n/)) {
-      const match = line.match(/^\s*(OPENAI_API_KEY|OPENAI_MODEL|AI_BASE_URL|HOST|PORT)\s*=\s*(.*?)\s*$/);
+      const match = line.match(/^\s*(OPENAI_API_KEY|OPENAI_MODEL|AI_BASE_URL|HOST|PORT|REPORTS_DIR|APP_CONTACT_EMAIL|APP_DEVELOPER_NAME)\s*=\s*(.*?)\s*$/);
       if (match && !process.env[match[1]]) process.env[match[1]] = match[2].replace(/^(['"])(.*)\1$/, '$2');
     }
   } catch (error) { if (error.code !== 'ENOENT') console.error('Could not read local .env settings.'); }
   const port = process.env.PORT || 3000, host = process.env.HOST || '127.0.0.1';
   createServer().listen(port, host, () => {
     console.log(`CropSight running at http://${host}:${port}`);
-    console.log('CropSight Evidence v3 — English-first, two-view analysis, Settings.');
+    console.log('CropSight Android v4 — installable app, explicit uncertainty, strict evidence references.');
     console.log(process.env.OPENAI_API_KEY ? 'AI key configured; live connection not yet verified.' : 'Set OPENAI_API_KEY to enable analysis. The interface alone does not generate results.');
   });
 }

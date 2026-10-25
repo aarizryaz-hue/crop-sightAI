@@ -1,0 +1,18 @@
+{
+  "id": "/",
+  "name": "CropSight",
+  "short_name": "CropSight",
+  "description": "Observe crop photos, compare possible explanations, and share a summary with your supervisor.",
+  "lang": "en",
+  "start_url": "/?source=installed",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#111c17",
+  "theme_color": "#111c17",
+  "categories": ["productivity", "education"],
+  "icons": [
+    {"src":"/icons/icon-192.png","sizes":"192x192","type":"image/png","purpose":"any"},
+    {"src":"/icons/icon-512.png","sizes":"512x512","type":"image/png","purpose":"any"},
+    {"src":"/icons/maskable-512.png","sizes":"512x512","type":"image/png","purpose":"maskable"}
+  ]
+}

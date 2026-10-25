@@ -1,0 +1,2 @@
+const {appUrl,args,check}=require('./android-common.cjs');
+(async()=>{const options=args(process.argv.slice(2));const result=await check(appUrl(options.url),{release:true,packageId:options.package});console.log('Release checks passed for '+result.origin);console.log('Live analysis since server startup: '+result.connectionVerified);if(!options.package)console.log('Digital Asset Links not checked: pass --package with the final Android application ID.');})().catch(error=>{console.error(error.message);process.exitCode=1;});

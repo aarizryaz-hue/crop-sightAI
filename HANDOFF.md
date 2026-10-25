@@ -1,3 +1,33 @@
+# CropSight — Android and evidence fixes
+
+Updated October 24, 2026. This section supersedes the previous pass below.
+
+## Completed now
+
+- Removed forced seed classifications and conflicting “never Unknown” instructions. The model can return a usable photo with unknown identity. Added a required identification status; tentative names remain labeled in English and Spanish.
+- Removed fallback inference of a crop from problem names. Retained the user's newer crop/seed guides and centered green interface, while treating guides as unverified context.
+- Restored strict output/reference validation. Nonexistent detail photos and invalid evidence links fail the response instead of being relabeled or silently dropped. Restored conflicting-healthy-result normalization.
+- Added install manifest, app icons, maskable icon and a Settings install control. The service worker caches only interface assets; API calls/results/photos are not cached. It does not force an update over a tab's in-memory photos.
+- Added a publisher-configurable privacy page and separate-consent in-app reporting. Reports save text without photos, use private files, and have 30-day retention. Publisher identity/contact and durable storage must be configured before release.
+- Added pinned Bubblewrap Android build tooling, HTTPS/deployment preflight, signing/build instructions and Digital Asset Links generation. The pinned generator targets API 36.
+- Prepared a store-listing draft and 1024×500 feature graphic. All changes remain local until deployment/publication is completed.
+
+## Verification
+
+37 Node tests pass. Browser tests pass at 320/390/768/1280 widths with no uncaught errors. A fresh non-incognito Chrome profile reports zero PWA installability errors. Tested the tentative label, reporting consent and actual local file persistence, installation-prompt wiring, Spanish settings, offline shell reload and recovery, and confirmed CacheStorage has no API entries. Also rechecked two-photo/follow-up/copy and error recovery with a mock provider.
+
+No live API call was made against the revised prompt/schema. The user's server on port 3000 still reports `cropsight-evidence-3` and needs a restart to load `cropsight-android-4`. Its key was not extracted or moved. Tests used separate servers with mock responses. No physical Android device or Play-installed package has been tested.
+
+No Android APK/AAB exists yet. Generation is intentionally gated on the real public HTTPS origin; the publisher has not supplied that address or Play Console account status. No signing key/account/certificate or publication outcome is invented.
+
+The server has no npm runtime dependencies; production dependency audit reports zero vulnerabilities. Bubblewrap's development dependency tree reports upstream audit findings. Those dependencies are not installed with `npm ci --omit=dev` on the web server. Do not run a force-upgrade without revalidating the Android toolchain.
+
+## What is needed to finish
+
+See [release/PLAY-STORE.md](release/PLAY-STORE.md). Required inputs: stable hosted HTTPS origin, Play Console account access/status, real publisher name/support email, permanent application ID, and durable report storage. After these are available, generate/sign the AAB, configure the Play app-signing certificate in Digital Asset Links, test on Android, and submit the reviewed listing. Google controls account eligibility and publication review. New personal accounts may require a 12-tester, 14-day closed test before production access.
+
+## Previous pass (historical snapshot)
+
 # CropSight — final implementation and handoff
 
 Updated October 24, 2026. Workspace: `/Users/jami-yo/crop-sight`.

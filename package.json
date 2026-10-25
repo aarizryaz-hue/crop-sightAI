@@ -1,0 +1,20 @@
+{
+  "name": "cropsight",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Crop photo observations and supervisor handoff",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "test": "node --test test/*.test.js",
+    "android:check": "node scripts/android-check.cjs",
+    "android:init": "node scripts/android-init.cjs",
+    "android:build": "node scripts/android-build.cjs",
+    "android:links": "node scripts/android-links.cjs"
+  },
+  "devDependencies": {
+    "@bubblewrap/cli": "1.27.0"
+  }
+}

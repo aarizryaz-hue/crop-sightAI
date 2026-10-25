@@ -4,3 +4,10 @@
 node_modules/
 .DS_Store
 *.log
+data/
+android/
+*.keystore
+*.jks
+*.aab
+*.apk
+.bubblewrap/

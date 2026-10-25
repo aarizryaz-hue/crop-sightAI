@@ -1,0 +1,174 @@
+# CropSight detailed crop guide (text knowledge, no images). Central Valley (CV) crops are listed first.
+# Format: id|crop|category|CV or other|seed look|plant and harvest look|visible issues to check
+# Written from general botanical and agronomy knowledge. Confirm crop identity from the photo; do not invent.
+almond|Almond|Nut|CV|Teardrop-shaped tan seed with pale skin; shelled kernels are cream and smooth|Tree with pink-white spring blossoms; green fuzzy hulls split open at harvest; hulls turn tan-brown|Hull rot, shriveled kernels, splitting hulls, shaker damage, navel orangeworm holes
+pistachio|Pistachio|Nut|CV|Oval beige shell, partly split, with a purple-tan kernel inside|Tree with clusters of red-green hulls that split at maturity; shells turn beige|Split hull, blank nuts, sunburned shells, shell staining
+walnut|Walnut|Nut|CV|Wrinkled brown nut in a pale shell, sometimes with green husk remaining|Tall tree with compound leaves; green husks turn black-brown; nuts drop at harvest|Husk fly marks, black walnut blight, dark spots on husks, shrivel
+grape|Grape|Fruit|CV|Small brown seeds inside pulp (table grapes usually seedless)|Vines with clusters of round berries; green, red or purple; leaves lobed|Powdery mildew, downy mildew, sunburn, berry shrivel, botrytis bunch rot
+tomato|Tomato|Vegetable|CV|Flat cream seeds with gel coating, many per fruit|Vines or bushes; red round or oblong fruit; compound leaves with serrated edges|Blossom end rot, early blight rings, late blight water-soaked lesions, cracking, sunscald
+lettuce|Lettuce|Vegetable|CV|Tiny flat seeds, cream, tan or black, sometimes with a fine tuft|Leafy heads, green or red; romaine has upright leaves; iceberg is compact|Tip burn, downy mildew yellow patches, aphids, bolting, slug damage
+strawberry|Strawberry|Fruit|CV|Tiny yellow achenes on the fruit surface|Low plants with white flowers; red fruit on green calyx; runners|Gray mold on fruit, powdery mildew, spider mites, crown rot, sunscald
+garlic|Garlic|Vegetable|CV|Small cloves or bulbils; no true seed for most cultivars|Bulb with papery white skin and separate cloves; green leaves with flat blades|Rust on leaves, white rot at bulb base, bulb split, neck rot
+onion|Onion|Vegetable|CV|Small black angular seeds|Round white, yellow or red bulb; hollow green leaves|Downy mildew on leaves, thrips streaking, bulb neck rot, bolting
+carrot|Carrot|Vegetable|CV|Small flat brown ridged seeds|Orange or purple tapering root with feathery green top|Forked or cracked roots, leaf blight, carrot rust fly tunnels, aster yellows
+broccoli|Broccoli|Vegetable|CV|Small round dark brown seeds|Dense green florets on a thick stalk with leaves|Cabbage worm holes, downy mildew, hollow stem, bolting, black rot on veins
+cauliflower|Cauliflower|Vegetable|CV|Small round brown seeds|White curd head wrapped in green leaves|Browning of curd, aphids, cabbage worm, bolting
+cabbage|Cabbage|Vegetable|CV|Small round dark brown seeds|Round compact head of green, red or white leaves|Black rot yellow V-shaped edges, aphids, cabbage worm, splitting heads
+spinach|Spinach|Vegetable|CV|Small round brown knobby seeds, sometimes in clusters|Dark green rosette of leaves; bolts into flower stalk|Downy mildew, leaf miner, white rust, bolting
+kale|Kale|Vegetable|CV|Small round brown seeds|Curly or flat dark green leaves on a stalk|Aphids, cabbage worm holes, black rot, yellowing lower leaves
+celery|Celery|Vegetable|CV|Tiny brown ridged seeds|Crisp pale green ribbed stalks with leafy top|Heart rot, leaf spot, celery aphids, cracking stalks
+spinach_beet|Sugar beet|Cash crop|CV|Small brown knobby seed clusters|White taproot with green leaf rosette|Cercospora leaf spot, curly top virus, rot
+cotton|Cotton|Fiber|CV|Black seeds covered in white fluffy lint|White cotton bolls bursting from green pods on a branching bush|Boll rot, bronzing, aphids, bollworm holes, defoliation
+alfalfa|Alfalfa|Legume|CV|Small kidney-shaped yellow-brown seeds|Clover-like trifoliate leaves; purple flowers; cut hay bales|Leaf spot, weevil damage, yellowing, stand thinning
+hay|Hay|Fodder|CV|Mixed grass seeds in dried feed|Golden or green baled grass hay|Mold, weeds, dust, stemminess, bale heating
+corn_sweet|Sweet corn|Vegetable|CV|Yellow or white kernels, dried|Tall stalk with ear enclosed in husk; silk at top|Corn earworm in ear, smut, poor kernel fill, tassel fail
+wheat|Wheat|Grain|CV|Plump golden grains|Golden heads on stalks; flat seed heads|Rust on leaves, stripe rust, head scab, lodging
+barley|Barley|Grain|CV|Long plump grains with bristly awns|Golden heads with long awns on stalks|Net blotch, powdery mildew, lodging, scald
+rice|Rice|Grain|CV|White or brown grains, long and slender|Paddy stalks; golden grain heads that bend when ripe|Blast lesions, sheath blight, stem borer, lodging
+oat|Oat|Grain|CV|Long grains with a hull|Golden panicle with drooping spikelets|Crown rust, smut, lodging
+rye|Rye|Grain|CV|Long slender grains|Golden heads with long awns on stalks|Ergot, leaf rust, lodging
+sorghum|Sorghum|Grain|CV|Small round shiny seeds|Tall stalk with dense seed head; red, white or brown|Anthracnose, head mold, sugarcane aphid
+sunflower|Sunflower|Oilseed|CV|Large striped black and white seeds|Yellow flower head with seeds; green leaves on tall stalk|Head rot, rust, stem canker, birds damage
+safflower|Safflower|Oilseed|CV|Small white-gray oil seeds|Branching plant with orange thistle-like flowers|Rust, root rot, aphids
+canola|Canola|Oilseed|CV|Tiny round black seeds|Bright yellow flowers in field; long seed pods|Blackleg lesions on stem, aphids, pod shatter, flea beetle holes
+flax|Flax|Oilseed|CV|Small shiny brown flaxseeds|Blue flowers; slender stems; seed capsules|Rust, wilt, lodging
+mustard_plant|Mustard plant|Oilseed|CV|Small round brown mustard seeds|Tall plant with yellow flowers and pods|Aphids, downy mildew, white rust
+olive|Olive|Fruit|CV|Oval olive pit, brown or tan|Green or black olives on silver-green leaves; tree with gray bark|Olive knot, peacock spot, olive fruit fly holes, leaf scorch
+citrus|Citrus|Fruit|CV|Small pale seeds inside citrus fruit|Oranges, lemons or mandarins on green glossy leaves|Greening yellow shoots, scale insects, sunburn, leaf miner, rind pitting
+orange|Orange|Fruit|CV|Small white orange seeds|Round orange fruit on glossy green tree|Greening, scale, sunburn, rind splitting
+lemon|Lemon|Fruit|CV|Small pale lemon seeds|Yellow oval fruit on tree with thorns|Greening, scale, leaf miner, sunburn
+mandarin_orange|Mandarin orange|Fruit|CV|Small pale mandarin seeds|Small orange fruit with loose peel|Greening, scale, rind puffing
+lime|Lime|Fruit|CV|Small pale green seeds|Small green round fruit on thorny tree|Canker, scale, leaf miner
+peach|Peach|Fruit|CV|Large brown rough pit|Fuzzy orange-red blush fruit on tree|Brown rot on fruit, peach leaf curl, shot hole, split pit
+nectarine|Nectarine|Fruit|CV|Large brown rough pit|Smooth-skinned red-orange fruit on tree|Brown rot, leaf curl, cracking
+plum|Plum|Fruit|CV|Brown oval pit|Purple or yellow plums in clusters on branch|Brown rot, plum curculio holes, split fruit
+prunus|Prunus|Fruit|CV|Brown plum or cherry pit|Red or purple fruit clusters on branches|Brown rot, leaf spot, gummosis
+cherry|Cherry|Fruit|CV|Round brown pit|Red or dark cherries on a stem|Brown rot, cherry fruit fly, splitting, shot hole
+apricot|Apricot|Fruit|CV|Flat brown oval pit|Round orange fuzzy fruit with red blush|Brown rot, bacterial canker, sunburn, cracking
+apple|Apple|Fruit|CV|Small brown pointed seeds in core|Round red, yellow or green apples on branch|Scab, codling moth holes, fire blight, sunburn
+pear|Pear|Fruit|CV|Small brown seeds|Green or yellow pears on tree|Pear psylla honeydew, scab, fire blight
+avocado|Avocado|Fruit|CV|Large smooth brown pit|Dark green or black pear-shaped fruit on tree|Root rot, sunburn, scale, avocado thrips scarring
+fig|Fig|Fruit|CV|Tiny seeds inside fruit pulp (not in dataset; use for figs)|Purple or green fruit on broad-leaf tree|Souring, fig mosaic, fruit splitting
+pomegranate|Pomegranate|Fruit|CV|Red seeds inside arils|Round red fruit with crown on top|Sunburn, cracking, fruit fly holes
+kiwi|Kiwi|Fruit|CV|Tiny black seeds in green flesh|Fuzzy brown oval fruit on vine|Bacterial canker, root rot, cold damage
+persimmon|Diospyros|Fruit|CV|Dark brown seeds inside fruit|Round orange persimmon fruit on tree|Calyx rot, cracking, fruit fly
+melon|Melon|Fruit|CV|Flat cream melon seeds|Round melon with netted or smooth skin on vine|Powdery mildew, downy mildew, fusarium wilt, vine borer
+cantaloupe|Cantaloupe|Fruit|CV|Flat cream seeds in ribbed melon|Round tan netted melon with orange flesh|Powdery mildew, aphids, vine wilt, sunscald
+honeydew|Honeydew|Fruit|CV|Flat cream melon seeds|Smooth pale green melon on vine|Powdery mildew, downy mildew, blossom end rot
+watermelon|Watermelon|Fruit|CV|Flat black or cream seeds|Large round green striped melon on vine|Anthracnose, fusarium wilt, sunscald, cracking
+cucumber|Cucumber|Vegetable|CV|Flat white cucumber seeds|Long green cucumber on vine with prickly leaves|Downy mildew, powdery mildew, angular leaf spot, bitter fruit
+squash_winter|Winter squash|Vegetable|CV|Flat cream squash seeds|Hard-skinned squash, orange or green, on vine|Powdery mildew, squash bug, vine borer, rind rot
+pumpkin|Pumpkin|Vegetable|CV|Flat cream pumpkin seeds|Round orange pumpkin on vine|Powdery mildew, vine borer, rind rot
+zucchini|Summer squash|Vegetable|CV|Flat cream seeds|Long or round yellow-green squash on bush|Powdery mildew, squash vine borer, blossom end rot
+butternut_squash|Butternut squash|Vegetable|CV|Flat cream seeds|Tan elongated squash with bulbous base|Powdery mildew, squash bug, vine borer
+acorn_squash|Acorn squash|Vegetable|CV|Flat cream seeds|Ribbed dark green squash with orange flesh|Powdery mildew, rind rot
+spaghetti_squash|Spaghetti squash|Vegetable|CV|Flat cream seeds|Oval yellow squash with stringy flesh|Powdery mildew, squash bug
+bell_pepper|Bell pepper|Vegetable|CV|Flat cream pepper seeds|Red, yellow or green bell peppers on bush|Blossom end rot, sunscald, pepper weevil, bacterial spot
+chili_pepper|Chili pepper|Vegetable|CV|Pale flat pepper seeds|Red, green or orange chili peppers on bush|Sunscald, bacterial leaf spot, aphids
+eggplant|Eggplant|Vegetable|CV|Flat cream seeds|Glossy dark purple eggplant on bush|Flea beetle holes, verticillium wilt, sunscald
+green_bean|Green bean|Legume|CV|Small pale seeds in pods|Long green pods on bush|Rust, bean common mosaic, bean leaf beetle holes
+bean|Bean|Legume|CV|Kidney or oval beans in many colors|Green pods on bush or dried beans|Rust, anthracnose, mosaic, root rot
+pinto_bean|Pinto bean|Legume|CV|Speckled beige and brown beans|Dried pinto beans in pile|Rust, halo blight, mold
+kidney_bean|Kidney bean|Legume|CV|Red kidney bean, shiny|Dried red beans or green pods|Rust, halo blight, seed mold
+pea|Pea|Legume|CV|Round smooth pea, pale green or yellow|Green pea pods on vine|Powdery mildew, pea weevil holes, root rot
+snow_pea|Snow pea|Legume|CV|Round smooth pea seeds|Flat green pea pods on vine|Powdery mildew, aphids
+chickpea|Cicer|Legume|CV|Round tan or cream chickpea|Pods on plant; dried chickpeas|Ascochyta blight, root rot, pod borer
+lentil|Lentil|Legume|CV|Small flat lentil seeds, brown or green|Thin pods on short plant|Ascochyta, rust, lodging
+lablab|Lablab|Legume|CV|Flat brown or white beans|Purple bean pods on vine|Rust, aphids
+soybean|Glycine max|Legume|CV|Small yellow or black soybeans|Green pods on bush; dried yellow beans|Soybean rust, sudden death syndrome, aphids, stem canker
+cowpea|Cowpea|Legume|CV|Small cream seeds with black eye|Long thin green pods on vine|Bacterial blight, aphids, pod borer
+mung_bean|Mung bean|Legume|CV|Small green shiny beans|Thin pods on plant|Powdery mildew, bean mosaic
+clover|Clover|Legume|CV|Small round seeds, brown or yellow|Green clover with three leaflets and pink or white flowers|Clover leaf weevil, root rot, powdery mildew
+lupin|Lupin|Legume|CV|Flat brown lupin seeds|Tall spikes of blue or purple flowers|Anthracnose, aphids
+almond_hull|Almond hull|Nut|CV|Green fuzzy hull around nut|Hull on tree, splitting at maturity|Hull rot, navel orangeworm
+cashew|Cashew|Nut|other|Curved kidney-shaped nut with pale shell|Cashew apple with nut hanging below|Anthracnose, tea mosquito bug damage
+hazelnut|Hazelnut|Nut|CV|Round brown hazelnut kernel|Brown nuts in frilly husks on bush|Filbert blight, husk rot, weevil
+chestnut|Chestnut|Nut|other|Glossy brown nut in spiky shell|Chestnuts in spiny green burrs|Chestnut blight, weevil holes
+macadamia|Macadamia|Nut|other|Round pale macadamia nut|Brown nuts in husks on tree|Husk rot, nut borer
+coffee|Coffee|Cash crop|other|Green or brown coffee beans in pulp|Red coffee cherries on shrub|Leaf rust, berry borer
+tea|Tea|Cash crop|other|Large brown tea seeds|Green tea leaves on shrub|Blister blight, leaf spot, mites
+tobacco|Tobacco|Cash crop|other|Tiny brown seeds|Large green leaves on stalk|Mosaic virus, hornworm, black shank
+hops|Hops|Plant|CV|Small round seeds, rarely used|Green cone-shaped flowers on climbing vine|Downy mildew, powdery mildew, aphids
+ginger|Ginger|Spice|other|No true seeds; knobby root pieces|Pale tan rhizomes with green stalks|Rhizome rot, soft rot
+turmeric|Turmeric|Spice|other|No true seeds; orange-yellow root pieces|Knobby orange-yellow rhizome|Rhizome rot
+black_pepper|Black pepper|Spice|other|Dried black peppercorns, round and wrinkled|Green pepper berries on climbing vine|Foot rot, mealybug
+cinnamon|Cinnamon|Spice|other|Few seeds; rolled brown bark|Rolled brown bark sticks|Bark mold
+clove|Clove|Spice|other|Dried clove buds, dark brown|Clove flower buds on tree|Bud mold
+cardamom|Cardamom|Spice|other|Small black seeds in green pods|Green pods on leafy stalks|Capsule rot
+cumin|Cumin|Spice|other|Small elongated brown ridged seeds|Feathery leaves and white flower umbels|Powdery mildew, root rot
+coriander|Coriander|Herb|CV|Round tan seeds with ridges|Bright green cilantro leaves and white flower umbels|Bolting, aphids, leaf spot
+parsley|Parsley|Herb|CV|Tiny brown ridged seeds|Curly or flat green parsley leaves|Leaf spot, carrot rust fly, aphids
+basil|Basil|Herb|CV|Tiny black seeds, gel-coated when wet|Bright green leaves and purple flower spikes|Downy mildew, fusarium wilt, aphids
+chive|Chive|Herb|CV|Small black angular seeds|Thin hollow green leaves with purple flower balls|Rust, thrips
+leek|Leek|Vegetable|CV|Small black onion-type seeds|Long white stalks with flat green leaves|Rust, thrips, neck rot
+scallion|Scallion|Vegetable|CV|Small black onion seeds|Thin green stalks with white bulbs|Thrips, downy mildew
+radish|Radish|Vegetable|CV|Small round brown seeds|Round red radish with white tip|Root maggot, flea beetle holes, cracking
+turnip|Turnip|Vegetable|CV|Small round brown seeds|White root with purple top and green leaves|Root maggot, cabbage worm, black rot
+parsnip|Parsnip|Vegetable|CV|Small flat brown seeds|Cream-colored tapered root with feathery top|Canker, parsnip webworm
+beet|Beet|Vegetable|CV|Small seed clusters, rough|Round red or purple root with leafy top|Cercospora leaf spot, leaf miner
+broccoli_raab|Brassica|Vegetable|CV|Small round brown seeds|Leafy stalks with small florets|Flea beetle, aphids, worm holes
+bok_choy|Water spinach|Vegetable|CV|Small brown seeds|Crisp white stalks with dark green leaves|Flea beetle, aphids, soft rot
+artichoke|Artichoke|Vegetable|CV|Seeds rarely used; propagated from offsets|Large silver-green leaves with purple thistle-like buds|Aphids, plume moth, crown rot
+asparagus|Asparagus|Vegetable|CV|Round black seeds inside red berries|Feathery fern stalks; green spears|Asparagus beetle, rust, crown rot
+celeriac|Celery|Vegetable|CV|Tiny brown ridged seeds|Knobby white root with leafy stalks|Leaf spot, celery aphids
+okra|Okra|Vegetable|CV|Round dark okra seeds|Green ridged pods on plant|Verticillium wilt, fruit worm holes, aphids
+sweet_potato|Sweet potato|Vegetable|CV|Small seeds rarely used; propagated by slips|Orange or purple root with vine|Scurf, weevil tunnels, root rot
+potato|Potato|Vegetable|CV|True seeds in berries, rarely used|Brown tubers in soil with green stems|Late blight, early blight, scab, tuber rot
+sugar_cane|Sugarcane|Cash crop|other|Small seeds in plumes; propagated by cane|Tall stalks with feathery plume at top|Smut, rust, borer holes
+okra_seed|Okra|Vegetable|CV|Round dark okra seeds|Green ridged pods|Verticillium wilt
+cabbage_savoy|Cabbage|Vegetable|CV|Small round brown seeds|Crinkled green savoy head|Black rot, aphids, worm holes
+endive|Endive|Vegetable|CV|Small brown seeds|Curly green or pale leaves, chicory-like|Tip burn, bolting, aphids
+january_king_cabbage|January King cabbage|Vegetable|other|Small brown cabbage seeds|Leafy red and green head|Black rot, aphids
+red_cabbage|Red cabbage|Vegetable|CV|Small round brown seeds|Purple-red cabbage head|Black rot, aphids, splitting
+brussels_sprouts|Brussels sprouts|Vegetable|CV|Small round brown seeds|Small cabbage-like buds along a tall stalk|Aphids, cabbage worm, loose buds
+rhubarb|Rhubarb|Vegetable|CV|Seeds rarely used; propagated by crown|Thick red stalks with large leaves|Crown rot, crown rust
+flaxseed|Flax|Oilseed|CV|Small shiny brown flaxseeds|Blue flowers; slender stems|Rust
+corn_field|Corn|Grain|CV|Yellow dent kernels, dried in ear|Tall stalks with ear and silk|Corn rootworm, earworm, gray leaf spot, stalk rot
+grain_sorghum|Sorghum|Grain|CV|Small round shiny seeds|Tall stalk with dense seed head|Head mold, sugarcane aphid
+millet|Millet|Grain|other|Small round yellow grains|Grain heads on tall grass stalks|Downy mildew, smut
+triticale|Triticale|Grain|other|Long plump grains|Golden heads on tall stalks|Rust, scab
+farro|Farro|Grain|other|Hard grain kernels in husk|Golden grain heads on stalks|Rust, scab
+jute|Jute|Fiber|other|Small brown seeds in pods|Jute stalks with long fibers|Root rot
+hemp_cannabis|Cannabis|Plant|other|Small gray-brown mottled seeds|Green serrated leaves on tall stalks; flower buds|Mites, powdery mildew, botrytis
+ryegrass|Ryegrass|Fodder|CV|Small slender brown grass seeds|Green blades in pasture|Rust, leaf spot
+fodder|Fodder|Fodder|CV|Grain seeds for feed|Cut green fodder bales|Mold, weeds
+lettuce_romaine|Lettuce|Vegetable|CV|Tiny flat seeds, cream, tan or black|Upright romaine heads, green|Tip burn, downy mildew, aphids
+mint|Mint|Herb|other|Tiny dark seeds rarely used|Green square stems with toothed leaves|Rust, verticillium
+rosemary|Rosemary|Herb|other|Small brown seeds|Needle-like green leaves on woody shrub|Root rot, powdery mildew
+lavender|Lavender|Plant|other|Small brown seeds in spikes|Purple flower spikes on silver shrub|Root rot, aphids
+sunflower_head|Sunflower|Oilseed|CV|Striped black and white seeds|Yellow flower head with seeds|Head rot, rust
+castor_oil_plant|Castor oil plant|Oilseed|other|Mottled brown shiny seeds|Large palmate leaves and spiky seed capsules|Leaf spot, capsule borer
+peanut|Peanut|Legume|CV|Oval tan nut in pods underground|Low bushy plant with yellow flowers; pods dug from soil|Leaf spot, pod rot, aflatoxin risk visible as mold
+kola_nut|Kola nut|Nut|other|Large brown lobed nut|Kola pods on tree|Pod rot
+areca_nut|Areca nut|Nut|other|Hard brown mottled kernel|Orange-red fruit clusters on palm|Fruit rot
+date_palm|Date palm|Fruit|CV|Large hard brown date pit|Clusters of dates, brown or golden, on palm|Bayoud, rot, sunburn
+pineapple|Pineapple|Fruit|other|Small brown seeds, rarely seen|Pineapple with spiky crown|Heart rot, mealybug
+mango|Mango|Fruit|other|Large flat mango seed|Yellow-orange fruit with red blush|Anthracnose, fruit fly
+banana|Banana|Fruit|other|Small black seeds in wild bananas|Bunch of long curved yellow or green bananas|Sigatoka, weevil
+guava|Guava|Fruit|other|Small seeds in pink flesh|Green or yellow guava with pink flesh|Fruit fly, rust
+lychee|Lychee|Fruit|other|Brown seed inside flesh|Red bumpy lychee clusters|Fruit borer, sunburn
+passion_fruit|Passion fruit|Fruit|other|Black seeds in pulp|Purple wrinkled fruit with orange pulp|Woodiness, root rot
+grapefruit|Citrus|Fruit|CV|Small pale seeds|Large yellow round fruit on tree|Greening, scale
+tangerine|Mandarin orange|Fruit|CV|Small pale seeds|Small orange fruit with loose peel|Greening, scale
+kumquat|Citrus|Fruit|CV|Small pale seeds|Tiny oval orange fruit on shrub|Scale, leaf miner
+persimmon_fuyu|Diospyros|Fruit|CV|Dark brown seeds|Flat orange fuyu persimmon on tree|Calyx rot
+blackberry|Berry|Fruit|CV|Small seeds inside drupelets|Clusters of black or red berries on canes|Botrytis, cane borer, spider mites
+blueberry|Berry|Fruit|other|Tiny seeds inside blue berries|Blue berries in clusters on shrub|Mummy berry, stem blight
+raspberry|Berry|Fruit|CV|Tiny seeds inside drupelets|Red or black berry clusters on canes|Cane blight, botrytis, spider mites
+cranberry|Cranberry|Fruit|other|Tiny seeds inside red berries|Red cranberries on low vines|Fruit rot, weevil
+elderberry|Elderberry|Fruit|other|Small seeds in dark berries|Dark purple clusters|Leaf spot, borer
+saffron|Crocus|Spice|other|No seeds; orange-red stigmas|Purple crocus flower with red threads|Corm rot
+cilantro_seed|Coriander|Herb|CV|Round tan seeds with ridges|Green leaves and white flower umbels|Bolting
+dill|Anise|Herb|other|Small curved greenish-brown seeds with ridges|Feathery leaves and yellow umbel flowers|Aphids, powdery mildew
+fennel|Anise|Herb|CV|Small curved ridged seeds|Feathery bulb and yellow umbels|Aphids, bolting
+caraway|Caraway|Spice|other|Small curved brown crescent seeds|Feathery leaves and white umbels|Root rot
+fenugreek|Fenugreek|Spice|other|Small yellow-brown angular seeds|Green leaves and pods with yellow flowers|Leaf spot, powdery mildew
+anise|Anise|Spice|other|Small curved greenish-brown seeds with ridges|Feathery leaves and umbels|Leaf spot
+mustard|Mustard|Spice|CV|Tiny round yellow or black seeds|Yellow mustard flowers in field|Aphids, white rust
+amaranth|Amaranth|Grain|other|Tiny round black or cream shiny seeds|Tall plant with dense red, green or purple seed heads|Downy mildew, root rot
+quinoa|Quinoa|Grain|other|Small round seeds, cream or red|Broad leaves and dense seed panicle|Mildew, aphids
+buckwheat|Buckwheat|Grain|other|Triangular brown seeds|Pink-white flower clusters on short plant|Lodging
+wheatgrass|Wheat|Grain|other|Plump grains|Green grass blades|Rust
+bulgur_wheat|Wheat|Grain|other|Cracked wheat grains|Golden heads on stalk|Scab
+cucumber_seed|Cucumber|Vegetable|CV|Flat white seeds|Long green cucumbers on vine|Downy mildew
+pepper_serrano|Chili pepper|Vegetable|CV|Small pale flat seeds|Small green or red pointed peppers on bush|Bacterial spot, sunscald

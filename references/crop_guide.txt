@@ -1,0 +1,284 @@
+# CropSight crop guide: what each crop's SEEDS and HARVEST look like.
+# Format per line: id|crop|category|seed look|harvest look
+# Written from general botanical knowledge to fill gaps where dataset photos are blank or unclear.
+# Genus-level names (for example Berberis, Brassica) use general descriptions. Lines starting with # are comments.
+acorn|Acorn|Grain|Smooth oval brown acorn nut in a shiny shell|Brown acorns on oak branches or on the ground, in scaly caps
+acorn_squash|Acorn squash|Vegetable|Flat cream squash seeds with smooth edges|Ribbed dark green squash with orange flesh, on vine or in a pile
+agave|Agave|Plant|Dark flat papery black seeds from a tall flower stalk|Spiky rosette of thick blue-green leaves, sometimes a tall flower stalk
+agrimonia|Agrimonia|Plant|Small hooked burr-like fruits with tiny hairs and spines|Tall stem with small yellow flowers and burred seed heads
+alfalfa|Alfalfa|Legume|Small kidney-shaped yellow-brown seeds|Green clover-like leaves with purple flowers, or cut hay
+almond|Almond|Nut|Tan teardrop-shaped almond seed with pale skin|Almonds in fuzzy green hulls, or shelled pale ivory nuts
+amaranth|Amaranth|Grain|Tiny round black or cream shiny seeds|Tall plant with dense red, green or purple seed heads
+amelanchier|Amelanchier|Fruit|Small hard brown seeds inside dark berries|Small purple-black berries on shrubs, similar to blueberries
+anise|Anise|Spice|Small curved greenish-brown seeds with ridges|Feathery leaves and clusters of small seeds on umbel stalks
+annatto|Annatto|Spice|Small reddish-brown triangular shiny seeds|Spiny red seed pods on a shrub, seeds coated in red pigment
+annona|Annona|Fruit|Dark flat shiny brown seeds inside the fruit|Green knobby fruit with scaly skin and sweet white flesh
+annonaceae|Annonaceae|Fruit|Dark hard shiny seeds from custard apple family fruit|Green scaly fruit of the custard apple family
+apple|Apple|Fruit|Small brown pointed apple seeds in the core|Round red, yellow or green apples on a branch
+apricot|Apricot|Fruit|Flat brown oval pit with a rough surface|Round orange fuzzy fruit, often with a red blush
+aquilegia|Aquilegia|Plant|Tiny black seeds in dry pods|Spurred flowers in purple, blue or red on thin stems
+areca_nut|Areca nut|Nut|Hard brown mottled seed kernels, similar to nutmeg|Orange-red areca nut fruit in clusters on palm trees
+aristolochia|Aristolochia|Plant|Small flattened seeds in dried capsules|Plant with heart-shaped leaves and tubular brown-purple flowers
+arnica|Arnica|Plant|Small slender dark brown seeds with fluffy tops|Yellow daisy-like flowers on a single stem with basal leaves
+artemisia|Artemisia|Plant|Tiny dark brown seeds in small seed heads|Silvery gray-green leafy plant with small yellow flower heads
+asimina|Asimina|Fruit|Large flat brown seeds inside a dark fruit|Pawpaw fruit: large green oblong fruit with yellow custard pulp
+aspen|Aspen|Plant|Tiny cottony seeds on catkins|Quaking aspen: tall tree, round leaves on flat stems, white bark
+atemoya|Atemoya|Fruit|Black shiny seeds inside the fruit|Green fruit with bumpy knobs and creamy white flesh
+avocado|Avocado|Fruit|Large smooth brown pit|Dark green or black pear-shaped fruit with creamy green flesh
+bamboo_shoot|Bamboo shoot|Vegetable|Small seeds from bamboo flowering, grain-like|Pale tan pointed shoots coming out of soil, or cut bamboo shoots
+banana|Banana|Fruit|Small black seeds in some wild bananas|Long curved yellow or green bananas in a bunch
+barley|Barley|Grain|Small plump grains with long bristles on top|Golden barley heads with awns on tall stalks
+basil|Basil|Herb|Small black seeds, gel-coated when wet|Bright green basil leaves and flower spikes
+basil_seed|Basil seed|Seed|Small black oval shiny basil seeds|Basil plants with small white flowers and seeds
+bean|Bean|Legume|Kidney or oval beans in many colors|Green bean pods on a plant, or dried beans
+bell_pepper|Bell pepper|Vegetable|Flat cream pepper seeds|Red, yellow or green bell peppers, glossy and blocky
+berberis|Berberis|Fruit|Small dark red oval seeds|Small oval red berries on a spiny shrub
+berry|Berry|Fruit|Small seeds inside berries|Assorted small round fruit in clusters
+black_pepper|Black pepper|Spice|Dried black peppercorns, wrinkled and round|Green pepper berries on a vine, drying to black
+borassus|Borassus|Fruit|Large hard brown seeds from palm fruit|Round brown fibrous palm fruit
+brassica|Brassica|Vegetable|Small round black or brown mustard-like seeds|Cabbage-family plants: broccoli, kale or cabbage heads
+broccoli|Broccoli|Vegetable|Small round dark brown seeds|Green broccoli florets in dense clusters on a stalk
+butternut_squash|Butternut squash|Vegetable|Flat cream seeds from squash flesh|Tan elongated squash with bulbous bottom and orange flesh
+cabbage|Cabbage|Vegetable|Small round dark brown seeds|Round compact head of green, purple or white leaves
+calendula|Calendula|Plant|Curved brown seeds with spiny ends|Orange or yellow daisy-like flowers (pot marigold)
+callicarpa|Callicarpa|Plant|Small seeds inside purple berries|Clusters of bright purple berries on shrub stems
+camassia|Camassia|Vegetable|Small black seeds in dry capsules|Blue or white star-shaped flowers on tall stalks
+cannabis|Cannabis|Plant|Small gray-brown mottled seeds|Green serrated leaves on tall stalks, flower buds
+canola|Canola|Oilseed|Tiny round black seeds|Bright yellow flowers in a field, and seed pods
+cantaloupe|Cantaloupe|Fruit|Flat cream seeds in a ribbed melon|Round tan netted melon with orange flesh
+caper|Caper|Spice|Small round dark seeds|Small round green buds, or dried caper berries
+caraway|Caraway|Spice|Small curved brown crescent seeds with ridges|Plants with feathery leaves and white flower umbels
+cardamom|Cardamom|Spice|Small black seeds in green pods|Green cardamom pods on leafy stalks
+carrot|Carrot|Vegetable|Small flat brown ridged carrot seeds|Orange tapering roots with green tops
+cashew|Cashew|Nut|Curved kidney-shaped cashew nut with pale shell|Cashew apple and nut hanging under a fleshy fruit
+cashew_nut|Cashew nut|Nut|Curved pale kidney-shaped cashew nut|Shelled cashew kernels, cream colored
+castilla|Castilla|Fiber|Large brown seeds from tree fruit|Tall tree with fruit pods and milky latex
+castor_oil_plant|Castor oil plant|Oilseed|Mottled brown shiny seeds with spots|Large palmate leaves and spiky red-green seed capsules
+cauliflower|Cauliflower|Vegetable|Small round brown seeds|White cauliflower head surrounded by green leaves
+celery|Celery|Vegetable|Tiny brown ridged seeds|Pale green crisp ribbed stalks with leafy tops
+cherimoya|Cherimoya|Fruit|Black shiny seeds inside the fruit|Green scaly fruit with white custard-like flesh
+cherry|Cherry|Fruit|Round brown cherry pits|Red or dark cherries on a stem
+chestnut|Chestnut|Nut|Glossy brown nut inside a spiky husk|Chestnuts in spiny green burrs on a tree
+chili_pepper|Chili pepper|Vegetable|Pale flat pepper seeds|Red, green or orange chili peppers
+chive|Chive|Herb|Small black angular seeds|Thin hollow green leaves with purple flower balls
+chives|Chives|Vegetable|Small black angular seeds|Thin green chive stems with pale purple flowers
+cicer|Cicer|Legume|Round tan or cream chickpea seeds|Chickpea pods on a plant, or dried chickpeas
+cinnamon|Cinnamon|Spice|Few or no seeds; rolled brown bark sticks|Rolled brown cinnamon bark sticks
+citron|Citron|Fruit|Small cream seeds inside a large yellow fruit|Large rough yellow citron fruit with thick rind
+citron_melon|Citron melon|Fruit|Flat cream melon seeds|Pale green striped melon with white flesh
+citrus|Citrus|Fruit|Small pale seeds inside citrus fruit|Orange, lemon or lime fruit clusters on branches
+clove|Clove|Spice|Dried clove buds, dark brown|Clove flower buds on a tree, dried reddish brown
+clover|Clover|Legume|Small round seeds, brown or yellow|Green clover with three leaflets and white or pink flowers
+coconut|Coconut|Fruit|Coconut seed inside a brown husk|Brown hairy coconuts on palm trees
+codonopsis|Codonopsis|Plant|Small dark seeds in capsules|Twining vine with bell-shaped flowers
+coffee|Coffee|Cash crop|Green or brown coffee beans in pulp|Red coffee cherries on green shrub branches
+coffee_bean|Coffee bean|Nut|Roasted brown coffee beans, oval with a center crease|Coffee cherries, or roasted coffee beans
+combretum|Combretum|Plant|Small winged seeds|Woody shrub or tree with small green flowers
+coriander|Coriander|Herb|Round tan seeds with ridges|Bright green cilantro leaves and white flower umbels
+corydalis|Corydalis|Plant|Small black shiny seeds with a fleshy appendage|Delicate plant with blue-purple tubular flowers
+cotton|Cotton|Fiber|Black seeds covered in white fluffy fiber|White cotton bolls bursting from green pods
+cowpea|Cowpea|Legume|Small cream seeds with a black eye|Long thin green bean pods on a vine
+cranberry|Cranberry|Fruit|Tiny seeds inside red berries|Red cranberries on low vines in a bog
+croton|Croton|Plant|Small mottled seeds in capsules|Shrub with colorful red, yellow and green leaves
+cumin|Cumin|Spice|Small elongated brown seeds with ridges|Feathery leaves and small white flower umbels
+custard_apple|Custard apple|Fruit|Dark glossy seeds inside the fruit|Green knobby fruit with creamy white flesh
+dandelion|Dandelion|Vegetable|Tiny seeds with white fluffy parachutes|Yellow flower heads on hollow stems with jagged leaves
+date_palm|Date palm|Fruit|Large hard brown date pit|Clusters of brown or golden dates on a palm tree
+desmanthus|Desmanthus|Fodder|Small flat brown seeds in pods|Legume shrub with feathery leaves and cream flowers
+digitalis|Digitalis|Plant|Tiny dark brown seeds in capsules|Tall spike of purple or pink bell-shaped flowers
+digitaria|Digitaria|Grain|Small grains in fingered seed heads|Grass with finger-like seed spikes
+diospyros|Diospyros|Fruit|Dark brown seeds inside persimmon fruit|Round orange persimmon fruit on a tree
+drupe|Drupe|Nut|Hard seed inside a stone fruit pit|Round drupe fruit with thin skin and a pit inside
+echinochloa|Echinochloa|Grain|Small brown grains in bristly seed heads|Grass with bristly seed heads
+echinochloa_crus_galli|Echinochloa crus-galli|Grain|Small brown grains in spiky seed heads|Barnyard grass with spiky seed heads, a common weed grass
+eggplant|Eggplant|Vegetable|Flat cream eggplant seeds|Glossy dark purple eggplant fruit
+egusi|Egusi|Nut|Flat white melon seeds, hulled|Green melon fruit with pale seeds inside
+elderberry|Elderberry|Fruit|Small seeds inside dark berries|Dark purple elderberries in umbel clusters
+empetrum|Empetrum|Fruit|Small dark seeds inside berries|Small black berries on a low evergreen shrub
+endive|Endive|Vegetable|Small brown seeds|Curly green or pale leaves, like chicory
+ephedra|Ephedra|Plant|Small seeds in fleshy cones|Green jointed stems with scale leaves, leafless shrub
+er_jing_tiao|Er jing tiao|Vegetable|Small flat seeds in pods|Green leafy vegetable stems, Chinese greens
+erythrina|Erythrina|Plant|Hard red-black shiny seeds|Tree with red tubular flowers and dark pods
+euphorbia|Euphorbia|Plant|Small seeds in three-lobed capsules|Milky-sap plant with small flowers in cup-like clusters
+farro|Farro|Grain|Hard grain kernels in husk|Golden grain heads on stalks, spelt-like
+fenugreek|Fenugreek|Spice|Small yellow-brown hard angular seeds|Green leaves and pods with small yellow flowers
+finger_millet|Finger millet|Grain|Tiny dark brown grains|Grass with finger-like seed heads and dark grains
+flax|Flax|Oilseed|Small shiny brown flaxseeds|Blue flowers on slender stems, and seed pods
+fodder|Fodder|Fodder|Grain seeds used for animal feed|Cut green fodder bales of grass or hay
+fragaria|Fragaria|Fruit|Tiny seeds on a strawberry surface|Red strawberries on a green plant
+fraxinus|Fraxinus|Plant|Winged papery seeds|Ash tree with compound leaves and clusters of winged seeds
+galeopsis|Galeopsis|Plant|Small four-sided seeds|Plant with purple-pink hooded flowers (hemp-nettle)
+ginger|Ginger|Spice|No true seeds; dried ginger root pieces|Knobby pale tan ginger rhizomes with green stalks
+ginseng|Ginseng|Herb|Small red berries with seeds|Forked fleshy pale brown root with green leaves
+glycine_max|Glycine max|Legume|Small yellow or black soybeans|Green soybean pods on a bush, or dried yellow beans
+gnetum|Gnetum|Plant|Ovoid seed inside red fleshy fruit|Shrub with leathery leaves and red fruit
+gossypium|Gossypium|Fiber|Black seeds with fluff|Cotton boll: white fibers bursting from a green pod
+grain|Grain|Vegetable|Mixed small dry cereal grains|Sheaves of cereal grain stalks with seeds
+grains_of_paradise|Grains of paradise|Spice|Small reddish-brown peppery seeds|Pods with dark brown seeds
+granola|Granola|Grain|Oats and nut mixture, flakes|Toasted oat granola clusters with dried fruit
+grape|Grape|Fruit|Small brown grape seeds|Purple or green grape clusters on a vine
+green_bean|Green bean|Legume|Small pale seeds in pods|Long green bean pods on a bush
+guava|Guava|Fruit|Small seeds inside pink guava flesh|Green or yellow guava fruit with pink flesh
+habanero|Habanero|Vegetable|Small flat cream pepper seeds|Orange wrinkled habanero chili peppers
+hablitzia|Hablitzia|Vegetable|Small seeds in capsules|Plant with heart-shaped leaves and small flower spikes
+hay|Hay|Fodder|Grass seeds mixed in dried feed|Bales of dried golden grass hay
+hazel|Hazel|Nut|Small brown nut inside a husk|Hazel nut clusters in frilly green husks
+hazelnut|Hazelnut|Nut|Round brown hazelnut kernel|Brown hazelnuts in husks, or shelled
+heimia|Heimia|Plant|Small dark brown seeds|Plant with narrow leaves and small yellow flowers
+henna|Henna|Plant|Small dark seeds|Shrub with small white flowers and dried henna leaves
+hibiscus|Hibiscus|Plant|Small kidney-shaped seeds in pods|Red hibiscus flowers with five petals
+honeydew|Honeydew|Fruit|Flat cream melon seeds|Smooth pale green melon with pale flesh
+hops|Hops|Plant|Small round hop seeds|Green cone-shaped hop flowers on a climbing vine
+husk|Husk|Grain|Dry grain seeds in husk|Husked grains and chaff on dried stalks
+indigo|Indigo|Plant|Small brown seeds in pods|Blue indigo dye plant with pink flower spikes
+ipomoea|Ipomoea|Plant|Hard black round seeds, some fuzzy|Morning glory vine with trumpet flowers
+irvingia|Irvingia|Fruit|Hard seed inside fruit with bitter pulp|Yellow-green plum-like fruit on a tree
+jacaranda|Jacaranda|Plant|Flat brown seed pods|Tree with purple tubular flowers and fern-like leaves
+january_king_cabbage|January King cabbage|Vegetable|Small brown cabbage seeds|Leafy cabbage head, red and green
+japanese_radish|Japanese radish|Vegetable|Small brown radish seeds|Long white daikon radish root with green top
+job_s_tears|Job's tears|Grain|Hard gray-white round seeds in shell|Grain seeds in clusters on tall grass
+jute|Jute|Fiber|Small brown seeds in pods|Jute plant stalks with long fibers
+kale|Kale|Vegetable|Small round brown kale seeds|Curly dark green kale leaves
+kidney_bean|Kidney bean|Legume|Red kidney bean seeds, shiny|Dried red kidney beans or green pods
+kola_nut|Kola nut|Nut|Large brown lobed kola nut|Kola nut pods on a tree, red or brown
+lablab|Lablab|Legume|Flat brown or white bean seeds|Purple bean pods on a vine
+leek|Leek|Vegetable|Small black onion-type seeds|Long white stalks with flat green leaves
+lemon|Lemon|Fruit|Small pale lemon seeds|Yellow lemons on tree branches
+lettuce|Lettuce|Vegetable|Tiny flat lettuce seeds, cream, tan or black, sometimes with a fine tuft|Crisp green or red leaves in a head
+lilium|Lilium|Vegetable|Flat winged seeds in capsules|Trumpet-shaped lily flowers on tall stems, and bulbs
+lime|Lime|Fruit|Small pale green lime seeds|Green limes on a tree
+lobelia|Lobelia|Plant|Tiny dust-like seeds in capsules|Small blue or purple flowers on thin stems
+lomatium|Lomatium|Vegetable|Small winged seeds|Umbel plant with yellow flowers and lacy leaves, edible root
+long_pepper|Long pepper|Spice|Small dark seeds on a spike|Dried long pepper spikes, dark brown
+longan|Longan|Fruit|Round brown seed inside the fruit|Brown round fruit in clusters
+lotus_root|Lotus root|Vegetable|Round hard lotus seeds|Pale sliced lotus root with holes, crunchy
+luffa|Luffa|Vegetable|Black seeds inside a dried luffa sponge|Long green luffa gourds, ridged
+lupin|Lupin|Legume|Flat brown lupin seeds|Tall spikes of blue or purple flowers
+lupin_bean|Lupin bean|Legume|Flat cream lupin beans|Green lupin pods on a plant
+lychee|Lychee|Fruit|Brown seed inside lychee flesh|Red bumpy lychee fruit in clusters
+macadamia|Macadamia|Nut|Round pale macadamia nut|Brown macadamia nuts in husks
+magnolia|Magnolia|Plant|Red seeds in cone-shaped fruit|Large white fragrant magnolia flowers on a tree
+malt|Malt|Grain|Germinated barley grains, malted, golden|Malted grain pile, amber color
+malus|Malus|Fruit|Small brown apple seeds|Apple fruit on an apple or crabapple branch
+mandarin_orange|Mandarin orange|Fruit|Small pale mandarin seeds|Small orange mandarin fruit with loose peel
+mango|Mango|Fruit|Large flat mango seed|Yellow-orange mango fruit, sometimes with red blush
+martynia|Martynia|Plant|Black seeds in a pod with horns|Plant with horned seed pods and trumpet flowers
+melilotus|Melilotus|Plant|Small yellow-brown seeds in pods|Yellow sweet clover flowers on tall stems
+melon|Melon|Fruit|Flat cream melon seeds|Round melon with netted or smooth skin
+melon_day|Melon Day|Fruit|Small cream melon seeds|Green oval melon with striped skin
+micrantha|Micrantha|Fruit|Small seeds in capsules|Plant with small fruits or flowers
+millet|Millet|Grain|Small round yellow millet grains|Millet grain heads on tall grass stalks
+mucuna|Mucuna|Plant|Hard black or mottled large seeds|Vine with purple seed pods (velvet bean)
+mugwort|Mugwort|Plant|Tiny seeds in gray seed heads|Silvery gray-green leafy plant with small flower heads
+mung_bean|Mung bean|Legume|Small green shiny mung beans|Thin pods on a plant, or green mung beans
+mustard|Mustard|Spice|Tiny round yellow or black mustard seeds|Yellow mustard flowers in a field
+mustard_plant|Mustard plant|Oilseed|Small round brown mustard seeds|Tall mustard plant with yellow flowers
+nerium|Nerium|Plant|Long slender seed pods with fluffy seeds|Oleander shrub with pink or white flowers (toxic plant)
+nutmeg|Nutmeg|Spice|Hard brown oval nutmeg seed|Nutmeg fruit splitting open with red mace
+ocimum|Ocimum|Herb|Tiny black seeds, gel-coated when wet|Basil plant with green leaves and purple flowers
+okra|Okra|Vegetable|Round dark okra seeds|Green ridged okra pods on a plant
+olive|Olive|Fruit|Oval brown olive pit|Green or black olives on tree branches
+onion|Onion|Vegetable|Small black onion seeds|Round white onion bulb with dry skins
+opium|Opium|Plant|Small black poppy seeds|Poppy flower and seed capsule
+orange|Orange|Fruit|Small white orange seeds|Round orange fruit on a tree
+oriental_melon|Oriental melon|Fruit|Flat cream melon seeds|Pale green oriental melon, smooth or ribbed
+oriental_pickling_melon|Oriental pickling melon|Vegetable|Small cream seeds|Small green pickling melon, ribbed
+pandanus|Pandanus|Plant|Hard seed kernels in fruit clusters|Spiral fruit clusters on a palm-like tree
+pangium|Pangium|Nut|Large dark seed inside fruit|Large round fruit on a tree
+parsley|Parsley|Herb|Tiny brown ridged parsley seeds|Curly or flat-leaf green parsley
+parsnip|Parsnip|Vegetable|Small flat brown seeds|Cream-colored tapered root with feathery top
+passiflora|Passiflora|Fruit|Black seeds in fruit pulp|Passionflower with purple and white flowers and fruit
+passion_fruit|Passion fruit|Fruit|Black seeds in pulp|Purple wrinkled passion fruit with orange pulp
+pea|Pea|Legume|Round smooth pea seeds, pale green or yellow|Green pea pods on a vine
+peach|Peach|Fruit|Large brown rough peach pit|Fuzzy peach fruit with orange-red blush
+pear|Pear|Fruit|Small brown pear seeds|Green or yellow pears on a tree
+pearl_millet|Pearl millet|Grain|Small gray millet grains|Pearl millet seed heads on tall stalks
+pelargonium|Pelargonium|Plant|Long beak-shaped seed capsules|Geranium flowers in pink, red or white
+perilla|Perilla|Plant|Small brown shiny seeds|Purple-green perilla leaves on a plant
+petasites|Petasites|Plant|Tiny seeds with fluff|Large round leaves and pale flower spikes (butterbur)
+phellodendron|Phellodendron|Plant|Small black seeds in berries|Tree with corky bark and dark berries
+pimpinella|Pimpinella|Plant|Small ridged anise-like seeds|Umbel plant with white flowers (anise plant)
+pine_nut|Pine nut|Nut|Small pale pine nut kernel|Pine cones with pine nuts inside
+pineapple|Pineapple|Fruit|Small brown seeds, rarely seen|Pineapple fruit with a spiky crown on top
+pinto_bean|Pinto bean|Legume|Speckled beige and brown pinto beans|Dried speckled pinto beans in a pile
+pistacia|Pistacia|Nut|Pistachio nut in beige shell|Pistachio clusters on a tree with green-red hulls
+plantago|Plantago|Vegetable|Tiny seeds in spikes|Plant with broad leaves and seed spikes (plantain)
+plum|Plum|Fruit|Brown oval plum pit|Purple or yellow plums on a branch
+pochas|Pochas|Legume|Speckled large beans|Green bean pods on a plant
+pomegranate|Pomegranate|Fruit|Red seeds inside a pomegranate|Round red fruit with a crown on top
+poppy|Poppy|Oilseed|Tiny black poppy seeds|Red poppy flower with seed capsule
+potato|Potato|Vegetable|Small true potato seeds in berries|Brown potatoes in soil with green stems
+produce|Produce|Fruit|Mixed seeds or produce|Fresh mixed produce pile
+prosopis|Prosopis|Plant|Hard brown mesquite seeds in pods|Mesquite pods on a thorny tree
+prunus|Prunus|Fruit|Brown plum or cherry pits|Red or purple plums and cherries on a branch
+psyllium|Psyllium|Plant|Small pale shiny seeds|Plant with flower spikes and dried seeds
+pterocarpus|Pterocarpus|Plant|Flat brown seed pods with round seeds|Tree with pods and yellow flowers
+pumpkin|Pumpkin|Vegetable|Flat cream pumpkin seeds|Round orange pumpkin on a vine
+punica|Punica|Fruit|Red pomegranate seeds|Round red pomegranate with a crown
+radish|Radish|Vegetable|Small round brown radish seeds|Round red radish with a white tip
+rambutan|Rambutan|Fruit|Brown seed inside rambutan flesh|Red spiny rambutan fruit
+red_cabbage|Red cabbage|Vegetable|Small round brown cabbage seeds|Purple-red cabbage head
+rice|Rice|Grain|White or brown rice grains|Rice paddy stalks with golden grain heads
+rice_as_food|Rice as food|Grain|Uncooked white or brown rice grains|Bowl of cooked white rice
+rose|Rose|Plant|Small hard seeds inside rose hips|Pink or red rose flowers on thorny stems
+rubber|Rubber|Cash crop|Hard brown rubber seeds|Rubber tree with milky latex on the trunk
+rye|Rye|Grain|Long slender rye grains|Rye stalks with golden seed heads
+ryegrass|Ryegrass|Fodder|Small slender brown grass seeds|Green ryegrass blades in a pasture
+safflower|Safflower|Oilseed|Small white-gray oil seeds|Orange thistle-like flowers on branching plants
+salvia|Salvia|Plant|Small black seeds|Tall spikes of purple or blue sage flowers
+sambucus|Sambucus|Fruit|Small seeds inside dark berries|Dark purple elderberry clusters
+sapodilla|Sapodilla|Fruit|Glossy black seeds in brown fruit|Brown rough round sapodilla fruit
+scallion|Scallion|Vegetable|Small black onion seeds|Thin green onion stalks with white bulbs
+seasoning|Seasoning|Spice|Mixed dried seasoning seeds and spices|Spice mix in bowls, dried herbs
+sedum|Sedum|Plant|Tiny dust-like seeds in capsules|Succulent with fleshy leaves and star-shaped flower clusters
+senna|Senna|Plant|Flat brown seeds in pods|Plant with yellow flowers and long narrow pods
+sesame|Sesame|Oilseed|Small white or black sesame seeds|Sesame seed pods on a plant
+snow_pea|Snow pea|Legume|Round smooth pea seeds|Flat green pea pods on a vine
+solanum|Solanum|Plant|Small flat seeds inside a berry|Plant with purple or yellow flowers and berries (nightshade)
+sonchus|Sonchus|Vegetable|Small seeds with fluff|Yellow daisy-like flowers on milky stems (sow thistle)
+sorrel|Sorrel|Vegetable|Tiny brown seeds in dry seed heads|Green arrow-shaped sorrel leaves
+soursop|Soursop|Fruit|Black shiny seeds inside the fruit|Large green spiky fruit with white flesh
+spaghetti_squash|Spaghetti squash|Vegetable|Flat cream squash seeds|Oval yellow squash with stringy flesh
+spice|Spice|Spice|Mixed dried spice seeds|Spices in bowls, dried
+spinach|Spinach|Vegetable|Small round brown knobby spinach seeds|Dark green spinach leaves, bunched
+staphisagria|Staphisagria|Plant|Hard dark triangular seeds|Plant with purple flowers and seed pods (larkspur)
+star_anise|Star anise|Spice|Brown star-shaped seed pods|Star-shaped brown pods with seeds inside
+strawberry|Strawberry|Fruit|Tiny yellow seeds on a red strawberry surface|Red strawberries on a green plant
+styrax|Styrax|Plant|Small seeds in capsules|Tree with white bell-shaped flowers and resin
+sugar_beet|Sugar beet|Cash crop|Small brown seed clusters, rough|White beet root with green leaves
+sugarcane|Sugarcane|Cash crop|Small seeds in seed plumes|Tall stalks of sugarcane with a feathery plume at the top
+sumac|Sumac|Spice|Small red berries in a cluster|Red fuzzy sumac clusters on a shrub
+sunflower|Sunflower|Oilseed|Large striped black and white sunflower seeds|Yellow sunflower heads with seeds
+sweet_chestnut|Sweet chestnut|Nut|Glossy brown chestnut in a spiky shell|Chestnuts in green spiny burrs
+sweet_corn|Sweet corn|Vegetable|Yellow or white kernels, dried|Yellow corn ears on a stalk
+sweet_potato|Sweet potato|Vegetable|Small seeds in pods, rarely used|Orange or purple sweet potato root
+taraxacum|Taraxacum|Vegetable|Tiny seeds with fluffy parachutes|Yellow dandelion flower heads with jagged leaves
+tarragon|Tarragon|Herb|Small brown seeds, rarely used|Narrow green aromatic leaves
+tea|Tea|Cash crop|Tea seeds, large brown|Green tea leaves on a shrub, dried tea
+terminalia|Terminalia|Plant|Hard seed with winged parts|Tree with large leaves and small fruit
+thatching|Thatching|Grain|Dry grass seeds, bundled|Bundles of dried grass thatch
+the_land_institute|The Land Institute|Grain|Mixed perennial grain seeds|Tall grass seed heads of a perennial grain
+thuja|Thuja|Plant|Small winged seeds in cones|Cedar-like tree with scale leaves and small cones
+tilia|Tilia|Plant|Small round seeds in clusters|Linden tree with heart-shaped leaves and yellow flowers
+tobacco|Tobacco|Cash crop|Tiny brown tobacco seeds|Large green tobacco leaves on a stalk
+tomato|Tomato|Vegetable|Flat cream tomato seeds with gel coating|Red round tomatoes on a vine
+tragopogon|Tragopogon|Vegetable|Small seeds with fluffy parachutes|Yellow flower heads (goat's beard) with long roots
+trichilia|Trichilia|Plant|Small round brown seeds in a capsule|Tree with pinnate leaves and yellow-red fruit
+trichosanthes|Trichosanthes|Plant|Flat cream gourd seeds|Long pale green snake gourd, cucumber-like fruit
+triticale|Triticale|Grain|Long plump grains (wheat-rye hybrid)|Golden grain heads on tall stalks
+turmeric|Turmeric|Spice|No true seeds; orange-yellow turmeric root pieces|Orange-yellow knobby turmeric root
+turnip|Turnip|Vegetable|Small round brown turnip seeds|White turnip root with a purple top
+typha|Typha|Vegetable|Tiny seeds with silky fluff|Cattail: brown velvet spike on a tall reed stalk
+urochloa|Urochloa|Grain|Small grains in grass seed heads|Grass with seed spikes (signal grass)
+viola|Viola|Vegetable|Small brown seeds in capsules|Small purple and yellow pansy-like flowers
+walnut|Walnut|Nut|Wrinkled brown walnut kernel in a shell|Green walnut husks on a tree, shelled nuts
+wasabi|Wasabi|Spice|Tiny dark seeds in pods|Pale green knobby wasabi root
+water_spinach|Water spinach|Vegetable|Small brown seeds in pods|Hollow green stems with arrow-shaped leaves (morning glory)
+wattleseed|Wattleseed|Legume|Small hard dark mottled seeds|Acacia tree with yellow flower spikes and pods
+wheat|Wheat|Grain|Golden plump wheat grains|Golden wheat heads on stalks
+wheat_berry|Wheat berry|Grain|Whole plump brown wheat grains|Golden wheat stalks with grain heads
+white_mustard|White mustard|Spice|Small round pale yellow mustard seeds|Tall plant with yellow flowers and pods
+wild_rice|Wild rice|Vegetable|Long dark wild rice grains|Tall aquatic grass with long seed heads
+willow|Willow|Plant|Small brown seeds with white fluff|Willow tree with long narrow leaves and catkins
+winter_squash|Winter squash|Vegetable|Flat cream squash seeds|Hard-skinned squash, orange or green, many shapes
+yucca|Yucca|Fiber|Flat black yucca seeds|Spiky rosette of sword-shaped leaves and a tall white flower spike

@@ -61,7 +61,6 @@ test('malformed, incomplete, refused and invalid upstream responses fail closed'
     envelope(null),
     envelope({ ...observation(), possible_problems: [{ ...observation().possible_problems[0], first_steps: ['English only'] }] }),
     envelope({ ...observation(), confidence: 'high' }),
-    envelope({ ...observation(), possible_problems: [1, 2, 3, 4].map(() => observation().possible_problems[0]) }),
   ];
   for (const body of cases) {
     const f = await fixture(t, { fetchImpl: async () => reply(body) });
@@ -103,6 +102,11 @@ test('Seeds and Harvest are validated and passed to the provider', async t => {
   for(const mode of ['seeds','harvest'])assert.equal((await f.post({image:photo,consent:true,mode})).status,200);
   assert.match(requests[0].messages[1].content[0].text,/Focus: seeds/);
   assert.match(requests[1].messages[1].content[0].text,/Focus: harvest/);
+  // Seeds guidance reaches the model for v3 requests, so seedlings are not treated as a different stage.
+  const seedsV3=[];const g=await fixture(t,{fetchImpl:async(_url,options)=>{seedsV3.push(JSON.parse(options.body));return reply(envelope(evidence()));}});
+  assert.equal((await g.post({...input,mode:'seeds',analysisVersion:3})).status,200);
+  assert.match(seedsV3[0].messages[0].content,/SEEDS FOCUS/);
+  assert.match(seedsV3[0].messages[0].content,/damping-off/);
   assert.equal((await f.post({...input,mode:'unknown'})).status,400);
   assert.equal(requests.length,2);
 });
@@ -117,11 +121,20 @@ test('contradictory healthy result is downgraded and empty crop gets a readable 
   const {result}=await(await f.post()).json();assert.equal(result.overall,'unclear');assert.equal(result.crop_seen.en,'Could not identify');
   assert.match(result.report_to_supervisor.en,/inconsistent/);
 });
-test('a blank observation or supervisor summary is rejected', async t => {
+test('a blank observation or supervisor summary is filled in, not rejected', async t => {
   for(const property of ['photo_note','report_to_supervisor']){
     const f=await fixture(t,{fetchImpl:async()=>reply(envelope({...observation(),[property]:bi('','')}))});
-    assert.equal((await f.post()).status,502);
+    const response=await f.post();
+    assert.equal(response.status,200);
+    const {result}=await response.json();
+    for(const lang of ['en','es']){assert.ok(result.photo_note[lang].trim());assert.ok(result.report_to_supervisor[lang].trim());}
   }
+});
+test('extra problems are trimmed to three instead of failing', async t => {
+  const f=await fixture(t,{fetchImpl:async()=>reply(envelope({...observation(),possible_problems:[1,2,3,4].map(()=>observation().possible_problems[0])}))});
+  const response=await f.post();
+  assert.equal(response.status,200);
+  assert.equal((await response.json()).result.possible_problems.length,3);
 });
 test('compatible provider receives JSON mode and status identifies it for consent', async t => {
   let request;const f=await fixture(t,{baseUrl:'https://generativelanguage.googleapis.com/v1beta/openai',model:'test-model',fetchImpl:async(url,options)=>{assert.equal(url,'https://generativelanguage.googleapis.com/v1beta/openai/chat/completions');request=JSON.parse(options.body);return reply(envelope(observation()));}});
@@ -130,7 +143,7 @@ test('compatible provider receives JSON mode and status identifies it for consen
 });
 
 const evidence = () => ({
- photo_usable:true,crop:'Tomato',stage_match:'matches',stage_note:'',overall:'problem_found',
+ photo_usable:true,crop:'Tomato',crop_identification:'identified',stage_match:'matches',stage_note:'',overall:'problem_found',
  observation_summary:'Brown patches are visible on the fruit.',
  evidence:[{view:'overview',observation:'The fruit has brown patches.'}],
  possible_problems:[{name:'Possible surface injury',evidence_indices:[0],why_possible:'Damage appears on one exposed side.',how_to_distinguish:'Check whether the same side is affected on nearby fruit.'}],
@@ -154,7 +167,7 @@ test('v3 follow-up is user-reported context, requests Spanish only, and complete
  assert.equal(response.status,200);assert.match(request.messages[1].content[0].text,/Language: Spanish/);assert.match(request.messages[1].content[0].text,/User-reported context \(not visually verified\)/);assert.match(request.messages[1].content[0].text,/Not sure/);
  assert.deepEqual((await response.json()).result.follow_up,{question:'',options:[]});
 });
-test('v3 rejects nonexistent image/evidence links, empty evidence, unsafe schema extras and invalid choices',async t=>{
+test('v3 rejects invalid photo and evidence references without relabeling them',async t=>{
  const cases=[
   {...evidence(),evidence:[{view:'detail',observation:'Not supplied.'}]},
   {...evidence(),evidence:[]},
@@ -166,7 +179,7 @@ test('v3 rejects nonexistent image/evidence links, empty evidence, unsafe schema
   {...evidence(),stage_match:'certain'},
   {...evidence(),follow_up:{question:'Question?',options:['Only one answer']}},
  ];
- for(const result of cases){const f=await fixture(t,{fetchImpl:async()=>reply(envelope(result))});assert.equal((await f.post(enhanced)).status,502);assert.equal((await(await fetch(f.base+'/api/status')).json()).connectionVerified,false);}
+ for(const result of cases){const f=await fixture(t,{fetchImpl:async()=>reply(envelope(result))});const response=await f.post(enhanced);assert.equal(response.status,502);assert.equal((await response.json()).error,'unreadable_response');}
 });
 test('v3 normalizes unusable photos and conflicting healthy claims without inventing a crop',async t=>{
  for(const language of ['en','es']){
@@ -185,4 +198,85 @@ test('provider failures distinguish invalid key, quota, busy, unavailable model 
   const f=await fixture(t,{fetchImpl:async()=>new Response(JSON.stringify({error:{code}}),{status})});assert.equal((await(await f.post(enhanced)).json()).error,expected);
  }
  const f=await fixture(t,{fetchImpl:async()=>reply({choices:[{finish_reason:'length',message:{content:'{}'}}]})});assert.equal((await(await f.post(enhanced)).json()).error,'incomplete_response');
+});
+
+test('team reference examples are sent before the photo, and skipped when unusable', async t => {
+  const fs = require('node:fs'), os = require('node:os'), path = require('node:path');
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'cropsight-refs-'));
+  t.after(() => fs.rmSync(dir, { recursive: true, force: true }));
+  fs.writeFileSync(path.join(dir, 'ref.png'), Buffer.from('iVBORw0KGgo=', 'base64'));
+  fs.writeFileSync(path.join(dir, 'manifest.json'), JSON.stringify([
+    { file: 'ref.png', crop: 'lettuce', stage: 'seeds', label: 'Lettuce seed lot' },
+    { file: '../outside.png', crop: 'x', label: 'escapes the folder' },
+    { file: 'missing.jpg', crop: 'x', label: 'no file' },
+  ]));
+  const sent = [];
+  const f = await fixture(t, { referencesDir: dir, fetchImpl: async (_url, options) => { sent.push(JSON.parse(options.body)); return reply(envelope(evidence())); } });
+  assert.equal((await f.post({ ...input, mode: 'seeds', analysisVersion: 3 })).status, 200);
+  const content = sent[0].messages[1].content;
+  const refIndex = content.findIndex(b => b.type === 'image_url' && b.image_url.url.startsWith('data:image/png'));
+  assert.ok(refIndex > 0, 'reference image is sent');
+  assert.equal(content.filter(b => b.type === 'image_url' && b.image_url.url.startsWith('data:image/png')).length, 1, 'escaping and missing entries are skipped');
+  assert.match(content[refIndex - 1].text, /crop lettuce, stage seeds\. Label: Lettuce seed lot/);
+});
+
+test('the crop guide is loaded into the evidence prompt for every crop', async t => {
+  const sent = [];
+  const f = await fixture(t, { fetchImpl: async (_url, options) => { sent.push(JSON.parse(options.body)); return reply(envelope(evidence())); } });
+  assert.equal((await f.post({ ...input, mode: 'harvest', analysisVersion: 3 })).status, 200);
+  assert.match(sent[0].messages[0].content, /CROP GUIDE/);
+  assert.match(sent[0].messages[0].content, /- Lettuce \(Vegetable.*\)\. Seeds:/);
+});
+test('common seeds (apple, tomato, lettuce, orange, banana, grape, cucumber, pepper, watermelon, bean, strawberry) have guide context without forced classifications', () => {
+  const analysis = require('../analysis');
+  const guide = analysis.loadSeedGuide(require('path').join(__dirname, '..', 'references', 'seed_guide.txt'));
+  const prompt = analysis.promptFor('seeds', '', guide);
+  for (const crop of ['Apple', 'Tomato', 'Lettuce', 'Orange', 'Banana', 'Grape', 'Cucumber', 'Pepper', 'Watermelon', 'Bean', 'Strawberry']) {
+    assert.match(guide, new RegExp(`^- ${crop}[:\\s]`, 'm'), `${crop} missing from seed guide`);
+  }
+  assert.match(prompt, /Unknown is a valid answer/);
+  assert.doesNotMatch(prompt, /Never answer Unknown|must be one of the allowed crop names|QUICK KEY/);
+});
+
+test('usable seed photos can remain Unknown and are never inferred from problem names', async t => {
+  const requests = [];
+  const f = await fixture(t, { fetchImpl: async (_url, options) => { requests.push(JSON.parse(options.body)); return reply(envelope(seedResult({ crop: 'Unknown', possible_problems: [{ name: 'Cucumber', evidence_indices: [0], why_possible: 'Smooth flat seed with a pale rim.', how_to_distinguish: 'Tomato seeds are fuzzy.' }] }))); } });
+  const response = await f.post({ ...input, mode: 'seeds', analysisVersion: 3, consent: true });
+  assert.equal(response.status, 200);
+  const { result } = await response.json();
+  assert.equal(result.crop, 'Unknown');
+  assert.equal(result.crop_identification, 'unknown');
+  const cropSchema = requests[0].response_format.json_schema.schema.properties.crop;
+  assert.equal(cropSchema.enum, undefined);
+});
+test('harvest keeps a free-text crop field and unusable photos stay Unknown', async t => {
+  const requests = [];
+  const f = await fixture(t, { fetchImpl: async (_url, options) => { requests.push(JSON.parse(options.body)); return reply(envelope(seedResult({ photo_usable: false, crop: 'Unknown', possible_problems: [] }))); } });
+  const unusable = await f.post({ ...input, mode: 'seeds', analysisVersion: 3, consent: true });
+  assert.equal((await unusable.json()).result.crop, 'Unknown');
+  await f.post({ ...input, mode: 'harvest', analysisVersion: 3, consent: true });
+  assert.equal(requests[1].response_format.json_schema.schema.properties.crop.enum, undefined);
+});
+const seedResult = (over = {}) => ({
+  photo_usable: true, crop: 'Tomato', crop_identification: 'tentative', stage_match: 'matches', stage_note: '', overall: 'unclear',
+  observation_summary: 'Small flat seeds with a smooth pale rim.',
+  evidence: [{ view: 'overview', observation: 'Flat oval seeds with a pale margin.' }],
+  possible_problems: [], next_steps: ['Photograph one seed beside a coin.'],
+  follow_up: { question: '', options: [] }, limits: 'A photo cannot show viability.',
+  report_to_supervisor: 'Seeds visible; likely cucumber.', ...over,
+});
+
+test('tentative crop labels remain explicit in English and Spanish', async t => {
+  for (const [language, label] of [['en', 'Possible Tomato'], ['es', 'Posible Tomato']]) {
+    const f = await fixture(t, {fetchImpl: async () => reply(envelope(seedResult({crop: 'Tomato (likely)'})))});
+    const response = await f.post({...enhanced, mode:'seeds', language});
+    assert.equal(response.status, 200); assert.equal((await response.json()).result.crop, label);
+  }
+});
+test('unknown identification overrides a named crop, and missing identification is rejected', async t => {
+  const f = await fixture(t, {fetchImpl: async () => reply(envelope({...evidence(),crop_identification:'unknown'}))});
+  assert.equal((await(await f.post(enhanced)).json()).result.crop, 'Unknown');
+  const value=evidence();delete value.crop_identification;
+  const missing=await fixture(t,{fetchImpl:async()=>reply(envelope(value))});
+  assert.equal((await missing.post(enhanced)).status,502);
 });
