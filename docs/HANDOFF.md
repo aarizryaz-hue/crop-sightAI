@@ -1,4 +1,10 @@
-# CropSight — Android and evidence fixes
+# CropSight development history
+
+[← Project overview](../README.md) · [Current validation status](TECHNICAL.md#validation-status)
+
+This document preserves implementation snapshots from October 24, 2026. Statements about running servers, local-only changes and pending tests describe the time of each entry. The current source is published on GitHub and reports `cropsight-android-5`; live verification of the latest prompt changes remains pending. See the technical guide for the current overview.
+
+## Android and evidence fixes — historical snapshot
 
 Updated October 24, 2026. This section supersedes the previous pass below.
 
@@ -24,7 +30,7 @@ The server has no npm runtime dependencies; production dependency audit reports 
 
 ## What is needed to finish
 
-See [release/PLAY-STORE.md](release/PLAY-STORE.md). Required inputs: stable hosted HTTPS origin, Play Console account access/status, real publisher name/support email, permanent application ID, and durable report storage. After these are available, generate/sign the AAB, configure the Play app-signing certificate in Digital Asset Links, test on Android, and submit the reviewed listing. Google controls account eligibility and publication review. New personal accounts may require a 12-tester, 14-day closed test before production access.
+See [release/PLAY-STORE.md](../release/PLAY-STORE.md). Required inputs: stable hosted HTTPS origin, Play Console account access/status, real publisher name/support email, permanent application ID, and durable report storage. After these are available, generate/sign the AAB, configure the Play app-signing certificate in Digital Asset Links, test on Android, and submit the reviewed listing. Google controls account eligibility and publication review. New personal accounts may require a 12-tester, 14-day closed test before production access.
 
 ## Previous pass (historical snapshot)
 

@@ -39,7 +39,7 @@ For a Node web service:
 
 Keep API keys, `.env`, reports and signing keys out of Git and out of the APK. Set provider spending controls and appropriate access/abuse controls before broad public distribution. The local request limits are per process, not a production-wide quota.
 
-After deployment, open the actual HTTPS URL on Android Chrome. Settings should show server build `cropsight-android-4`. Check one real photo, a tentative/unknown case, a two-view result, a follow-up and a report submission. Chrome's Install/Add to Home screen lets the user install the web app without waiting for a Play listing.
+After deployment, open the actual HTTPS URL on Android Chrome. Settings should show server build `cropsight-android-5`. Check one real photo, a tentative/unknown case, a two-view result, a follow-up and a report submission. Chrome's Install/Add to Home screen lets the user install the web app without waiting for a Play listing.
 
 ## 2. Generate the Android project
 

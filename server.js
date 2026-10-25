@@ -247,7 +247,7 @@ if (require.main === module) {
   const port = process.env.PORT || 3000, host = process.env.HOST || '127.0.0.1';
   createServer().listen(port, host, () => {
     console.log(`CropSight running at http://${host}:${port}`);
-    console.log('CropSight Android v4 — installable app, explicit uncertainty, strict evidence references.');
+    console.log('CropSight Android v5 — installable app, explicit uncertainty, strict evidence references.');
     console.log(process.env.OPENAI_API_KEY ? 'AI key configured; live connection not yet verified.' : 'Set OPENAI_API_KEY to enable analysis. The interface alone does not generate results.');
   });
 }
