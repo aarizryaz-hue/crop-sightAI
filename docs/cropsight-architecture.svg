@@ -1,0 +1,79 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1200" viewBox="0 0 1800 1200" role="img" aria-labelledby="title desc"><title id="title">CropSight architecture and technology stack</title><desc id="desc">Photos move from the browser to a Node.js server and OpenAI GPT-4o mini, then through structural validation to observations and a supervisor summary. Supporting development tools and Android release status are listed below.</desc><rect width="100%" height="100%" fill="#101d16"/>
+<text x="70" y="100.2" font-family="Arial, sans-serif" font-size="60" font-weight="700" fill="#a7d5a6">CropSight</text>
+<text x="70" y="146.68" font-family="Arial, sans-serif" font-size="29" font-weight="400" fill="#e5efde">How a crop photo becomes a clearer conversation</text>
+<text x="1260" y="84.32" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#9ed3a5">TECHNOLOGY &amp; DATA FLOW</text>
+<text x="1260" y="120.4" font-family="Arial, sans-serif" font-size="20" font-weight="400" fill="#abc0ac">Repository snapshot · October 24, 2026</text>
+<rect x="70" y="205" width="500" height="270" rx="22" fill="#1b3023" stroke="#3c5945" stroke-width="2"/>
+<text x="95" y="247.24" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#9ed3a5">01</text>
+<text x="146" y="249.68" font-family="Arial, sans-serif" font-size="29" font-weight="700" fill="#edf4e4">Photo in the browser</text>
+<text x="95" y="304.16" font-family="Arial, sans-serif" font-size="23" font-weight="400" fill="#d8e7d5">HTML5 + CSS3 + JavaScript</text>
+<text x="95" y="341.16" font-family="Arial, sans-serif" font-size="23" font-weight="400" fill="#d8e7d5">Choose Seeds or Harvest</text>
+<text x="95" y="378.16" font-family="Arial, sans-serif" font-size="23" font-weight="400" fill="#d8e7d5">Canvas resizes and re-encodes photos</text>
+<text x="95" y="415.16" font-family="Arial, sans-serif" font-size="23" font-weight="400" fill="#d8e7d5">User consent before upload</text>
+<rect x="650" y="205" width="500" height="270" rx="22" fill="#1b3023" stroke="#3c5945" stroke-width="2"/>
+<text x="675" y="247.24" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#9ed3a5">02</text>
+<text x="726" y="249.68" font-family="Arial, sans-serif" font-size="29" font-weight="700" fill="#edf4e4">CropSight server</text>
+<text x="675" y="304.16" font-family="Arial, sans-serif" font-size="23" font-weight="400" fill="#d8e7d5">Node.js · native HTTP + fetch</text>
+<text x="675" y="341.16" font-family="Arial, sans-serif" font-size="23" font-weight="400" fill="#d8e7d5">Input validation and request limits</text>
+<text x="675" y="378.16" font-family="Arial, sans-serif" font-size="23" font-weight="400" fill="#d8e7d5">Stage prompts + team reference text</text>
+<text x="675" y="415.16" font-family="Arial, sans-serif" font-size="23" font-weight="400" fill="#d8e7d5">API key stays on the server</text>
+<rect x="1230" y="205" width="500" height="270" rx="22" fill="#1b3023" stroke="#3c5945" stroke-width="2"/>
+<text x="1255" y="247.24" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#9ed3a5">03</text>
+<text x="1306" y="249.68" font-family="Arial, sans-serif" font-size="29" font-weight="700" fill="#edf4e4">Vision model</text>
+<text x="1255" y="304.16" font-family="Arial, sans-serif" font-size="23" font-weight="400" fill="#d8e7d5">OpenAI Chat Completions API</text>
+<text x="1255" y="341.16" font-family="Arial, sans-serif" font-size="23" font-weight="400" fill="#d8e7d5">GPT-4o mini · pretrained model</text>
+<text x="1255" y="378.16" font-family="Arial, sans-serif" font-size="23" font-weight="400" fill="#d8e7d5">Photo(s) + context → structured JSON</text>
+<text x="1255" y="415.16" font-family="Arial, sans-serif" font-size="23" font-weight="400" fill="#d8e7d5">No custom model training</text>
+<line x1="580" y1="340" x2="640" y2="340" stroke="#9ed3a5" stroke-width="4"/><polygon points="640,340 626.8362615716444,347.19138307906303 626.8362615716444,332.80861692093697" fill="#9ed3a5"/>
+<line x1="1160" y1="340" x2="1220" y2="340" stroke="#9ed3a5" stroke-width="4"/><polygon points="1220,340 1206.8362615716444,347.19138307906303 1206.8362615716444,332.80861692093697" fill="#9ed3a5"/>
+<text x="575" y="309.72" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#a7d5a6">POST</text>
+<text x="1159" y="309.72" font-family="Arial, sans-serif" font-size="16" font-weight="700" fill="#a7d5a6">HTTPS</text>
+<rect x="1230" y="610" width="500" height="245" rx="22" fill="#1b3023" stroke="#3c5945" stroke-width="2"/>
+<text x="1255" y="652.24" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#9ed3a5">04</text>
+<text x="1306" y="654.68" font-family="Arial, sans-serif" font-size="29" font-weight="700" fill="#edf4e4">Validate the response</text>
+<text x="1255" y="709.16" font-family="Arial, sans-serif" font-size="23" font-weight="400" fill="#d8e7d5">JavaScript + JSON Schema</text>
+<text x="1255" y="746.16" font-family="Arial, sans-serif" font-size="23" font-weight="400" fill="#d8e7d5">Check structure and evidence links</text>
+<text x="1255" y="783.16" font-family="Arial, sans-serif" font-size="23" font-weight="400" fill="#d8e7d5">Reject malformed output</text>
+<text x="1255" y="820.16" font-family="Arial, sans-serif" font-size="23" font-weight="400" fill="#d8e7d5">Not proof of agricultural accuracy</text>
+<rect x="650" y="610" width="500" height="245" rx="22" fill="#1b3023" stroke="#3c5945" stroke-width="2"/>
+<text x="675" y="652.24" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#9ed3a5">05</text>
+<text x="726" y="654.68" font-family="Arial, sans-serif" font-size="29" font-weight="700" fill="#edf4e4">Evidence and next checks</text>
+<text x="675" y="709.16" font-family="Arial, sans-serif" font-size="23" font-weight="400" fill="#d8e7d5">Numbered visible observations</text>
+<text x="675" y="746.16" font-family="Arial, sans-serif" font-size="23" font-weight="400" fill="#d8e7d5">Possible causes + distinguishing checks</text>
+<text x="675" y="783.16" font-family="Arial, sans-serif" font-size="23" font-weight="400" fill="#d8e7d5">One optional follow-up question</text>
+<text x="675" y="820.16" font-family="Arial, sans-serif" font-size="23" font-weight="400" fill="#d8e7d5">English; Spanish in Settings</text>
+<rect x="70" y="610" width="500" height="245" rx="22" fill="#1b3023" stroke="#3c5945" stroke-width="2"/>
+<text x="95" y="652.24" font-family="Arial, sans-serif" font-size="22" font-weight="700" fill="#9ed3a5">06</text>
+<text x="146" y="654.68" font-family="Arial, sans-serif" font-size="29" font-weight="700" fill="#edf4e4">Supervisor handoff</text>
+<text x="95" y="709.16" font-family="Arial, sans-serif" font-size="23" font-weight="400" fill="#d8e7d5">Copy a concise observation summary</text>
+<text x="95" y="746.16" font-family="Arial, sans-serif" font-size="23" font-weight="400" fill="#d8e7d5">Human reviews findings and limits</text>
+<text x="95" y="783.16" font-family="Arial, sans-serif" font-size="23" font-weight="400" fill="#d8e7d5">AI observations, not a diagnosis</text>
+<line x1="1480" y1="485" x2="1480" y2="600" stroke="#9ed3a5" stroke-width="4"/><polygon points="1480,600 1472.8086169209369,586.8362615716444 1487.1913830790631,586.8362615716444" fill="#9ed3a5"/>
+<text x="1505" y="544.32" font-family="Arial, sans-serif" font-size="21" font-weight="400" fill="#a7d5a6">JSON response</text>
+<line x1="1220" y1="730" x2="1160" y2="730" stroke="#9ed3a5" stroke-width="4"/><polygon points="1160,730 1173.1637384283556,722.808616920937 1173.1637384283556,737.191383079063" fill="#9ed3a5"/>
+<line x1="640" y1="730" x2="580" y2="730" stroke="#9ed3a5" stroke-width="4"/><polygon points="580,730 593.1637384283556,722.808616920937 593.1637384283556,737.191383079063" fill="#9ed3a5"/>
+<line x1="900" y1="600" x2="900" y2="485" stroke="#9ed3a5" stroke-width="4" stroke-dasharray="9 9"/><polygon points="900,485 907.191383079063,498.1637384283556 892.808616920937,498.1637384283556" fill="#9ed3a5"/>
+<text x="665" y="544.32" font-family="Arial, sans-serif" font-size="21" font-weight="400" fill="#a7d5a6">Optional follow-up</text>
+<text x="665" y="574.48" font-family="Arial, sans-serif" font-size="19" font-weight="400" fill="#abc0ac">answer → new request</text>
+<rect x="70" y="910" width="500" height="235" rx="22" fill="#15271c" stroke="#3c5945" stroke-width="2"/>
+<text x="95" y="949.32" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#9ed3a5">BUILD, TEST &amp; DEMO</text>
+<text x="95" y="989.32" font-family="Arial, sans-serif" font-size="21" font-weight="400" fill="#d8e7d5">Codex + Claude: coding assistance</text>
+<text x="95" y="1020.32" font-family="Arial, sans-serif" font-size="21" font-weight="400" fill="#d8e7d5">Git + GitHub: version control</text>
+<text x="95" y="1051.32" font-family="Arial, sans-serif" font-size="21" font-weight="400" fill="#d8e7d5">npm: scripts and build tools</text>
+<text x="95" y="1082.32" font-family="Arial, sans-serif" font-size="21" font-weight="400" fill="#d8e7d5">node:test + Chrome/Playwright: tests</text>
+<text x="95" y="1113.32" font-family="Arial, sans-serif" font-size="21" font-weight="400" fill="#d8e7d5">FFmpeg + macOS TTS: demo video</text>
+<rect x="650" y="910" width="500" height="235" rx="22" fill="#15271c" stroke="#3c5945" stroke-width="2"/>
+<text x="675" y="949.32" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#9ed3a5">WEB APP &amp; STORAGE</text>
+<text x="675" y="989.32" font-family="Arial, sans-serif" font-size="21" font-weight="400" fill="#d8e7d5">PWA manifest + service worker</text>
+<text x="675" y="1020.32" font-family="Arial, sans-serif" font-size="21" font-weight="400" fill="#d8e7d5">Offline interface; AI needs internet</text>
+<text x="675" y="1051.32" font-family="Arial, sans-serif" font-size="21" font-weight="400" fill="#d8e7d5">localStorage saves preferences</text>
+<text x="675" y="1082.32" font-family="Arial, sans-serif" font-size="21" font-weight="400" fill="#d8e7d5">Photos/results are not cached</text>
+<text x="675" y="1113.32" font-family="Arial, sans-serif" font-size="21" font-weight="400" fill="#d8e7d5">Opt-in reports: private server files</text>
+<rect x="1230" y="910" width="500" height="235" rx="22" fill="#15271c" stroke="#3c5945" stroke-width="2"/>
+<text x="1255" y="949.32" font-family="Arial, sans-serif" font-size="21" font-weight="700" fill="#9ed3a5">ANDROID RELEASE STATUS</text>
+<text x="1255" y="989.32" font-family="Arial, sans-serif" font-size="21" font-weight="400" fill="#d8e7d5">Bubblewrap tooling is prepared</text>
+<text x="1255" y="1020.32" font-family="Arial, sans-serif" font-size="21" font-weight="400" fill="#d8e7d5">Planned: Trusted Web Activity</text>
+<text x="1255" y="1051.32" font-family="Arial, sans-serif" font-size="21" font-weight="400" fill="#d8e7d5">Still needs HTTPS hosting, signing</text>
+<text x="1255" y="1082.32" font-family="Arial, sans-serif" font-size="21" font-weight="400" fill="#d8e7d5">and Play Console review/release</text>
+<text x="1255" y="1113.32" font-family="Arial, sans-serif" font-size="21" font-weight="400" fill="#d8e7d5">No Java app code or Play listing yet</text>
+</svg>
