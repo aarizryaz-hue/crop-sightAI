@@ -1,0 +1,31 @@
+1
+00:00:00,000 --> 00:00:05,000
+CropSight helps farmworkers turn unfamiliar crop symptoms into a clearer conversation.
+
+2
+00:00:05,000 --> 00:00:11,000
+Choose Seeds or Harvest, then add a crop photo. A close-up can provide another view.
+
+3
+00:00:11,000 --> 00:00:16,000
+Photos go to OpenAI only after consent. The API key stays on the server.
+
+4
+00:00:16,000 --> 00:00:18,000
+Live AI request · Waiting time shortened
+
+5
+00:00:18,000 --> 00:00:25,000
+This is a real model response. Numbered observations separate visible evidence from possible explanations.
+
+6
+00:00:25,000 --> 00:00:41,000
+This test also exposes a limitation. The model calls the fruit healthy despite noticing a dark patch. That inconsistency needs human review. Its suggested next steps are not permission to harvest. We have not measured accuracy yet.
+
+7
+00:00:41,000 --> 00:00:48,000
+Copy a concise summary for your supervisor. The result states its limits and asks for human review.
+
+8
+00:00:48,000 --> 00:00:54,000
+English comes first. Spanish and installation options live in Settings. AI analysis needs internet.

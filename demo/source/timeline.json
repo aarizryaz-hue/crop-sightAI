@@ -1,0 +1,59 @@
+{
+  "segments": [
+    {
+      "id": "01-intro",
+      "start": 0.47,
+      "end": 5.976
+    },
+    {
+      "id": "02-photo",
+      "start": 6.048,
+      "end": 13.825
+    },
+    {
+      "id": "03-consent",
+      "start": 13.879,
+      "end": 20.004
+    },
+    {
+      "id": "04-wait",
+      "start": 20.126,
+      "end": 21.927
+    },
+    {
+      "id": "05-evidence",
+      "start": 33.676,
+      "end": 42.801
+    },
+    {
+      "id": "06-causes",
+      "start": 42.952,
+      "end": 51.157
+    },
+    {
+      "id": "09-summary",
+      "start": 51.226,
+      "end": 59.006
+    },
+    {
+      "id": "10-settings",
+      "start": 59.058,
+      "end": 66.214
+    }
+  ],
+  "errors": [],
+  "responses": [
+    {
+      "status": 200,
+      "meta": {
+        "analysisVersion": 3,
+        "model": "gpt-4o-mini",
+        "provider": "OpenAI",
+        "imageCount": 1,
+        "elapsedMs": 13474,
+        "requestId": "35c19b12-c5d2-4568-9dc7-257295f1e8a8",
+        "language": "en"
+      }
+    }
+  ]
+}

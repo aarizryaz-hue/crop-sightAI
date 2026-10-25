@@ -119,7 +119,7 @@ Settings names the model and credits assistance; no custom training or measured 
 
 ## Remaining work, honestly ranked
 
-1. **Restart and test v3 live.** Try a healthy-looking plant, damaged plant, an unclear/non-plant image, both views and the follow-up. Record unexpected behavior. This is the biggest demo risk left.
+1. **Restart and retest `cropsight-android-5` live.** The running `android-4` build completed two real OpenAI calls during video work but made substantive mistakes: unripe fruit was treated as outside Harvest mode; a damaged ripe tomato was called healthy despite a dark-spot observation. The code now clarifies the stage and requires consistent conclusions, but prompt changes are not proof of a fix. Test these cases and additional representative photos before presenting the app as reliable.
 2. **Use representative real photos.** Two views must be of the same plant; compare outputs against an agricultural expert or reliable labeled examples. No accuracy percentage without a documented evaluation.
 3. **Rehearse on the presentation network and an actual phone.** Viewport tests do not prove iOS/Android camera, HEIC, clipboard or poor-network behavior.
 4. **Test with intended users and review Spanish.** Research describes interest in training, not proof this interface solves a communication barrier.
@@ -135,3 +135,7 @@ Settings names the model and credits assistance; no custom training or measured 
 - `.env.example`: safe configuration template.
 - `README.md`: setup, demo, credits and limitations.
 - `HANDOFF.md`: this record.
+
+## Demo video — October 24, 2026
+
+`demo/CropSight-demo.mp4` is a 60-second English review cut with synthetic narration, step captions, real browser footage and labeled shortened API waits. It explicitly calls out the incorrect reassuring verdict. It is not a successful diagnosis demo or a validated accuracy claim. `demo/README.md` documents photo licensing, reproduction and limitations; `demo/source/live-results.json` retains the actual response without keys. The recorded server was `cropsight-android-4`; `android-5` is saved on disk and needs a restart and live retest. All 37 automated tests pass; those do not measure model accuracy. No Play Store upload was performed.

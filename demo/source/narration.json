@@ -1,0 +1,50 @@
+[
+  {
+    "start": 0,
+    "duration": 5,
+    "narration": "CropSight helps farmworkers turn unfamiliar crop symptoms into a clearer conversation.",
+    "caption": "CropSight \u00b7 See the signs. Know what to check."
+  },
+  {
+    "start": 5,
+    "duration": 6,
+    "narration": "Choose Seeds or Harvest, then add a crop photo. A close-up can provide another view.",
+    "caption": "01 / Choose a focus and add a photo"
+  },
+  {
+    "start": 11,
+    "duration": 5,
+    "narration": "Photos go to OpenAI only after consent. The API key stays on the server.",
+    "caption": "02 / Give consent before sending the photo"
+  },
+  {
+    "start": 16,
+    "duration": 2,
+    "narration": "",
+    "caption": "Live AI request \u00b7 Waiting time shortened"
+  },
+  {
+    "start": 18,
+    "duration": 7,
+    "narration": "This is a real model response. Numbered observations separate visible evidence from possible explanations.",
+    "caption": "03 / Review what the model can actually see"
+  },
+  {
+    "start": 25,
+    "duration": 16,
+    "narration": "This test also exposes a limitation. The model calls the fruit healthy despite noticing a dark patch. That inconsistency needs human review. Its suggested next steps are not permission to harvest. We have not measured accuracy yet.",
+    "caption": "Known limitation in this test: the AI gives an overly reassuring verdict"
+  },
+  {
+    "start": 41,
+    "duration": 7,
+    "narration": "Copy a concise summary for your supervisor. The result states its limits and asks for human review.",
+    "caption": "06 / Share a clearer summary with your supervisor"
+  },
+  {
+    "start": 48,
+    "duration": 6,
+    "narration": "English comes first. Spanish and installation options live in Settings. AI analysis needs internet.",
+    "caption": "English first \u00b7 Language and installation in Settings"
+  }
+]

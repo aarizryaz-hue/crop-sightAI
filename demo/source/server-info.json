@@ -1,0 +1,11 @@
+{
+  "aiEnabled": true,
+  "model": "gpt-4o-mini",
+  "provider": {
+    "name": "OpenAI",
+    "privacyUrl": "https://developers.openai.com/api/docs/guides/your-data"
+  },
+  "connectionVerified": true,
+  "analysisVersion": 3,
+  "version": "cropsight-android-4"
+}

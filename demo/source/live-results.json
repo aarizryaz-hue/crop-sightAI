@@ -1,0 +1,55 @@
+[
+  {
+    "status": 200,
+    "data": {
+      "result": {
+        "photo_usable": true,
+        "crop": "Tomato",
+        "crop_identification": "identified",
+        "stage_match": "matches",
+        "stage_note": "",
+        "overall": "looks_healthy",
+        "observation_summary": "The tomato appears ripe and healthy with a smooth surface.",
+        "evidence": [
+          {
+            "view": "overview",
+            "observation": "The tomato is bright red with a smooth surface."
+          },
+          {
+            "view": "overview",
+            "observation": "There is a dark spot at the stem end."
+          },
+          {
+            "view": "overview",
+            "observation": "The shape is round and typical for a ripe tomato."
+          },
+          {
+            "view": "overview",
+            "observation": "No visible bruising or splits on the surface."
+          }
+        ],
+        "possible_problems": [],
+        "next_steps": [
+          "Inspect the dark spot for any signs of rot or disease.",
+          "Check other tomatoes in the batch for similar issues.",
+          "Consider harvesting if the fruit is ready."
+        ],
+        "follow_up": {
+          "question": "",
+          "options": []
+        },
+        "limits": "This photo cannot establish the internal condition of the tomato.",
+        "report_to_supervisor": "The tomato appears ripe and healthy, but there is a dark spot at the stem end that requires further inspection."
+      },
+      "meta": {
+        "analysisVersion": 3,
+        "model": "gpt-4o-mini",
+        "provider": "OpenAI",
+        "imageCount": 1,
+        "elapsedMs": 13474,
+        "requestId": "35c19b12-c5d2-4568-9dc7-257295f1e8a8",
+        "language": "en"
+      }
+    }
+  }
+]
